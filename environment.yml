@@ -168,4 +168,4 @@ dependencies:
     - werkzeug==2.3.4
     - widgetsnbextension==4.0.7
     - wrapt==1.14.1
-prefix: /home/steve/anaconda3/envs/reggen
+prefix: /home/usr/anaconda3/envs/reggen
