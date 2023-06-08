@@ -11,11 +11,6 @@
 
 3. Activate the conda environement with `conda activate reggen`
 
-In case you are using a beautiful apple device with an M1 chip do the following **with the previously mentioned conda environment enabled**:
 
-```
-pip uninstall tensorflow
-conda install -c apple tensorflow-deps
-pip install tensorflow-macos
 
-```
+TODO: add license from RNATracker

@@ -9,4 +9,6 @@ dependencies:
     - keras
     - jupyter
     - tensorflow
+    - matplotlib
+    - scikit-learn
 prefix: /home/usr/anaconda3/envs/reggen
