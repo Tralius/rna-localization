@@ -2,13 +2,14 @@ name: reggen
 channels:
   - defaults
 dependencies:
+  - python=3.7
   - pip:
     - pandas
     - torch
     - numpy
-    - keras
-    - jupyter
+    - keras==2.0.9
     - tensorflow
+    - jupyter
     - matplotlib
     - scikit-learn
 prefix: /home/usr/anaconda3/envs/reggen

@@ -1,0 +1,8 @@
+pandas
+torch
+numpy
+keras==2.0.9
+tensorflow
+jupyter
+matplotlib
+scikit-learn
