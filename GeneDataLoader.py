@@ -10,7 +10,8 @@ class GeneDataLoader(Sequence):
         self.batch_size = batch_size
         self.shuffle = shuffle
         self.indices = np.arange(len(self.data))
-        self.max_len = self.data['seq'].apply(lambda x: len(x)).max()
+        # self.max_len = self.data['seq'].apply(lambda x: len(x)).max()
+        self.max_len = 34256
 
         # Calculate the number of batches
         self.num_batches = len(self.data) // batch_size
