@@ -5,11 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="52db749d-89b6-4485-b261-7f1b8eaaf8a7" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/script.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RNAtracker.py" beforeDir="false" afterPath="$PROJECT_DIR$/RNAtracker.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dataPipeline.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/dataPipeline.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/environment.yml" beforeDir="false" afterPath="$PROJECT_DIR$/environment.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,6 +83,8 @@
       <option name="presentableId" value="Default" />
       <updated>1686055082562</updated>
       <workItem from="1686900534312" duration="2573000" />
+      <workItem from="1686903984807" duration="562000" />
+      <workItem from="1686907335153" duration="40000" />
     </task>
     <servers />
   </component>
