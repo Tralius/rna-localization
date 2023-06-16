@@ -5,7 +5,7 @@ from typing import Tuple
 
 
 class GeneDataLoader(Sequence):
-    def __init__(self, data_table:pd.DataFrame, batch_size: int = 32, shuffle: bool = True, struct: bool = False):
+    def __init__(self, data_table:pd.DataFrame, padding_length: int, batch_size: int = 32, shuffle: bool = True, struct: bool = False):
         
         transformed_data = output_normalization(data_table.iloc[:, 0:9])
         transformed_data = pd.concat([transformed_data, one_hot_emb(data_table['seq'])], axis=1)
@@ -17,7 +17,7 @@ class GeneDataLoader(Sequence):
         self.batch_size = batch_size
         self.shuffle = shuffle
         self.indices = np.arange(self.data.shape[0])
-        self.max_len = self.data['seq'].apply(lambda x: len(x)).max()
+        self.max_len = padding_length
 
         # Calculate the number of batches
         self.num_batches = self.data.shape[0] // batch_size

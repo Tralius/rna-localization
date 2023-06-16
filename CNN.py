@@ -2,12 +2,12 @@ from typing import Dict
 from model import Model
 import keras
 from keras.layers import Conv1D, Dense, Flatten, MaxPooling1D, Dropout
+import pandas as pd
+from GeneDataLoader import GeneDataLoader
 
 class CNN(Model):
     def __init__(self, 
-                 train_data,
-                 valid_data,
-                 architecure: str, 
+                 architecure: str,
                  optimizer: str = 'adam',
                  loss: str = 'categorical_crossentropy',
                  metrics: list[str] = ['accuracy'],
@@ -16,7 +16,6 @@ class CNN(Model):
                  pooling: list = [], 
                  dense: list[Dict] = [],
                  **kwargs) -> None:
-        super().__init__(train_data=train_data, validation_data=valid_data, **kwargs)
 
         arch = list(architecure)
         if len(dropouts)!=arch.count('d'):
@@ -42,11 +41,19 @@ class CNN(Model):
             if i=='p':
                 self.model.add(MaxPooling1D(pooling.pop(0)))
 
-        self.model.compile(optimizer=optimizer, loss=loss, metrics=metrics)
+        self.model.compile(optimizer=optimizer, loss=loss, metrics=metrics, **kwargs)
 
     
-    def fit(self, **kwargs):
-        return self.model.fit(x=self.train_data_loader, **kwargs)
+    def fit(self, train_data: pd.DataFrame, **kwargs):
+        padding_length = kwargs.pop('padding_length')
+        batch_size_train = kwargs.pop('batch_size_train')
+        shuffle_batch_train = kwargs.pop('shuffle_batch_train')
+        train_data_loader = GeneDataLoader(train_data, padding_length=padding_length, batch_size=batch_size_train, shuffle=shuffle_batch_train)
+        return self.model.fit(x=train_data_loader, **kwargs)
     
-    def evaluate(self, **kwargs):
-        return self.model.evaluate(x=self.validation_data_loader, **kwargs)
+    def evaluate(self, eval_data: pd.DataFrame, **kwargs):
+        padding_length = kwargs.pop('padding_length')
+        batch_size_valid = kwargs.pop('batch_size_valid')
+        shuffle_batch_valid = kwargs.pop('shuffle_batch_valid')
+        validation_data_loader = GeneDataLoader(eval_data, padding_length=padding_length, batch_size=batch_size_valid, shuffle=shuffle_batch_valid)
+        return self.model.evaluate(x=validation_data_loader, **kwargs)
