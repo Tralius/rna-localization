@@ -50,7 +50,7 @@ class RNATracker:
     def build_model(self, nb_filters, filters_length, pooling_size, lstm_units, embedding_vec, attention_size=50):
         """
         Original settings with batch-normalization. In practice to alleviate the noise introduced
-        via border_modes, batch-normalization is avoided. This function should only be used as reference.
+        via paddings, batch-normalization is avoided. This function should only be used as reference.
         """
         input = Input(shape=(self.max_len,), dtype='int8')
         embedding_layer = Embedding(len(embedding_vec), len(embedding_vec[0]), weights=[embedding_vec],
@@ -59,17 +59,17 @@ class RNATracker:
         embedding_output = embedding_layer(input)
         with tf.name_scope('first_cnn'):
             # first cnn layer
-            cnn_output = MaxPooling1D(pool_length=pooling_size, strides=pooling_size)(
+            cnn_output = MaxPooling1D(pool_size=pooling_size, strides=pooling_size)(
                 # BatchNormalization(axis=-1)(
-                Convolution1D(nb_filters, filters_length, border_mode='valid', activation='relu', use_bias=False)(
+                Convolution1D(nb_filters, filters_length, padding='valid', activation='relu', use_bias=False)(
                     embedding_output)  # )
                 # output shape is in (batch_size, steps, filters), normalizing over the feature axis which is -1
             )
         with tf.name_scope('Second_cnn'):
             # stack another cnn layer on top
-            cnn_output = MaxPooling1D(pool_length=pooling_size, strides=pooling_size)(
+            cnn_output = MaxPooling1D(pool_size=pooling_size, strides=pooling_size)(
                 # BatchNormalization(axis=-1)(
-                Convolution1D(nb_filters, filters_length, border_mode='valid', activation='relu', use_bias=False)(
+                Convolution1D(nb_filters, filters_length, padding='valid', activation='relu', use_bias=False)(
                     cnn_output)  # )
             )
         sequence_length = cnn_output.get_shape()[1].value
@@ -134,11 +134,11 @@ class RNATracker:
         embedding_output = embedding_layer(input)
         with tf.name_scope('first_cnn'):
             #first_cnn = Convolution1D(nb_filters, filters_length, #kernel_regularizer=regularizers.l2(0.0001),
-            #                          border_mode='valid', activation='relu', use_bias=False)
+            #                          padding='valid', activation='relu', use_bias=False)
             first_cnn = Convolution1D(nb_filters, filters_length, #kernel_regularizer=regularizers.l2(0.0001),
-                                      border_mode='valid', activation='relu', use_bias=False)
+                                      padding='valid', activation='relu', use_bias=False)
             # first cnn layer
-            cnn_output = Dropout(0.2)(MaxPooling1D(pool_length=pooling_size, strides=pooling_size)(
+            cnn_output = Dropout(0.2)(MaxPooling1D(pool_size=pooling_size, strides=pooling_size)(
                 # Lambda(lambda x: x, output_shape=lambda s: s)(BatchNormalization(axis=-1)(Masking(mask_value=0.)(
                 first_cnn(embedding_output))  # )))
                 # output shape is in (batch_size, steps, filters), normalizing over the feature axis which is -1
@@ -147,11 +147,11 @@ class RNATracker:
         # cnn doesn't support masking
         with tf.name_scope('Second_cnn'):
             #second_cnn = Convolution1D(nb_filters, filters_length, #kernel_regularizer=regularizers.l2(0.0001),
-            #                           border_mode='valid', activation='relu', use_bias=False)
+            #                           padding='valid', activation='relu', use_bias=False)
             second_cnn = Convolution1D(nb_filters, filters_length, #kernel_regularizer=regularizers.l2(0.0001),
-                                       border_mode='valid', activation='relu', use_bias=False)
+                                       padding='valid', activation='relu', use_bias=False)
             # stack another cnn layer on top
-            cnn_output = Dropout(0.2)(MaxPooling1D(pool_length=pooling_size, strides=pooling_size)(
+            cnn_output = Dropout(0.2)(MaxPooling1D(pool_size=pooling_size, strides=pooling_size)(
                 # Lambda(lambda x: x, output_shape=lambda s: s)(BatchNormalization(axis=-1)(Masking(mask_value=0.)(
                 second_cnn(cnn_output))  # )))
                 # output shape is in (batch_size, steps, filters), normalizing over the feature axis which is -1
@@ -159,14 +159,14 @@ class RNATracker:
 
         # with tf.name_scope('Third_cnn'):
         #     second_cnn = Convolution1D(nb_filters, filters_length, #kernel_regularizer=regularizers.l2(0.0001),
-        #                                border_mode='valid', activation='relu', use_bias=False)
+        #                                padding='valid', activation='relu', use_bias=False)
         #     # stack another cnn layer on top
-        #     cnn_output = Dropout(0.2)(MaxPooling1D(pool_length=pooling_size, strides=pooling_size)(
+        #     cnn_output = Dropout(0.2)(MaxPooling1D(pool_size=pooling_size, strides=pooling_size)(
         #         # Lambda(lambda x: x, output_shape=lambda s: s)(BatchNormalization(axis=-1)(Masking(mask_value=0.)(
         #         second_cnn(cnn_output))  # )))
         #     )
 
-        sequence_length = cnn_output.get_shape()[1].value
+        sequence_length = cnn_output.get_shape()[1] #.value
         with tf.name_scope('bilstm_layer'):
             # model.add(Masking(mask_value=0., input_shape=(timesteps, features)))
             bilstm = Bidirectional(LSTM(lstm_units, dropout=0.1, return_sequences=True,
@@ -177,7 +177,7 @@ class RNATracker:
             # to work with masking
             lstm_output = Lambda(lambda x: x, output_shape=lambda s: s)(lstm_output)
 
-        hidden_size = lstm_output.get_shape()[2].value
+        hidden_size = lstm_output.get_shape()[2] #.value
         # print('sequence_length: ', sequence_length)
         # print('hidden size:', hidden_size)
 
@@ -202,7 +202,7 @@ class RNATracker:
 
         from keras import optimizers
         # optim = optimizers.RMSprop()
-        optim = optimizers.nadam()
+        optim = optimizers.Nadam() #nadam()
         # optim = optimizers.sgd()
         self.model.compile(
             loss='kld',
@@ -245,9 +245,9 @@ class RNATracker:
         with tf.name_scope('first_cnn'):
             # first cnn layer
             if not load_weights:
-                cnn_output = Dropout(0.2)(MaxPooling1D(pool_length=pooling_size, strides=pooling_size)(
+                cnn_output = Dropout(0.2)(MaxPooling1D(pool_size=pooling_size, strides=pooling_size)(
                     # Lambda(lambda x: x, output_shape=lambda s: s)(BatchNormalization(axis=-1)(Masking(mask_value=0.)(
-                    Convolution1D(nb_filters, filters_length, border_mode='valid', activation='relu', use_bias=False)(
+                    Convolution1D(nb_filters, filters_length, padding='valid', activation='relu', use_bias=False)(
                         embedding_output))  # )))
                     # output shape is in (batch_size, steps, filters), normalizing over the feature axis which is -1
                 )
@@ -269,8 +269,8 @@ class RNATracker:
                 total_filters = weights.shape[-1]
                 selected_filters = np.random.choice(np.arange(total_filters), 512)
                 print('selected filters', selected_filters)
-                frozen_cnn = Convolution1D(512, filters_length, border_mode='valid', activation='relu', use_bias=False)
-                cnn_output = Dropout(0.2)(MaxPooling1D(pool_length=10, strides=10)(
+                frozen_cnn = Convolution1D(512, filters_length, padding='valid', activation='relu', use_bias=False)
+                cnn_output = Dropout(0.2)(MaxPooling1D(pool_size=10, strides=10)(
                     frozen_cnn(embedding_output))
                     # output shape is in (batch_size, steps, filters), normalizing over the feature axis which is -1
                 )
@@ -280,9 +280,9 @@ class RNATracker:
         # # cnn doesn't support masking
         # with tf.name_scope('Second_cnn'):
         #     # stack another cnn layer on top
-        #     cnn_output = Dropout(0.2)(MaxPooling1D(pool_length=pooling_size, strides=pooling_size)(
+        #     cnn_output = Dropout(0.2)(MaxPooling1D(pool_size=pooling_size, strides=pooling_size)(
         #         # Lambda(lambda x: x, output_shape=lambda s: s)(BatchNormalization(axis=-1)(Masking(mask_value=0.)(
-        #         Convolution1D(nb_filters, filters_length, border_mode='valid', activation='relu', use_bias=False)(
+        #         Convolution1D(nb_filters, filters_length, padding='valid', activation='relu', use_bias=False)(
         #             cnn_output))  # )))
         #         # output shape is in (batch_size, steps, filters), normalizing over the feature axis which is -1
         #     )
@@ -341,9 +341,9 @@ class RNATracker:
         embedding_output = embedding_layer(input)
         with tf.name_scope('first_cnn'):
             # first cnn layer
-            cnn_output = Dropout(0.2)(MaxPooling1D(pool_length=pooling_size, strides=pooling_size)(
+            cnn_output = Dropout(0.2)(MaxPooling1D(pool_size=pooling_size, strides=pooling_size)(
                 # Lambda(lambda x: x, output_shape=lambda s: s)(BatchNormalization(axis=-1)(Masking(mask_value=0.)(
-                Convolution1D(nb_filters, filters_length, border_mode='valid', activation='relu', use_bias=False,
+                Convolution1D(nb_filters, filters_length, padding='valid', activation='relu', use_bias=False,
                               kernel_regularizer=regularizers.l1(1e-3))(
                     embedding_output))  # )))
                 # output shape is in (batch_size, steps, filters), normalizing over the feature axis which is -1
@@ -352,9 +352,9 @@ class RNATracker:
         # cnn doesn't support masking
         with tf.name_scope('Second_cnn'):
             # stack another cnn layer on top
-            cnn_output = Dropout(0.2)(MaxPooling1D(pool_length=pooling_size, strides=pooling_size)(
+            cnn_output = Dropout(0.2)(MaxPooling1D(pool_size=pooling_size, strides=pooling_size)(
                 # Lambda(lambda x: x, output_shape=lambda s: s)(BatchNormalization(axis=-1)(Masking(mask_value=0.)(
-                Convolution1D(nb_filters, filters_length, border_mode='valid', activation='relu', use_bias=False,
+                Convolution1D(nb_filters, filters_length, padding='valid', activation='relu', use_bias=False,
                               kernel_regularizer=regularizers.l1(1e-3))(
                     cnn_output))  # )))
                 # output shape is in (batch_size, steps, filters), normalizing over the feature axis which is -1
@@ -414,11 +414,11 @@ class RNATracker:
                                     trainable=False)
         embedding_output = embedding_layer(input)
         # first cnn layer
-        cnn_output = Dropout(0.2)(MaxPooling1D(pool_length=pooling_size, strides=pooling_size)(
-            Convolution1D(nb_filters, filters_length, border_mode='valid', activation='relu')(embedding_output)))
+        cnn_output = Dropout(0.2)(MaxPooling1D(pool_size=pooling_size, strides=pooling_size)(
+            Convolution1D(nb_filters, filters_length, padding='valid', activation='relu')(embedding_output)))
         # stack another cnn layer on top
-        cnn_output = Dropout(0.2)(MaxPooling1D(pool_length=pooling_size, strides=pooling_size)(
-            Convolution1D(nb_filters, filters_length, border_mode='valid', activation='relu')(cnn_output)))
+        cnn_output = Dropout(0.2)(MaxPooling1D(pool_size=pooling_size, strides=pooling_size)(
+            Convolution1D(nb_filters, filters_length, padding='valid', activation='relu')(cnn_output)))
         sequence_length = cnn_output.get_shape()[1].value
         lstm_output = Bidirectional(LSTM(lstm_units, dropout=0.2, return_sequences=True,
                                          input_shape=(sequence_length, nb_filters)))(
@@ -484,11 +484,11 @@ class RNATracker:
                                     input_length=self.max_len,
                                     trainable=False)
         embedding_output = embedding_layer(input)
-        cnn_output = Dropout(0.2)(MaxPooling1D(pool_length=pooling_size, strides=pooling_size)(
-            Convolution1D(nb_filters, filters_length, border_mode='valid', activation='relu')(embedding_output)))
+        cnn_output = Dropout(0.2)(MaxPooling1D(pool_size=pooling_size, strides=pooling_size)(
+            Convolution1D(nb_filters, filters_length, padding='valid', activation='relu')(embedding_output)))
         # stack another layer on top
-        cnn_output = Dropout(0.2)(MaxPooling1D(pool_length=pooling_size, strides=pooling_size)(
-            Convolution1D(nb_filters, filters_length, border_mode='valid', activation='relu')(cnn_output)))
+        cnn_output = Dropout(0.2)(MaxPooling1D(pool_size=pooling_size, strides=pooling_size)(
+            Convolution1D(nb_filters, filters_length, padding='valid', activation='relu')(cnn_output)))
         lstm_output = Bidirectional(LSTM(lstm_units, dropout=0.2, recurrent_dropout=0.2, return_sequences=True,
                                          input_shape=cnn_output.get_shape()))(cnn_output)
         score_0 = Flatten()(Dense(1, input_dim=2 * lstm_units, activation='relu')(lstm_output))
@@ -807,7 +807,7 @@ class RNATracker:
         model_checkpoint = ModelCheckpoint(best_model_path, save_best_only=True, verbose=1)
         print(self.model.evaluate(x_train, y_train, batch_size=batch_size))
         print(self.model.evaluate(x_valid, y_valid, batch_size=batch_size))
-        hist = self.model.fit(x_train, y_train, batch_size=batch_size, nb_epoch=epochs, verbose=1,
+        hist = self.model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs, verbose=1,
                               validation_data=(x_valid, y_valid), callbacks=[model_checkpoint], shuffle=True)
         # load best performing model
         self.model.load_weights(best_model_path)
@@ -952,14 +952,14 @@ class NoATTModel:
         embedding_output = embedding_layer(input)
         with tf.name_scope('first_cnn'):
             # first cnn layer
-            cnn_output = Dropout(0.2)(MaxPooling1D(pool_length=pooling_size, strides=pooling_size)(
-                Convolution1D(nb_filters, filters_length, border_mode='valid', activation='relu')(embedding_output)
+            cnn_output = Dropout(0.2)(MaxPooling1D(pool_size=pooling_size, strides=pooling_size)(
+                Convolution1D(nb_filters, filters_length, padding='valid', activation='relu')(embedding_output)
                 # output shape is in (batch_size, steps, filters), normalizing over the feature axis which is -1
             ))
         with tf.name_scope('Second_cnn'):
             # stack another cnn layer on top
-            cnn_output = Dropout(0.2)(MaxPooling1D(pool_length=pooling_size, strides=pooling_size)(
-                Convolution1D(nb_filters, filters_length, border_mode='valid', activation='relu')(cnn_output))
+            cnn_output = Dropout(0.2)(MaxPooling1D(pool_size=pooling_size, strides=pooling_size)(
+                Convolution1D(nb_filters, filters_length, padding='valid', activation='relu')(cnn_output))
             )
 
         sequence_length = cnn_output.get_shape()[1].value
@@ -990,7 +990,7 @@ class NoATTModel:
         # early_stopping = EarlyStopping(monitor='val_loss', patience=7)
         best_model_path = OUTPATH + 'weights_fold_{}.h5'.format(self.kfold_index)
         model_checkpoint = ModelCheckpoint(best_model_path, save_best_only=True)
-        hist = self.model.fit(x_train, y_train, batch_size=batch_size, nb_epoch=epochs, verbose=1,
+        hist = self.model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs, verbose=1,
                               validation_split=0.1, callbacks=[model_checkpoint], shuffle=True)
         # load best performing model
         self.model.load_weights(best_model_path)
