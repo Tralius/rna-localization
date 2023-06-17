@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
 import pandas as pd
 
+
 class Model(ABC):
-    def __init__(self, train_data: pd.DataFrame, validation_data: pd.DataFrame = None, **kwargs) -> None:
+    def __init__(self, **kwargs) -> None:
         pass
 
     @abstractmethod

@@ -18,7 +18,7 @@ class CNN(Model):
                  **kwargs) -> None:
 
         arch = list(architecure)
-        if len(dropouts)!=arch.count('d'):
+        if len(dropouts) != arch.count('d'):
             ValueError('number of dropouts not equal to number of dropout parameters')
         if len(conv) != arch.count('c'):
             ValueError('number of convolutional 1D layers not equal to number of convolutional parameters')
