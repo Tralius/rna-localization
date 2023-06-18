@@ -6,8 +6,8 @@ from tensorflow.keras.layers import Bidirectional
 
 def build_model(max_len, layer_size: int = 128, learning_rate = 1e-3, dropout_rate = 0.3, out_size = 9):
     model = keras.models.Sequential()
-    model.add(keras.layers.Flatten(input_shape=[max_len]))
-    model.add(keras.layers.Reshape((max_len,1)))
+    #model.add(keras.layers.Flatten(input_shape=[max_len]))
+    model.add(keras.layers.Reshape((max_len*4, 1), input_shape=(max_len, 4)))
     model.add(keras.layers.Conv1D(64, 3,strides=2,padding="same"))
     model.add(keras.layers.BatchNormalization())
     model.add(keras.layers.LeakyReLU(alpha=0.05))
