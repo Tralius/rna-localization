@@ -1,9 +1,9 @@
 from typing import Dict
 from model import Model
 import keras
-from keras.layers import Conv1D, Dense, Flatten, MaxPooling1D, Dropout
+from keras.layers import Conv1D, Dense, Flatten, MaxPooling1D, Dropout, MultiHeadAttention
 import pandas as pd
-from GeneDataLoader import GeneDataLoader
+from dataloaders.GeneDataLoader import GeneDataLoader
 
 
 class CNN(Model):
@@ -12,12 +12,14 @@ class CNN(Model):
                  optimizer: str = 'adam',
                  loss: str = 'categorical_crossentropy',
                  metrics: list[str] = ['accuracy'],
-                 dropouts: list = [],
+                 dropouts: list[Dict] = [],
                  conv: list[Dict] = [],
-                 pooling: list = [],
+                 pooling: list[Dict] = [],
                  dense: list[Dict] = [],
+                 attention: list[Dict] = [],
                  **kwargs) -> None:
 
+        super().__init__()
         arch = list(architecure)
         if len(dropouts) != arch.count('d'):
             ValueError('number of dropouts not equal to number of dropout parameters')
@@ -27,22 +29,26 @@ class CNN(Model):
             ValueError('number of max pooling layers not equal to number of pooling parameters')
         if len(dense) != arch.count('e'):
             ValueError('number of dense layers not equal to number of dense parameters')
+        if len(attention) != arch.count('a'):
+            ValueError('number of attention layers not equal to number of attention parameters')
+
+        index = {'a': 0, 'c': 0, 'd': 0, 'e': 0, 'p': 0}
 
         self.model = keras.Sequential()
 
         for i in arch:
             if i == 'c':
-                self.model.add(Conv1D(**conv.pop(0)))
+                self.model.add(Conv1D(**conv[index.get('c')]))
             if i == 'd':
-                self.model.add(Dropout(dropouts.pop(0)))
+                self.model.add(Dropout(dropouts[index.get('d')]))
             if i == 'e':
-                self.model.add(Dense(**dense.pop(0)))
+                self.model.add(Dense(**dense[index.get('e')]))
             if i == 'f':
                 self.model.add(Flatten())
             if i == 'p':
-                self.model.add(MaxPooling1D(pooling.pop(0)))
+                self.model.add(MaxPooling1D(pooling[index.get('p')]))
             if i == 'm':
-                self.model.add(MultiHeadAttention(multihead.pop)) # TODO <<  fit proper params
+                self.model.add(MultiHeadAttention(attention[index.get('a')]))
 
         self.model.compile(optimizer=optimizer, loss=loss, metrics=metrics, **kwargs)
 
