@@ -1,10 +1,11 @@
 import keras
+import numpy as np
 from keras.layers import Conv1D, Dense, Flatten, MaxPooling1D, Dropout, MultiHeadAttention
 from keras.losses import MeanSquaredError
 from model import Model
-from typing import Dict, Union
+from typing import Dict
 from collections import Counter
-from GeneDataLoader import GeneDataLoader
+from dataloaders.GeneDataLoader import GeneDataLoader
 import pandas as pd
 
 
@@ -19,6 +20,7 @@ class MultiBranchMultiHead(Model):
     c
 
     """
+
     def __init__(self,
                  param_branches: list[Dict],
                  param_consensus: Dict,
@@ -66,18 +68,18 @@ class MultiBranchMultiHead(Model):
                 elif j == 'e':
                     self.branched_models[i].add(Dense(**parameters.get('dense')[index.get('e')]))
                     index['e'] = index.get('e') + 1
-                elif j == 'm':
-                    self.branched_models[i].add(MultiHeadAttention(**parameters.get('multihead')[index.get('m')]))
-                    index['m'] = index.get('m') + 1
+                elif j == 'a':
+                    self.branched_models[i].add(MultiHeadAttention(**parameters.get('attention')[index.get('a')]))
+                    index['a'] = index.get('a') + 1
 
             if i >= len(training):
                 self.branched_models[i].compile()
             else:
                 self.branched_models[i].compile(**training[i])
 
-        self.model = keras.Sequential()  # TODO: remane in "final_merge_model"
-        self.model.add(Dense(units=9, **param_consensus))
-        self.model.compile(loss=MeanSquaredError, **training_consensus)
+        self.final_merge_model = keras.Sequential()
+        self.final_merge_model.add(Dense(units=9, **param_consensus))
+        self.final_merge_model.compile(loss=MeanSquaredError, **training_consensus)
 
     def fit(self, train_data, params_branched: list[Dict] = None, params_consensus: Dict = None,
             params_loader: Dict = None):
@@ -92,6 +94,9 @@ class MultiBranchMultiHead(Model):
                     f' parameters will be used.')
 
         dataLoader = GeneDataLoader(train_data, **params_loader)
+        branches_pred_x = []
+        branches_pred_y = []
+
         for x_train, y_train in dataLoader:
             for i, model in enumerate(self.branched_models):
                 if i >= len(params_branched):
@@ -99,11 +104,14 @@ class MultiBranchMultiHead(Model):
                 else:
                     model.fit(x_train, y_train, **params_branched[i])
 
-            results_branched = [self.branched_models[i].evaluate() for i in # TODO: no eval
-                                range(self.number_branches)]  # TODO right command for getting results only
-            branches_pred = pd.concat(results_branched, axis=0)  # TODO adjust to numpy
+            results_branched = (self.branched_models[i].predict(x_train) for i in range(self.number_branches))
+            branches_pred_x.append(np.concatenate(results_branched, axis=1))
+            branches_pred_y.append(y_train)
 
-            self.model.fit(branches_pred, y_train, **params_consensus)
+        pred_x_concat = np.concatenate(branches_pred_x, axis=0)
+        pred_y_concat = np.concatenate(branches_pred_y, axis=0)
+        return self.final_merge_model.fit(pred_x_concat, pred_y_concat, **params_consensus)
+
 
     def evaluate(self, eval_data, params_branched: list[Dict] = None, params_consensus: Dict = None,
                  params_loader: Dict = None):
@@ -114,13 +122,22 @@ class MultiBranchMultiHead(Model):
                 f'Number of branches greater than provided evaluation parameters. Last {self.number_branches - len(params_branched)} '
                 f'models will be trained with default variables.')
         if len(params_branched) > self.number_branches:
-            Warning(f'Number of branches less than provided evaluation parameters. Only the first {self.number_branches}'
-                    f' parameters will be used.')
+            Warning(
+                f'Number of branches less than provided evaluation parameters. Only the first {self.number_branches}'
+                f' parameters will be used.')
 
         dataLoader = GeneDataLoader(eval_data, **params_loader)
-        for x_eval, y_eval in dataLoader:
-            for i, model in enumerate(self.branched_models):
+        branches_pred_x = []
+        branches_pred_y = []
 
+        for x_eval, y_eval in dataLoader:
+            results_branched = (self.branched_models[i].predict(x_eval) for i in range(self.number_branches))
+            branches_pred_x.append(np.concatenate(results_branched, axis=1))
+            branches_pred_y.append(y_eval)
+
+        pred_x_concat = np.concatenate(branches_pred_x, axis=0)
+        pred_y_concat = np.concatenate(branches_pred_y, axis=0)
+        return self.final_merge_model.evaluate(pred_x_concat, pred_y_concat, **params_consensus)
 
 
 def check_params(parameters: Dict):
@@ -130,29 +147,28 @@ def check_params(parameters: Dict):
 
     architecture = list(architecture)
 
-    parts_of_architecture = Counter(architecture).keys()
-    occurences = Counter(architecture).values()
+    occurences = Counter(architecture)
 
-    for i in range(len(parts_of_architecture)):
-        if parts_of_architecture[i] == 'd':
+    for layer, occ in occurences.items():
+        if layer == 'd':
             dropouts = parameters.get('dropouts')
-            if occurences[i] != len(dropouts):
+            if occ != len(dropouts):
                 ValueError('number of dropouts not equal to number of dropout parameters')
-        elif parts_of_architecture[i] == 'c':
+        elif layer == 'c':
             conv = parameters.get('conv')
-            if occurences[i] != len(conv):
+            if occ != len(conv):
                 ValueError('number of convolutional 1D layers not equal to number of convolutional parameters')
-        elif parts_of_architecture[i] == 'p':
+        elif layer == 'p':
             padding = parameters.get('pooling')
-            if occurences[i] != len(padding):
+            if occ != len(padding):
                 ValueError('number of max pooling layers not equal to number of pooling parameters')
-        elif parts_of_architecture[i] == 'e':
+        elif layer == 'e':
             dense = parameters.get('dense')
-            if occurences[i] != len(dense):
+            if occ != len(dense):
                 ValueError('number of dense layers not equal to number of dense parameters')
-        elif parts_of_architecture[i] == 'm':
-            multihead = parameters.get('multihead')
-            if occurences[i] != len(multihead):
+        elif layer == 'a':
+            attention = parameters.get('attention')
+            if occ != len(attention):
                 ValueError('number of multihead attention not equal to number of dense parameters')
         else:
             NotImplementedError
