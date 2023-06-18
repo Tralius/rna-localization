@@ -5,14 +5,15 @@ from typing import Tuple
 
 
 class GeneDataLoader(Sequence):
-    def __init__(self, data_table:pd.DataFrame, padding_length: int, batch_size: int = 32, shuffle: bool = True, struct: bool = False):
-        
+    def __init__(self, data_table: pd.DataFrame, padding_length: int, batch_size: int = 32, shuffle: bool = True,
+                 struct: bool = False):
+
         transformed_data = output_normalization(data_table.iloc[:, 0:9])
         transformed_data = pd.concat([transformed_data, one_hot_emb(data_table['seq'])], axis=1)
         if struct:
             transformed_data = pd.concat([transformed_data, data_table.iloc[:, 10:]], axis=1)
         self.data = transformed_data
-        self.struct = struct    # TODO for future use
+        self.struct = struct  # TODO for future use
 
         self.batch_size = batch_size
         self.shuffle = shuffle
@@ -32,7 +33,7 @@ class GeneDataLoader(Sequence):
     def __len__(self) -> int:
         return self.num_batches
 
-    def __getitem__(self, index: int) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    def __getitem__(self, index: int) -> Tuple[np.ndarray, np.ndarray]:
         # Calculate the start and end indices for the current batch
         start_index = index * self.batch_size
         end_index = (index + 1) * self.batch_size
@@ -55,16 +56,18 @@ class GeneDataLoader(Sequence):
             batch_labels[i] = label
 
         return padded_sequences, batch_labels
-    
-def one_hot_emb(data:pd.DataFrame) -> pd.DataFrame:
-    mapping = { 
+
+
+def one_hot_emb(data: pd.DataFrame) -> pd.DataFrame:
+    mapping = {
         'A': 0,
         'C': 1,
         'G': 2,
         'T': 3
-        }
+    }
     one_hot_encode_lam = lambda seq: to_categorical([mapping[x] for x in seq])
     return data.apply(one_hot_encode_lam)
+
 
 def output_normalization(data: pd.DataFrame) -> pd.DataFrame:
     sum_vec = data.sum(axis=1)

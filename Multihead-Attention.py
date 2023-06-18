@@ -4,6 +4,8 @@ from keras.losses import MeanSquaredError
 from model import Model
 from typing import Dict, Union
 from collections import Counter
+from GeneDataLoader import GeneDataLoader
+import pandas as pd
 
 
 class MultiBranchMultiHead(Model):
@@ -12,8 +14,8 @@ class MultiBranchMultiHead(Model):
                  param_branches: list[Dict],
                  param_consensus: Dict,
                  number_branches: int = 3,
-                 training: Union[None, list[Dict]] = None,
-                 training_consensus: Union[None, Dict] = None,
+                 training: list[Dict] = None,
+                 training_consensus: Dict = None,
                  **kwargs):
         super().__init__(**kwargs)
         if len(param_branches) != number_branches:
@@ -30,6 +32,7 @@ class MultiBranchMultiHead(Model):
                     f' parameters will be used.')
 
         self.branched_models = []
+        self.number_branches = number_branches
 
         for i in range(number_branches):
             self.branched_models[i] = keras.Sequential()
@@ -67,11 +70,48 @@ class MultiBranchMultiHead(Model):
         self.model.add(Dense(units=9, **param_consensus))
         self.model.compile(loss=MeanSquaredError, **training_consensus)
 
-    def fit(self, train_data, **kwargs):
-        pass
+    def fit(self, train_data, params_branched: list[Dict] = None, params_consensus: Dict = None,
+            params_loader: Dict = None):
+        if params_branched is None:
+            Warning('Training all models with default variables')
+        elif len(params_branched) < self.number_branches:
+            Warning(
+                f'Number of branches greater than provided training parameters. Last {self.number_branches - len(params_branched)} '
+                f'models will be trained with default variables.')
+        if len(params_branched) > self.number_branches:
+            Warning(f'Number of branches less than provided training parameters. Only the first {self.number_branches}'
+                    f' parameters will be used.')
 
-    def evaluate(self, eval_data, **kwargs):
-        pass
+        dataLoader = GeneDataLoader(train_data, **params_loader)
+        for x_train, y_train in dataLoader:
+            for i, model in enumerate(self.branched_models):
+                if i >= len(params_branched):
+                    model.fit(x_train, y_train)
+                else:
+                    model.fit(x_train, y_train, **params_branched[i])
+
+            results_branched = [self.model[i].evaluate() for i in
+                                range(self.number_branches)]  # TODO right command for getting results only
+            branches_pred = pd.concat(results_branched, axis=0)  # TODO adjust to numpy
+
+            self.model.fit(branches_pred, y_train, **params_consensus)
+
+    def evaluate(self, eval_data, params_branched: list[Dict] = None, params_consensus: Dict = None,
+                 params_loader: Dict = None):
+        if params_branched is None:
+            Warning('Evaluate all models with default variables')
+        elif len(params_branched) < self.number_branches:
+            Warning(
+                f'Number of branches greater than provided evaluation parameters. Last {self.number_branches - len(params_branched)} '
+                f'models will be trained with default variables.')
+        if len(params_branched) > self.number_branches:
+            Warning(f'Number of branches less than provided evaluation parameters. Only the first {self.number_branches}'
+                    f' parameters will be used.')
+
+        dataLoader = GeneDataLoader(eval_data, **params_loader)
+        for x_eval, y_eval in dataLoader:
+            for i, model in enumerate(self.branched_models):
+
 
 
 def check_params(parameters: Dict):
