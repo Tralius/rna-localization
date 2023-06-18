@@ -41,6 +41,8 @@ class CNN(Model):
                 self.model.add(Flatten())
             if i == 'p':
                 self.model.add(MaxPooling1D(pooling.pop(0)))
+            if i == 'm':
+                self.model.add(MultiHeadAttention(multihead.pop)) # TODO <<  fit proper params
 
         self.model.compile(optimizer=optimizer, loss=loss, metrics=metrics, **kwargs)
 

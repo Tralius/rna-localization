@@ -9,7 +9,16 @@ import pandas as pd
 
 
 class MultiBranchMultiHead(Model):
+    """
 
+    TODO: refine docs
+    ...
+
+    Architecture:
+    d : dropouts
+    c
+
+    """
     def __init__(self,
                  param_branches: list[Dict],
                  param_consensus: Dict,
@@ -66,7 +75,7 @@ class MultiBranchMultiHead(Model):
             else:
                 self.branched_models[i].compile(**training[i])
 
-        self.model = keras.Sequential()
+        self.model = keras.Sequential()  # TODO: remane in "final_merge_model"
         self.model.add(Dense(units=9, **param_consensus))
         self.model.compile(loss=MeanSquaredError, **training_consensus)
 
@@ -90,7 +99,7 @@ class MultiBranchMultiHead(Model):
                 else:
                     model.fit(x_train, y_train, **params_branched[i])
 
-            results_branched = [self.model[i].evaluate() for i in
+            results_branched = [self.branched_models[i].evaluate() for i in # TODO: no eval
                                 range(self.number_branches)]  # TODO right command for getting results only
             branches_pred = pd.concat(results_branched, axis=0)  # TODO adjust to numpy
 

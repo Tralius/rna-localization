@@ -7,8 +7,8 @@ dependencies:
     - torch
     - numpy
     - keras
-    - jupyter
     - tensorflow
+    - jupyter
     - matplotlib
     - scikit-learn
 prefix: /home/usr/anaconda3/envs/reggen
