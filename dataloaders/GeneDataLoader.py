@@ -53,7 +53,7 @@ class GeneDataLoader(Sequence):
 
             padded_sequences[i, :len(sequence), :] = sequence
 
-            batch_labels[i] = label
+            batch_labels[i, :] = label
 
         return padded_sequences, batch_labels
 

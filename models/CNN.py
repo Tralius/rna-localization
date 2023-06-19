@@ -39,16 +39,21 @@ class CNN(Model):
         for i in arch:
             if i == 'c':
                 self.model.add(Conv1D(**conv[index.get('c')]))
+                index['c'] = index.get('c') + 1
             if i == 'd':
                 self.model.add(Dropout(dropouts[index.get('d')]))
+                index['d'] = index.get('d') + 1
             if i == 'e':
                 self.model.add(Dense(**dense[index.get('e')]))
+                index['e'] = index.get('e') + 1
             if i == 'f':
                 self.model.add(Flatten())
             if i == 'p':
                 self.model.add(MaxPooling1D(pooling[index.get('p')]))
-            if i == 'm':
+                index['p'] = index.get('p') + 1
+            if i == 'a':
                 self.model.add(MultiHeadAttention(attention[index.get('a')]))
+                index['a'] = index.get('a') + 1
 
         self.model.compile(optimizer=optimizer, loss=loss, metrics=metrics, **kwargs)
 

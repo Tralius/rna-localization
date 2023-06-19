@@ -1,7 +1,6 @@
 import keras
 import numpy as np
-from keras.layers import Conv1D, Dense, Flatten, MaxPooling1D, Dropout, MultiHeadAttention
-from keras.losses import MeanSquaredError
+from keras.layers import Conv1D, Dense, Flatten, MaxPooling1D, Dropout, MultiHeadAttention, Reshape
 from model import Model
 from typing import Dict, Tuple
 from collections import Counter
@@ -25,8 +24,8 @@ class MultiBranchMultiHead(Model):
                  param_branches: list[Dict],
                  param_consensus: Dict,
                  number_branches: int = 3,
-                 training: list[Dict] = None,
-                 training_consensus: Dict = None,
+                 training: list[Dict] = [],
+                 training_consensus: Dict = {},
                  **kwargs):
         super().__init__(**kwargs)
         if len(param_branches) != number_branches:
@@ -46,7 +45,7 @@ class MultiBranchMultiHead(Model):
         self.number_branches = number_branches
 
         for i in range(number_branches):
-            self.branched_models[i] = keras.Sequential()
+            self.branched_models.append(keras.Sequential())
 
             parameters = param_branches[i]
             check_params(parameters)
@@ -57,31 +56,36 @@ class MultiBranchMultiHead(Model):
             architecture = list(parameters.get('architecture'))
             for j in architecture:
                 if j == 'd':
-                    self.branched_models[i].add(Dropout(**parameters.get('dropouts')[index.get('d')]))
-                    index['d'] = index.get('d') + 1
+                    self.branched_models[i].add(Dropout(**parameters.get('dropouts')[index.get('dropouts')]))
+                    index['d'] = index.get('dropouts') + 1
                 elif j == 'c':
-                    self.branched_models[i].add(Conv1D(**parameters.get('conv')[index.get('c')]))
-                    index['c'] = index.get('c') + 1
+                    self.branched_models[i].add(Conv1D(**parameters.get('conv')[index.get('conv')]))
+                    index['c'] = index.get('conv') + 1
                 elif j == 'p':
-                    self.branched_models[i].add(MaxPooling1D(**parameters.get('pooling')[index.get('p')]))
-                    index['p'] = index.get('p') + 1
+                    self.branched_models[i].add(MaxPooling1D(**parameters.get('pooling')[index.get('pooling')]))
+                    index['p'] = index.get('pooling') + 1
                 elif j == 'e':
-                    self.branched_models[i].add(Dense(**parameters.get('dense')[index.get('e')]))
-                    index['e'] = index.get('e') + 1
+                    self.branched_models[i].add(Dense(**parameters.get('dense')[index.get('dense')]))
+                    index['e'] = index.get('dense') + 1
                 elif j == 'a':
-                    self.branched_models[i].add(MultiHeadAttention(**parameters.get('attention')[index.get('a')]))
-                    index['a'] = index.get('a') + 1
+                    self.branched_models[i].add(MultiHeadAttention(**parameters.get('attention')[index.get('attention')]))
+                    index['a'] = index.get('attention') + 1
+                elif j == 'f':
+                    self.branched_models[i].add(Flatten())
+                elif j == 'r':
+                    self.branched_models[i].add(Reshape(**parameters.get('reshape')[index.get('reshape')]))
+                    index['r'] = index.get('reshape') + 1
 
             if i >= len(training):
-                self.branched_models[i].compile()
+                self.branched_models[i].compile(loss='categorical_crossentropy')
             else:
                 self.branched_models[i].compile(**training[i])
 
         self.final_merge_model = keras.Sequential()
         self.final_merge_model.add(Dense(units=9, **param_consensus))
-        self.final_merge_model.compile(loss=MeanSquaredError, **training_consensus)
+        self.final_merge_model.compile(loss='categorical_crossentropy', **training_consensus)
 
-    def fit(self, train_data, params_branched: list[Dict] = None, params_consensus: Dict = None,
+    def fit(self, train_data, params_branched: list[Dict] = [], params_consensus: Dict = {},
             params_loader: Dict = None):
         if params_branched is None:
             Warning('Training all models with default variables')
@@ -104,7 +108,7 @@ class MultiBranchMultiHead(Model):
                 else:
                     model.fit(x_train, y_train, **params_branched[i])
 
-            results_branched = (self.branched_models[i].predict(x_train) for i in range(self.number_branches))
+            results_branched = [self.branched_models[i].predict(x_train) for i in range(self.number_branches)]
             branches_pred_x.append(np.concatenate(results_branched, axis=1))
             branches_pred_y.append(y_train)
 
@@ -113,7 +117,7 @@ class MultiBranchMultiHead(Model):
         return self.final_merge_model.fit(pred_x_concat, pred_y_concat, **params_consensus)
 
 
-    def evaluate(self, eval_data, params_branched: list[Dict] = None, params_consensus: Dict = None,
+    def evaluate(self, eval_data, params_branched: list[Dict] = [], params_consensus: Dict = {},
                  params_loader: Dict = None):
         if params_branched is None:
             Warning('Evaluate all models with default variables')
@@ -131,7 +135,7 @@ class MultiBranchMultiHead(Model):
 
         return self.final_merge_model.evaluate(pred_x_concat, pred_y_concat, **params_consensus)
 
-    def predict(self, data, params_loader: Dict = None, params_predict: Dict = None, **kwargs):
+    def predict(self, data, params_loader: Dict = {}, params_predict: Dict = {}):
         dataLoader = GeneDataLoader(data, **params_loader)
         pred_x_concat, _ = self.predict_branches(dataLoader)
 
@@ -142,7 +146,7 @@ class MultiBranchMultiHead(Model):
         branches_pred_y = []
 
         for x_eval, y_eval in dataLoader:
-            results_branched = (self.branched_models[i].predict(x_eval) for i in range(self.number_branches))
+            results_branched = [self.branched_models[i].predict(x_eval) for i in range(self.number_branches)]
             branches_pred_x.append(np.concatenate(results_branched, axis=1))
             branches_pred_y.append(y_eval)
 
@@ -182,6 +186,10 @@ def check_params(parameters: Dict):
         elif layer == 'a':
             attention = parameters.get('attention')
             if occ != len(attention):
-                ValueError('number of multihead attention not equal to number of dense parameters')
+                ValueError('number of multihead attention not equal to number of attention parameters')
+        elif layer == 'r':
+            reshape = parameters.get('reshape')
+            if occ != len(reshape):
+                ValueError('number of reshape layer not equal to number of reshape parameters')
         else:
             NotImplementedError()
