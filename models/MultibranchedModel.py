@@ -3,7 +3,7 @@ import numpy as np
 from keras.layers import Conv1D, Dense, Flatten, MaxPooling1D, Dropout, MultiHeadAttention
 from keras.losses import MeanSquaredError
 from model import Model
-from typing import Dict
+from typing import Dict, Tuple
 from collections import Counter
 from dataloaders.GeneDataLoader import GeneDataLoader
 import pandas as pd
@@ -127,6 +127,17 @@ class MultiBranchMultiHead(Model):
                 f' parameters will be used.')
 
         dataLoader = GeneDataLoader(eval_data, **params_loader)
+        pred_x_concat, pred_y_concat = self.predict_branches(dataLoader)
+
+        return self.final_merge_model.evaluate(pred_x_concat, pred_y_concat, **params_consensus)
+
+    def predict(self, data, params_loader: Dict = None, params_predict: Dict = None, **kwargs):
+        dataLoader = GeneDataLoader(data, **params_loader)
+        pred_x_concat, _ = self.predict_branches(dataLoader)
+
+        return self.final_merge_model.predict(pred_x_concat, **params_predict)
+
+    def predict_branches(self, dataLoader: keras.Sequential) -> Tuple[np.ndarray, np.ndarray]:
         branches_pred_x = []
         branches_pred_y = []
 
@@ -137,7 +148,9 @@ class MultiBranchMultiHead(Model):
 
         pred_x_concat = np.concatenate(branches_pred_x, axis=0)
         pred_y_concat = np.concatenate(branches_pred_y, axis=0)
-        return self.final_merge_model.evaluate(pred_x_concat, pred_y_concat, **params_consensus)
+
+        return pred_x_concat, pred_y_concat
+
 
 
 def check_params(parameters: Dict):
@@ -171,4 +184,4 @@ def check_params(parameters: Dict):
             if occ != len(attention):
                 ValueError('number of multihead attention not equal to number of dense parameters')
         else:
-            NotImplementedError
+            NotImplementedError()

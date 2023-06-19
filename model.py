@@ -13,3 +13,7 @@ class Model(ABC):
     @abstractmethod
     def evaluate(self, eval_data, **kwargs):
         pass
+
+    @abstractmethod
+    def predict(self, data, **kwargs):
+        pass
