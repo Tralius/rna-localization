@@ -1,7 +1,7 @@
 import keras
 import numpy as np
 from keras.layers import Conv1D, Dense, Flatten, MaxPooling1D, Dropout, MultiHeadAttention, Reshape
-from model import Model
+from notes.model import Model
 from typing import Dict, Tuple
 from collections import Counter
 from dataloaders.GeneDataLoader import GeneDataLoader
@@ -68,7 +68,8 @@ class MultiBranchMultiHead(Model):
                     self.branched_models[i].add(Dense(**parameters.get('dense')[index.get('dense')]))
                     index['e'] = index.get('dense') + 1
                 elif j == 'a':
-                    self.branched_models[i].add(MultiHeadAttention(**parameters.get('attention')[index.get('attention')]))
+                    self.branched_models[i].add(
+                        MultiHeadAttention(**parameters.get('attention')[index.get('attention')]))
                     index['a'] = index.get('attention') + 1
                 elif j == 'f':
                     self.branched_models[i].add(Flatten())
@@ -116,7 +117,6 @@ class MultiBranchMultiHead(Model):
         pred_y_concat = np.concatenate(branches_pred_y, axis=0)
         return self.final_merge_model.fit(pred_x_concat, pred_y_concat, **params_consensus)
 
-
     def evaluate(self, eval_data, params_branched: list[Dict] = [], params_consensus: Dict = {},
                  params_loader: Dict = None):
         if params_branched is None:
@@ -154,7 +154,6 @@ class MultiBranchMultiHead(Model):
         pred_y_concat = np.concatenate(branches_pred_y, axis=0)
 
         return pred_x_concat, pred_y_concat
-
 
 
 def check_params(parameters: Dict):
