@@ -1,45 +1,52 @@
 import keras
 import numpy as np
 from keras.layers import Conv1D, Dense, Flatten, MaxPooling1D, Dropout, MultiHeadAttention, Reshape
-from notes.model import Model
+from notes import Model
 from typing import Dict, Tuple
 from collections import Counter
-from dataloaders.GeneDataLoader import GeneDataLoader
-import pandas as pd
+from dataloaders import GeneDataLoader
 
 
-class MultiBranchMultiHead(Model):
+class MultiBranch(Model):
     """
 
     TODO: refine docs
     ...
 
     Architecture:
-    d : dropouts
-    c
-
+    a: Multihead-Attention layer (for singlehead set heads=1)
+    c: 1D Convolution
+    d: Dropout layer
+    e: Dense layer
+    f: Flatten layer
+    p: 1D Max-Pooling layer
+    r: Reshape layer
     """
 
     def __init__(self,
                  param_branches: list[Dict],
                  param_consensus: Dict,
                  number_branches: int = 3,
-                 training: list[Dict] = [],
-                 training_consensus: Dict = {},
+                 training: list[Dict] = None,
+                 training_consensus: Dict = None,
                  **kwargs):
         super().__init__(**kwargs)
+
         if len(param_branches) != number_branches:
             ValueError('Number of branches and number of parameter sets different')
-
         if training is None:
-            Warning('Training all models with default variables')
+            Warning('Training all models in branch with default variables')
+            training = []
         elif len(training) < number_branches:
             Warning(
                 f'Number of branches greater than provided training parameters. Last {number_branches - len(training)} '
                 f'models will be trained with default variables.')
-        if len(training) > number_branches:
+        elif len(training) > number_branches:
             Warning(f'Number of branches less than provided training parameters. Only the first {number_branches}'
                     f' parameters will be used.')
+        if training is None:
+            Warning('Training consensus model with default variables')
+            training_consensus = {}
 
         self.branched_models = []
         self.number_branches = number_branches
@@ -86,17 +93,22 @@ class MultiBranchMultiHead(Model):
         self.final_merge_model.add(Dense(units=9, **param_consensus))
         self.final_merge_model.compile(loss='categorical_crossentropy', **training_consensus)
 
-    def fit(self, train_data, params_branched: list[Dict] = [], params_consensus: Dict = {},
+    def fit(self, train_data, params_branched: list[Dict] = None, params_consensus: Dict = None,
             params_loader: Dict = None):
+
         if params_branched is None:
-            Warning('Training all models with default variables')
+            Warning('Training all models in branch with default variables')
+            params_branched = []
         elif len(params_branched) < self.number_branches:
             Warning(
                 f'Number of branches greater than provided training parameters. Last {self.number_branches - len(params_branched)} '
                 f'models will be trained with default variables.')
-        if len(params_branched) > self.number_branches:
+        elif len(params_branched) > self.number_branches:
             Warning(f'Number of branches less than provided training parameters. Only the first {self.number_branches}'
                     f' parameters will be used.')
+        if params_consensus is None:
+            Warning('Training consensus model with default variables')
+            params_consensus = {}
 
         dataLoader = GeneDataLoader(train_data, **params_loader)
         branches_pred_x = []
@@ -117,10 +129,11 @@ class MultiBranchMultiHead(Model):
         pred_y_concat = np.concatenate(branches_pred_y, axis=0)
         return self.final_merge_model.fit(pred_x_concat, pred_y_concat, **params_consensus)
 
-    def evaluate(self, eval_data, params_branched: list[Dict] = [], params_consensus: Dict = {},
+    def evaluate(self, eval_data, params_branched: list[Dict] = None, params_consensus: Dict = None,
                  params_loader: Dict = None):
         if params_branched is None:
             Warning('Evaluate all models with default variables')
+            params_branched = []
         elif len(params_branched) < self.number_branches:
             Warning(
                 f'Number of branches greater than provided evaluation parameters. Last {self.number_branches - len(params_branched)} '
@@ -129,13 +142,20 @@ class MultiBranchMultiHead(Model):
             Warning(
                 f'Number of branches less than provided evaluation parameters. Only the first {self.number_branches}'
                 f' parameters will be used.')
+        if params_consensus is None:
+            Warning('Evaluation consensus model with default variables')
+            params_consensus = {}
 
         dataLoader = GeneDataLoader(eval_data, **params_loader)
         pred_x_concat, pred_y_concat = self.predict_branches(dataLoader)
 
         return self.final_merge_model.evaluate(pred_x_concat, pred_y_concat, **params_consensus)
 
-    def predict(self, data, params_loader: Dict = {}, params_predict: Dict = {}):
+    def predict(self, data, params_loader: Dict = None, params_predict: Dict = None):
+        if params_predict is None:
+            Warning('Prediction with default parameters')
+            params_predict = []
+
         dataLoader = GeneDataLoader(data, **params_loader)
         pred_x_concat, _ = self.predict_branches(dataLoader)
 
