@@ -17,3 +17,11 @@ class Model(ABC):
     @abstractmethod
     def predict(self, data, **kwargs):
         pass
+
+    @abstractmethod
+    def print_model(self, path):
+        pass
+
+    @abstractmethod
+    def save_model(self, path):
+        pass

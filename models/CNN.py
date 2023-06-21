@@ -1,9 +1,10 @@
 from typing import Dict
-from notes import Model
+from notes.model import Model
 import keras
 from keras.layers import Conv1D, Dense, Flatten, MaxPooling1D, Dropout, MultiHeadAttention
+from keras.utils import plot_model
 import pandas as pd
-from dataloaders import GeneDataLoader
+from dataloaders.GeneDataLoader import GeneDataLoader
 
 
 class CNN(Model):
@@ -26,6 +27,7 @@ class CNN(Model):
                  pooling: list[Dict] = None,
                  dense: list[Dict] = None,
                  attention: list[Dict] = None,
+                 epochs: int = 5,
                  **kwargs) -> None:
 
         super().__init__()
@@ -72,6 +74,8 @@ class CNN(Model):
                 self.model.add(MultiHeadAttention(attention[index.get('a')]))
                 index['a'] = index.get('a') + 1
 
+        self.epochs = epochs
+
         self.model.compile(optimizer=optimizer, loss=loss, metrics=metrics, **kwargs)
 
     def fit(self, train_data: pd.DataFrame, params_loader: Dict = None, **kwargs):
@@ -80,7 +84,7 @@ class CNN(Model):
         shuffle_batch_train = kwargs.pop('shuffle_batch_train')
         train_data_loader = GeneDataLoader(train_data, padding_length=padding_length, batch_size=batch_size_train,
                                            shuffle=shuffle_batch_train)
-        return self.model.fit(x=train_data_loader, **kwargs)
+        return self.model.fit(train_data_loader, epochs=self.epochs, **kwargs)
 
     def evaluate(self, eval_data: pd.DataFrame, params_loader: Dict = None, **kwargs):
         padding_length = kwargs.pop('padding_length')
@@ -88,8 +92,15 @@ class CNN(Model):
         shuffle_batch_valid = kwargs.pop('shuffle_batch_valid')
         validation_data_loader = GeneDataLoader(eval_data, padding_length=padding_length, batch_size=batch_size_valid,
                                                 shuffle=shuffle_batch_valid)
-        return self.model.evaluate(x=validation_data_loader, **kwargs)
+        return self.model.evaluate(validation_data_loader, **kwargs)
 
     def predict(self, data, params_loader: Dict = None, params_predict: Dict = None):
         dataLoader = GeneDataLoader(data, **params_loader)
         return self.model.predict(dataLoader, **params_predict)
+
+    def print_model(self, path):
+        self.model.summary()
+        plot_model(self.model, path, show_shapes=True)
+
+    def save_model(self, path):
+        self.model.save(path)
