@@ -1,10 +1,10 @@
 import keras
 import numpy as np
 from keras.layers import Conv1D, Dense, Flatten, MaxPooling1D, Dropout, MultiHeadAttention, Reshape
-from notes import Model
+from notes.model import Model
 from typing import Dict, Tuple
 from collections import Counter
-from dataloaders import GeneDataLoader
+from dataloaders.GeneDataLoader import GeneDataLoader
 
 
 class MultiBranch(Model):
@@ -64,25 +64,25 @@ class MultiBranch(Model):
             for j in architecture:
                 if j == 'd':
                     self.branched_models[i].add(Dropout(**parameters.get('dropouts')[index.get('dropouts')]))
-                    index['d'] = index.get('dropouts') + 1
+                    index['dropouts'] = index.get('dropouts') + 1
                 elif j == 'c':
                     self.branched_models[i].add(Conv1D(**parameters.get('conv')[index.get('conv')]))
-                    index['c'] = index.get('conv') + 1
+                    index['conv'] = index.get('conv') + 1
                 elif j == 'p':
                     self.branched_models[i].add(MaxPooling1D(**parameters.get('pooling')[index.get('pooling')]))
-                    index['p'] = index.get('pooling') + 1
+                    index['pooling'] = index.get('pooling') + 1
                 elif j == 'e':
                     self.branched_models[i].add(Dense(**parameters.get('dense')[index.get('dense')]))
-                    index['e'] = index.get('dense') + 1
+                    index['dense'] = index.get('dense') + 1
                 elif j == 'a':
                     self.branched_models[i].add(
                         MultiHeadAttention(**parameters.get('attention')[index.get('attention')]))
-                    index['a'] = index.get('attention') + 1
+                    index['attention'] = index.get('attention') + 1
                 elif j == 'f':
                     self.branched_models[i].add(Flatten())
                 elif j == 'r':
                     self.branched_models[i].add(Reshape(**parameters.get('reshape')[index.get('reshape')]))
-                    index['r'] = index.get('reshape') + 1
+                    index['reshape'] = index.get('reshape') + 1
 
             if i >= len(training):
                 self.branched_models[i].compile(loss='categorical_crossentropy')
@@ -94,7 +94,7 @@ class MultiBranch(Model):
         self.final_merge_model.compile(loss='categorical_crossentropy', **training_consensus)
 
     def fit(self, train_data, params_branched: list[Dict] = None, params_consensus: Dict = None,
-            params_loader: Dict = None):
+            params_loader_branches: Dict = None, params_loader_consensus: Dict = None):
 
         if params_branched is None:
             Warning('Training all models in branch with default variables')
@@ -110,24 +110,29 @@ class MultiBranch(Model):
             Warning('Training consensus model with default variables')
             params_consensus = {}
 
-        dataLoader = GeneDataLoader(train_data, **params_loader)
+        dataLoader = GeneDataLoader(train_data, **params_loader_branches)
         branches_pred_x = []
         branches_pred_y = []
 
-        for x_train, y_train in dataLoader:
-            for i, model in enumerate(self.branched_models):
-                if i >= len(params_branched):
-                    model.fit(x_train, y_train)
-                else:
-                    model.fit(x_train, y_train, **params_branched[i])
+        for i, model in enumerate(self.branched_models):
+            if i >= len(params_branched):
+                model.fit(dataLoader)
+            else:
+                model.fit(dataLoader, **params_branched[i])
 
-            results_branched = [self.branched_models[i].predict(x_train) for i in range(self.number_branches)]
-            branches_pred_x.append(np.concatenate(results_branched, axis=1))
-            branches_pred_y.append(y_train)
+#        for x_train, y_train in dataLoader:
+#            for i, model in enumerate(self.branched_models):
+#                if i >= len(params_branched):
+#                    model.fit(x_train, y_train)
+#                else:
+#                    model.fit(x_train, y_train, **params_branched[i])
 
+        dataLoader_consensus = GeneDataLoader(train_data, shuffle=False, **params_loader_consensus)
+        results_branched = [self.branched_models[i].predict(dataLoader_consensus) for i in range(self.number_branches)]
+        branches_pred_x.append(np.concatenate(results_branched, axis=1))
         pred_x_concat = np.concatenate(branches_pred_x, axis=0)
-        pred_y_concat = np.concatenate(branches_pred_y, axis=0)
-        return self.final_merge_model.fit(pred_x_concat, pred_y_concat, **params_consensus)
+
+        return self.final_merge_model.fit(pred_x_concat, train_data.iloc[:, 0:9], **params_consensus)
 
     def evaluate(self, eval_data, params_branched: list[Dict] = None, params_consensus: Dict = None,
                  params_loader: Dict = None):
@@ -154,7 +159,7 @@ class MultiBranch(Model):
     def predict(self, data, params_loader: Dict = None, params_predict: Dict = None):
         if params_predict is None:
             Warning('Prediction with default parameters')
-            params_predict = []
+            params_predict = {}
 
         dataLoader = GeneDataLoader(data, **params_loader)
         pred_x_concat, _ = self.predict_branches(dataLoader)

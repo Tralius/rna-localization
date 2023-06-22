@@ -36,11 +36,7 @@ class GeneDataLoader(Sequence):
     def __getitem__(self, index: int) -> Tuple[np.ndarray, np.ndarray]:
         # Calculate the start and end indices for the current batch
         start_index = index * self.batch_size
-        end_index = (index + 1) * self.batch_size
-
-        # Adjust the end index if it exceeds the total number of samples
-        if end_index > self.data.shape[0]:
-            end_index = self.data.shape[0]
+        end_index = min((index + 1) * self.batch_size, self.data.shape[0])
 
         # Initialize empty arrays for samples and labels
         padded_sequences = np.zeros((end_index - start_index, self.max_len, 4), dtype=np.float32)
@@ -48,12 +44,9 @@ class GeneDataLoader(Sequence):
 
         # Load padded sequences and labels for the current batch
         for i, idx in enumerate(self.indices[start_index:end_index]):
-            sequence = self.data['seq'].iloc[idx]
-            label = self.data.iloc[idx, 0:9]
+            padded_sequences[i, :len(self.data['seq'].iloc[idx]), :] = self.data['seq'].iloc[idx]
 
-            padded_sequences[i, :len(sequence), :] = sequence
-
-            batch_labels[i, :] = label
+            batch_labels[i, :] = self.data.iloc[idx, 0:9]
 
         return padded_sequences, batch_labels
 
