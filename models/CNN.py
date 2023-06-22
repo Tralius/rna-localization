@@ -1,25 +1,42 @@
 from typing import Dict
-from model import Model
+from notes import Model
 import keras
 from keras.layers import Conv1D, Dense, Flatten, MaxPooling1D, Dropout, MultiHeadAttention
 import pandas as pd
-from dataloaders.GeneDataLoader import GeneDataLoader
+from dataloaders import GeneDataLoader
 
 
 class CNN(Model):
+    """
+    Architecture:
+    a: Multihead-Attention layer (for singlehead set heads=1)
+    c: 1D Convolution
+    d: Dropout layer
+    e: Dense layer
+    f: Flatten layer
+    p: 1D Max-Pooling layer
+    """
     def __init__(self,
                  architecure: str,
                  optimizer: str = 'adam',
                  loss: str = 'categorical_crossentropy',
-                 metrics: list[str] = ['accuracy'],
-                 dropouts: list[Dict] = [],
-                 conv: list[Dict] = [],
-                 pooling: list[Dict] = [],
-                 dense: list[Dict] = [],
-                 attention: list[Dict] = [],
+                 metrics: list[str] = None,
+                 dropouts: list[Dict] = None,
+                 conv: list[Dict] = None,
+                 pooling: list[Dict] = None,
+                 dense: list[Dict] = None,
+                 attention: list[Dict] = None,
                  **kwargs) -> None:
 
         super().__init__()
+
+        if metrics is None: metrics = ['accuracy']
+        if dropouts is None: dropouts = []
+        if conv is None: conv = []
+        if pooling is None: pooling = []
+        if dense is None: dense = []
+        if attention is None: attention = []
+
         arch = list(architecure)
         if len(dropouts) != arch.count('d'):
             ValueError('number of dropouts not equal to number of dropout parameters')

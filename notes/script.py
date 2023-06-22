@@ -157,7 +157,8 @@ def main():
 
         model.train(X[train_indices], y[train_indices], batch_size, epochs)
 
-        model.evaluate(X[test_indices], y[test_indices], dataset)
+        score, acc = model.evaluate(X[test_indices], y[test_indices], "")
+
 
         K.clear_session()
 

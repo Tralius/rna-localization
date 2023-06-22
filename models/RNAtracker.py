@@ -30,12 +30,11 @@ plt.style.use('ggplot')
 matplotlib.rcParams.update(
     {'font.family': 'Times New Roman', 'font.size': 36, 'font.weight': 'light', 'figure.dpi': 350})
 
-OUTPATH = None
 pretrained_model_score = [0.8, 0.62, 0.88, 0.89, 0.63, 0.94, 0.97, 0.94, 0.62, 0.89, 0.92,
                           0.92, 0.95, 0.96, 0.72, 0.96, 0.98, 0.77, 0.78, 0.7, 0.83, 0.87,
                           0.96, 0.97, 0.9, 0.97, 0.93, 0.94, 0.9, 0.96, 0.95]
 
-
+global OUTPATH
 
 class RNATracker:
 
@@ -43,8 +42,7 @@ class RNATracker:
         self.max_len = max_len
         self.nb_classes = nb_classes
         self.is_built = False
-        global OUTPATH
-        OUTPATH = save_path
+        self.OUTPATH = save_path
         self.kfold_index = kfold_index
 
     def build_model(self, nb_filters, filters_length, pooling_size, lstm_units, embedding_vec, attention_size=50):
@@ -597,7 +595,7 @@ class RNATracker:
             out_layer = 20
         else:
             out_layer = 18
-        log_file = open(OUTPATH + 'pcorr.csv', 'w')
+        log_file = open(self.OUTPATH + 'pcorr.csv', 'w')
         fieldnames = []
         for loc in locations:
             fieldnames += [loc + '_corr', loc + '_pval']
@@ -639,7 +637,7 @@ class RNATracker:
             for j, c in enumerate(row):
                 plt.text(j - .3, i + .1, round(c, 2), fontsize=8)
 
-        plt.savefig(OUTPATH + 'pcorr.png')
+        plt.savefig(self.OUTPATH + 'pcorr.png')
 
     def motif_location_PCC(self, filter_outs, labels, locations=['cytoplasm', 'insoluble', 'membrane', 'nuclear']):
         '''
@@ -648,7 +646,7 @@ class RNATracker:
         '''
         # filter_outs is the activation ndarray with the shape (batch_size, sequence_length - filter_length + 1, nb_filters)
         assert (labels.shape == (filter_outs.shape[0], len(locations)))
-        log_file = open(OUTPATH + 'pcorr.csv', 'w')
+        log_file = open(self.OUTPATH + 'pcorr.csv', 'w')
         fieldnames = []
         for loc in locations:
             fieldnames += [loc + '_corr', loc + '_pval']
@@ -682,7 +680,7 @@ class RNATracker:
         for i, row in enumerate(np.array(corr_mat).T):
             for j, c in enumerate(row):
                 plt.text(j - .3, i + .1, round(c, 2), fontsize=8)
-        plt.savefig(OUTPATH + 'pcorr.png')
+        plt.savefig(self.OUTPATH + 'pcorr.png')
 
     def get_motif(self, x_train, y_train, seq_encoding_keys):
         '''
@@ -725,8 +723,8 @@ class RNATracker:
         filter_outs = self.get_feature(x_train)[0]
 
         from Reference.seq_motifs import plot_filter_seq_heat, plot_filter_seg_heat
-        plot_filter_seq_heat(np.transpose(filter_outs, (0, 2, 1)), y_train, OUTPATH + 'clustering.png')
-        # plot_filter_seg_heat(np.transpose(filter_outs, (0, 2, 1)), OUTPATH + 'clustering2.png', whiten=False)
+        plot_filter_seq_heat(np.transpose(filter_outs, (0, 2, 1)), y_train, self.OUTPATH + 'clustering.png')
+        # plot_filter_seg_heat(np.transpose(filter_outs, (0, 2, 1)), self.OUTPATH + 'clustering2.png', whiten=False)
         exit()
         self.new_motif_location_PCC(filter_outs, y_train)
         print('activations after the first convolution layers', filter_outs.shape)
@@ -735,21 +733,21 @@ class RNATracker:
 
         # turn x_train into symbols again
         x_train = [[seq_encoding_keys[ind] for ind in gene] for gene in x_train]
-        if not os.path.exists(OUTPATH + 'heatmap_filters/'):
-            os.makedirs(OUTPATH + 'heatmap_filters/')
-        if not os.path.exists(OUTPATH + 'motif_logos/'):
-            os.makedirs(OUTPATH + 'motif_logos/')
+        if not os.path.exists(self.OUTPATH + 'heatmap_filters/'):
+            os.makedirs(self.OUTPATH + 'heatmap_filters/')
+        if not os.path.exists(self.OUTPATH + 'motif_logos/'):
+            os.makedirs(self.OUTPATH + 'motif_logos/')
 
-        meme_file = meme_intro(OUTPATH + 'filters_meme.txt', x_train)
+        meme_file = meme_intro(self.OUTPATH + 'filters_meme.txt', x_train)
         filters_ic = []
         for i in range(len(filter_weights)):
-            plot_filter_heat(filter_weights[i, :, :], OUTPATH + 'heatmap_filters/filter{}.pdf'.format(i))
+            plot_filter_heat(filter_weights[i, :, :], self.OUTPATH + 'heatmap_filters/filter{}.pdf'.format(i))
             # draw motif logos learned from the filters
             plot_filter_logo(filter_outs[:, :, i], motif_size, x_train,
-                             OUTPATH + 'motif_logos/filter{}_logo'.format(i), maxpct_t=0.5)
+                             self.OUTPATH + 'motif_logos/filter{}_logo'.format(i), maxpct_t=0.5)
 
             # make pwm from aligned sequences; nsites is the number of aligned motifs
-            filter_pwm, nsites = make_filter_pwm(OUTPATH + 'motif_logos/filter{}_logo.fa'.format(i))
+            filter_pwm, nsites = make_filter_pwm(self.OUTPATH + 'motif_logos/filter{}_logo.fa'.format(i))
 
             if nsites < 10:
                 filters_ic.append(0)
@@ -766,15 +764,15 @@ class RNATracker:
         #################################################################
         # run tomtom #-evalue 0.01
         subprocess.call('tomtom -dist pearson -thresh 0.05 -png -oc %s/tomtom %s/filters_meme.txt %s' % (
-            OUTPATH, OUTPATH, basedir + '/Ray2013_rbp_RNA.meme'), shell=True)
+            self.OUTPATH, self.OUTPATH, basedir + '/Ray2013_rbp_RNA.meme'), shell=True)
 
         #    # draw some filter heatmaps
-        #     plot_filter_heat(filter_weights[i, :, :], OUTPATH + 'heatmap_filters', i, seq_encoding_keys)
+        #     plot_filter_heat(filter_weights[i, :, :], self.OUTPATH + 'heatmap_filters', i, seq_encoding_keys)
         #     # draw motif logos learned from the filters
         #     plot_filter_logo(filter_outs[:, :, i], motif_size, x_train,
-        #                      OUTPATH + 'motif_logos', i, maxpct_t=0.5)
+        #                      self.OUTPATH + 'motif_logos', i, maxpct_t=0.5)
         #     # make pwm from aligned sequences; nsites is the number of aligned motifs
-        #     filter_pwm, nsites = make_filter_pwm(OUTPATH + 'motif_logos/seq_filter{}_logo.fa'.format(i))
+        #     filter_pwm, nsites = make_filter_pwm(self.OUTPATH + 'motif_logos/seq_filter{}_logo.fa'.format(i))
         #
         #     if nsites < 10:
         #         filters_ic.append(0)
@@ -791,7 +789,7 @@ class RNATracker:
         # #################################################################
         # # run tomtom #-evalue 0.01
         # subprocess.call('tomtom -dist pearson -thresh 0.05 -eps -oc %s/tomtom %s/filters_meme.txt %s' % (
-        #     OUTPATH, OUTPATH, 'Ray2013_rbp_RNA.meme'), shell=True)
+        #     self.OUTPATH, self.OUTPATH, 'Ray2013_rbp_RNA.meme'), shell=True)
 
     def train(self, x_train, y_train, batch_size, epochs=100):
         if not self.is_built:
@@ -803,7 +801,7 @@ class RNATracker:
         x_train = x_train[:int(0.9 * size_train)]
         y_train = y_train[:int(0.9 * size_train)]
         # early_stopping = EarlyStopping(monitor='val_loss', patience=7)
-        best_model_path = OUTPATH + 'weights_fold_{}.h5'.format(self.kfold_index)
+        best_model_path = self.OUTPATH + 'weights_fold_{}.h5'.format(self.kfold_index)
         model_checkpoint = ModelCheckpoint(best_model_path, save_best_only=True, verbose=1)
         print(self.model.evaluate(x_train, y_train, batch_size=batch_size))
         print(self.model.evaluate(x_valid, y_valid, batch_size=batch_size))
@@ -820,10 +818,10 @@ class RNATracker:
         Train_Acc = np.array([Train_Acc]).T
         Valid_Acc = np.asarray(Train_Result_Optimizer.get('val_acc'))
         Valid_Acc = np.asarray([Valid_Acc]).T
-        np.savetxt(OUTPATH + 'Train_Loss_fold_{}.txt'.format(self.kfold_index), Train_Loss, delimiter=',')
-        np.savetxt(OUTPATH + 'Valid_Loss_fold_{}.txt'.format(self.kfold_index), Valid_Loss, delimiter=',')
-        np.savetxt(OUTPATH + 'Train_Acc_fold_{}.txt'.format(self.kfold_index), Train_Acc, delimiter=',')
-        np.savetxt(OUTPATH + 'Valid_Acc_fold_{}.txt'.format(self.kfold_index), Valid_Acc, delimiter=',')
+        np.savetxt(self.OUTPATH + 'Train_Loss_fold_{}.txt'.format(self.kfold_index), Train_Loss, delimiter=',')
+        np.savetxt(self.OUTPATH + 'Valid_Loss_fold_{}.txt'.format(self.kfold_index), Valid_Loss, delimiter=',')
+        np.savetxt(self.OUTPATH + 'Train_Acc_fold_{}.txt'.format(self.kfold_index), Train_Acc, delimiter=',')
+        np.savetxt(self.OUTPATH + 'Valid_Acc_fold_{}.txt'.format(self.kfold_index), Valid_Acc, delimiter=',')
 
     def evaluate(self, x_test, y_test, dataset):
         score, acc = self.model.evaluate(x_test, y_test, verbose=0)
@@ -832,14 +830,24 @@ class RNATracker:
 
         y_predict = self.model.predict(x_test)
         # save label and predicted values for future plotting
-        np.save(OUTPATH + 'y_label_fold_{}.npy'.format(self.kfold_index), y_test)
-        np.save(OUTPATH + 'y_predict_fold_{}.npy'.format(self.kfold_index), y_predict)
+        np.save(self.OUTPATH + 'y_label_fold_{}.npy'.format(self.kfold_index), y_test)
+        np.save(self.OUTPATH + 'y_predict_fold_{}.npy'.format(self.kfold_index), y_predict)
         if dataset == 'apex-rip':
             locations = ['KDEL', 'Mito', 'NES', 'NLS']
         elif dataset == 'cefra-seq':
             locations = ["cytoplasm", "insoluble", "membrane", "nucleus"]
         else:
-            raise RuntimeError('No such dataset.')
+            locations = {
+                'ER Membrane',
+                'ER Lumen',
+                'Nuclear Lamina',
+                'Mitochondrial Matrix',
+                'Cytosol',
+                'Nucleolus',
+                'Nucleus',
+                'Nuclear Pore',
+                'Outer Mitochondrial Membrane'
+            }
         self.multiclass_roc_and_pr(y_test, y_predict, locations)
         return score, acc
 
@@ -856,13 +864,13 @@ class RNATracker:
         y_label_ = list()
         for label in y_label:
             mode = np.argmax(label)
-            fill = [0, 0, 0, 0]
+            fill = [0, 0, 0, 0, 0, 0, 0, 0, 0]
             fill[mode] = 1
             y_label_.append(fill)
         y_label = np.array(y_label_)
 
         '''ROC curve'''
-        n_classes = 4
+        n_classes = 9
         fpr = dict()
         tpr = dict()
         roc_auc = dict()
@@ -876,7 +884,7 @@ class RNATracker:
 
         plt.figure(figsize=(10, 10))
         from itertools import cycle
-        colors = cycle(['aqua', 'darkorange', 'cornflowerblue', 'green'])
+        colors = cycle(['aqua', 'darkorange', 'cornflowerblue', 'green', 'yellow', 'black', 'brown', 'orange', 'gray'])
         for i, color in zip(range(n_classes), colors):
             plt.plot(fpr[i], tpr[i], color=color,
                      label='{0} (AUC = {1:0.2f})'
@@ -890,7 +898,7 @@ class RNATracker:
         plt.ylabel('True Positive Rate')
         plt.legend(loc="lower right")
         plt.show()
-        plt.savefig(OUTPATH + 'ROC_fold_{}.png'.format(self.kfold_index))
+        plt.savefig(self.OUTPATH + 'ROC_fold_{}.png'.format(self.kfold_index))
 
         '''PR curve'''
         precision = dict()
@@ -930,7 +938,7 @@ class RNATracker:
         plt.ylabel('Precision')
         plt.title('PR for mRNA localization')
         plt.legend(lines, labels, loc=(0, -.38), prop=dict(size=14))
-        plt.savefig(OUTPATH + 'PR_fold_{}.png'.format(self.kfold_index))
+        plt.savefig(self.OUTPATH + 'PR_fold_{}.png'.format(self.kfold_index))
 
 class NoATTModel:
 
