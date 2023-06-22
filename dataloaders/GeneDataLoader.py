@@ -5,15 +5,11 @@ from typing import Tuple
 
 
 class GeneDataLoader(Sequence):
-    def __init__(self, data_table: pd.DataFrame, padding_length: int, batch_size: int = 32, shuffle: bool = True,
-                 struct: bool = False):
+    def __init__(self, data_table: pd.DataFrame, padding_length: int, batch_size: int = 32, shuffle: bool = True):
 
-        transformed_data = output_normalization(data_table.iloc[:, 0:9])
+        transformed_data = output_normalization(data_table.iloc[:, 1:5])
         transformed_data = pd.concat([transformed_data, one_hot_emb(data_table['seq'])], axis=1)
-        if struct:
-            transformed_data = pd.concat([transformed_data, data_table.iloc[:, 10:]], axis=1)
         self.data = transformed_data
-        self.struct = struct  # TODO for future use
 
         self.batch_size = batch_size
         self.shuffle = shuffle
@@ -44,16 +40,16 @@ class GeneDataLoader(Sequence):
 
         # Initialize empty arrays for samples and labels
         padded_sequences = np.zeros((end_index - start_index, self.max_len, 4), dtype=np.float32)
-        batch_labels = np.zeros((end_index - start_index, 9), dtype=np.float32)
+        batch_labels = np.zeros((end_index - start_index, 4), dtype=np.float32)
 
         # Load padded sequences and labels for the current batch
         for i, idx in enumerate(self.indices[start_index:end_index]):
             sequence = self.data['seq'].iloc[idx]
-            label = self.data.iloc[idx, 0:9]
+            label = self.data.iloc[idx, :4]
 
             padded_sequences[i, :len(sequence), :] = sequence
 
-            batch_labels[i, :] = label
+            batch_labels[i, :] = label.to_numpy()
 
         return padded_sequences, batch_labels
 
