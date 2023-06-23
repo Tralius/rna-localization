@@ -1,6 +1,6 @@
 import keras
 import numpy as np
-from keras.layers import Conv1D, Dense, Flatten, MaxPooling1D, Dropout, MultiHeadAttention, Reshape
+from keras.layers import Conv1D, Dense, Flatten, MaxPooling1D, Dropout, MultiHeadAttention, Reshape, LeakyReLU, BatchNormalization
 from notes.model import Model
 from typing import Dict, Tuple
 from collections import Counter
@@ -62,24 +62,30 @@ class MultiBranch(Model):
 
             architecture = list(parameters.get('architecture'))
             for j in architecture:
-                if j == 'd':
-                    self.branched_models[i].add(Dropout(**parameters.get('dropouts')[index.get('dropouts')]))
-                    index['dropouts'] = index.get('dropouts') + 1
-                elif j == 'c':
-                    self.branched_models[i].add(Conv1D(**parameters.get('conv')[index.get('conv')]))
-                    index['conv'] = index.get('conv') + 1
-                elif j == 'p':
-                    self.branched_models[i].add(MaxPooling1D(**parameters.get('pooling')[index.get('pooling')]))
-                    index['pooling'] = index.get('pooling') + 1
-                elif j == 'e':
-                    self.branched_models[i].add(Dense(**parameters.get('dense')[index.get('dense')]))
-                    index['dense'] = index.get('dense') + 1
-                elif j == 'a':
+                if j == 'a':
                     self.branched_models[i].add(
                         MultiHeadAttention(**parameters.get('attention')[index.get('attention')]))
                     index['attention'] = index.get('attention') + 1
+                elif j == 'b':
+                    self.branched_models[i].add(BatchNormalization())
+                    index['batch'] = index.get('batch') + 1
+                elif j == 'c':
+                    self.branched_models[i].add(Conv1D(**parameters.get('conv')[index.get('conv')]))
+                    index['conv'] = index.get('conv') + 1
+                elif j == 'd':
+                    self.branched_models[i].add(Dropout(**parameters.get('dropouts')[index.get('dropouts')]))
+                    index['dropouts'] = index.get('dropouts') + 1
+                elif j == 'e':
+                    self.branched_models[i].add(Dense(**parameters.get('dense')[index.get('dense')]))
+                    index['dense'] = index.get('dense') + 1
                 elif j == 'f':
                     self.branched_models[i].add(Flatten())
+                elif j == 'l':
+                    self.branched_models[i].add(LeakyReLU(**parameters.get('leaky')[index.get('leaky')]))
+                    index['leaky'] = index.get('leaky') + 1
+                elif j == 'p':
+                    self.branched_models[i].add(MaxPooling1D(**parameters.get('pooling')[index.get('pooling')]))
+                    index['pooling'] = index.get('pooling') + 1
                 elif j == 'r':
                     self.branched_models[i].add(Reshape(**parameters.get('reshape')[index.get('reshape')]))
                     index['reshape'] = index.get('reshape') + 1
@@ -111,8 +117,7 @@ class MultiBranch(Model):
             params_consensus = {}
 
         dataLoader = GeneDataLoader(train_data, **params_loader_branches)
-        branches_pred_x = []
-        branches_pred_y = []
+#        branches_pred_x = []
 
         for i, model in enumerate(self.branched_models):
             if i >= len(params_branched):
@@ -120,17 +125,10 @@ class MultiBranch(Model):
             else:
                 model.fit(dataLoader, **params_branched[i])
 
-#        for x_train, y_train in dataLoader:
-#            for i, model in enumerate(self.branched_models):
-#                if i >= len(params_branched):
-#                    model.fit(x_train, y_train)
-#                else:
-#                    model.fit(x_train, y_train, **params_branched[i])
-
         dataLoader_consensus = GeneDataLoader(train_data, shuffle=False, **params_loader_consensus)
         results_branched = [self.branched_models[i].predict(dataLoader_consensus) for i in range(self.number_branches)]
-        branches_pred_x.append(np.concatenate(results_branched, axis=1))
-        pred_x_concat = np.concatenate(branches_pred_x, axis=0)
+#        branches_pred_x.append(np.concatenate(results_branched, axis=1))
+        pred_x_concat = np.concatenate(results_branched, axis=1)
 
         return self.final_merge_model.fit(pred_x_concat, train_data.iloc[:, 0:9], **params_consensus)
 
@@ -215,5 +213,13 @@ def check_params(parameters: Dict):
             reshape = parameters.get('reshape')
             if occ != len(reshape):
                 ValueError('number of reshape layer not equal to number of reshape parameters')
+        elif layer == 'l':
+            reshape = parameters.get('leaky')
+            if occ != len(reshape):
+                ValueError('number of leakyReLU layer not equal to number of leaky parameters')
+        elif layer == 'b':
+            reshape = parameters.get('batch')
+            if occ != len(reshape):
+                ValueError('number of batch normalization layers not equal to number of batch parameters')
         else:
             NotImplementedError()
