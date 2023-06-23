@@ -1,5 +1,5 @@
 from typing import Dict
-from notes import Model
+from notes.model import Model
 import keras
 from keras.layers import Conv1D, Dense, Flatten, MaxPooling1D, Dropout, MultiHeadAttention
 import pandas as pd
