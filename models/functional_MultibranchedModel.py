@@ -29,9 +29,9 @@ class MultiBranch(Func_Model):
                  number_branches: int,
                  param_branches: List[Dict[str, List[Dict]]],
                  param_consensus: Dict,
-                 loss = keras.losses.CategoricalCrossentropy(),
-                 optimizer = keras.optimizers.Adam(),
-                 metrics = ['accuracy'],
+                 loss=keras.losses.CategoricalCrossentropy(),
+                 optimizer=keras.optimizers.Adam(),
+                 metrics=['accuracy'],
                  compile: Dict = None):
         super().__init__()
 
@@ -50,7 +50,7 @@ class MultiBranch(Func_Model):
             utils.check_params(parameters)
             index = {}
             arch = []
-            
+
             for key in parameters.keys():
                 index[key] = 0
 
@@ -59,9 +59,9 @@ class MultiBranch(Func_Model):
                 if k == 0:
                     arch, index = utils.add_layer(j, input_lay, index, parameters, arch)
                 else:
-                    arch, index = utils.add_layer(j, arch[len(arch)-1], index, parameters, arch)
+                    arch, index = utils.add_layer(j, arch[len(arch) - 1], index, parameters, arch)
 
-            branched_models.append(arch[len(arch)-1])
+            branched_models.append(arch[len(arch) - 1])
 
         x = Concatenate(axis=1)(branched_models)
         x = Dense(**param_consensus)(x)
@@ -72,8 +72,11 @@ class MultiBranch(Func_Model):
     def fit(self, train_data, params_dataLoader: Dict = None, params_train: Dict = None):
         return super().fit(train_data, params_dataLoader, params_train)
 
-    def evaluate(self, eval_data, params_eval: Dict = None, params_dataLoader: Dict = None):
-        return super().eval(eval_data, params_dataLoader, params_eval)
+    def evaluate(self, eval_data, params_dataLoader: Dict = None, params_eval: Dict = None):
+        return super().evaluate(eval_data, params_dataLoader, params_eval)
 
     def predict(self, pred_data, params_dataLoader: Dict = None, params_predict: Dict = None):
         return super().predict(pred_data, params_dataLoader, params_predict)
+
+    def summary(self):
+        return super().summary()

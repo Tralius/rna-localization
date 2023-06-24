@@ -59,4 +59,5 @@ class CNN(Func_Model):
     def predict(self, pred_data, params_dataLoader: Dict = None, params_predict: Dict = None):
         return super().predict(pred_data, params_dataLoader, params_predict)
     
-    
+    def summary(self):
+        return super().summary()    

@@ -1,0 +1,101 @@
+param_dataLoader_train:
+  batch_size: 32
+  shuffle: True
+
+param_dataLoader_valid:
+  batch_size: 32
+  shuffle: True
+
+param_branches:
+  - architecture: cdpcdpcpf
+    dropouts:
+      - rate: 0.2
+      - rate: 0.2
+    pooling:
+      - pool_size: 2
+      - pool_size: 2
+      - pool_size: 2
+    conv:
+      - filters: 64
+        kernel_size: 7
+        activation: relu
+        padding: same
+      - filters: 64
+        kernel_size: 7
+        activation: relu
+        padding: same
+      - filters: 64
+        kernel_size: 7
+        activation: relu
+        padding: same
+  - architecture: cdpcdpcpf
+    dropouts:
+      - rate: 0.2
+      - rate: 0.2
+    pooling:
+      - pool_size: 2
+      - pool_size: 2
+      - pool_size: 2
+    conv:
+      - filters: 64
+        kernel_size: 11
+        activation: relu
+        padding: same
+      - filters: 64
+        kernel_size: 11
+        activation: relu
+        padding: same
+      - filters: 64
+        kernel_size: 11
+        activation: relu
+        padding: same
+  - architecture: cdpcdpcpf
+    dropouts:
+      - rate: 0.2
+      - rate: 0.2
+    pooling:
+      - pool_size: 2
+      - pool_size: 2
+      - pool_size: 2
+    conv:
+      - filters: 64
+        kernel_size: 15
+        activation: relu
+        padding: same
+      - filters: 64
+        kernel_size: 15
+        activation: relu
+        padding: same
+      - filters: 64
+        kernel_size: 15
+        activation: relu
+        padding: same
+  - architecture: cdpcdpcpf
+    dropouts:
+      - rate: 0.2
+      - rate: 0.2
+    pooling:
+      - pool_size: 2
+      - pool_size: 2
+      - pool_size: 2
+    conv:
+      - filters: 64
+        kernel_size: 19
+        activation: relu
+        padding: same
+      - filters: 64
+        kernel_size: 19
+        activation: relu
+        padding: same
+      - filters: 64
+        kernel_size: 19
+        activation: relu
+        padding: same
+
+param_consensus:
+  units: 100
+  activation: softmax
+
+param_train:
+  epochs: 10
+  use_multiprocessing: True

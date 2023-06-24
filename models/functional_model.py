@@ -2,9 +2,10 @@ from abc import ABC, abstractmethod
 import pandas as pd
 from dataloaders.GeneDataLoader import GeneDataLoader
 
+
 class Func_Model(ABC):
     def __init__(self, **kwargs) -> None:
-        pass
+        self.model = None
 
     def fit(self, train_data, params_dataLoader, params_train):
         if params_train is None:
@@ -32,3 +33,6 @@ class Func_Model(ABC):
             Warning('data Loader uses default arguments')
             params_dataLoader = {}
         return self.model.predict(GeneDataLoader(pred_data, **params_dataLoader), **params_predict)
+
+    def summary(self):
+        return self.model.summary()
