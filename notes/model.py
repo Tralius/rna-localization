@@ -15,6 +15,10 @@ class Model(ABC):
         pass
 
     @abstractmethod
+    def fit_and_evaluate(self, train_data, eval_data, **kwargs):
+        pass
+
+    @abstractmethod
     def predict(self, data, **kwargs):
         pass
 

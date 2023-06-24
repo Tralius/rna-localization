@@ -94,6 +94,17 @@ class CNN(Model):
                                                 shuffle=shuffle_batch_valid)
         return self.model.evaluate(validation_data_loader, **kwargs)
 
+    def fit_and_evaluate(self, train_data, eval_data, **kwargs):
+        padding_length = kwargs.pop('padding_length')
+        batch_size = kwargs.pop('batch_size_train')
+        shuffle_batch = kwargs.pop('shuffle_batch_train')
+        callbacks = kwargs.pop('callbacks')
+        train_data_loader = GeneDataLoader(train_data, padding_length=padding_length, batch_size=batch_size,
+                                           shuffle=True)
+        validation_data_loader = GeneDataLoader(eval_data, padding_length=padding_length, batch_size=batch_size,
+                                                shuffle=False)
+        return self.model.fit(train_data_loader, epochs=self.epochs, callbacks=callbacks, validation_data=validation_data_loader, **kwargs)
+
     def predict(self, data, params_loader: Dict = None, params_predict: Dict = None):
         dataLoader = GeneDataLoader(data, **params_loader)
         return self.model.predict(dataLoader, **params_predict)

@@ -3,7 +3,7 @@ optimization:
   loss: categorical_crossentropy
   metrics:
     - accuracy
-  epochs: 10
+  epochs: 15
 model:
  architecture: cdpcdpcpfee
  dropouts:
