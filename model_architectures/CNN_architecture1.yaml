@@ -1,10 +1,8 @@
 param_dataLoader_train:
-  padding_length:
-  batch_size: 32,
+  batch_size: 32
   shuffle: True
 
 param_dataLoader_valid:
-  padding_length:
   batch_size: 32
   shuffle: True
 
@@ -12,7 +10,7 @@ params_model:
   conv:
     - filters: 64
       kernel_size: 9
-      activation: reLU
+      activation: relu
   dense:
     - units: 9
       activation: softmax

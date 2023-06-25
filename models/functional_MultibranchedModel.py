@@ -80,3 +80,12 @@ class MultiBranch(Func_Model):
 
     def summary(self):
         return super().summary()
+
+    def fit_and_evaluate(self, train_data, eval_data, callback: List[keras.callbacks.Callback] = None,
+                         params_train_dataLoader: Dict = None,
+                         params_eval_dataLoader: Dict = None,
+                         params_train: Dict = None):
+        return super().fit_and_evaluate(train_data, eval_data, callback,
+                                        params_train_dataLoader,
+                                        params_eval_dataLoader,
+                                        params_train)
