@@ -28,6 +28,7 @@ class CNN(Model):
                  dense: list[Dict] = None,
                  attention: list[Dict] = None,
                  epochs: int = 5,
+                 learning_rate = 0.01,
                  **kwargs) -> None:
 
         super().__init__()
@@ -76,7 +77,10 @@ class CNN(Model):
 
         self.epochs = epochs
 
-        self.model.compile(optimizer=optimizer, loss=loss, metrics=metrics, **kwargs)
+        if optimizer == 'adam':
+            optimizer = keras.optimizers.Adam(learning_rate=learning_rate)
+
+        self.model.compile(optimizer=optimizer, loss=loss, metrics=metrics,**kwargs)
 
     def fit(self, train_data: pd.DataFrame, params_loader: Dict = None, **kwargs):
         padding_length = kwargs.pop('padding_length')
