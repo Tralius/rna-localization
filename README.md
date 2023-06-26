@@ -12,5 +12,7 @@
 3. Activate the conda environement with `conda activate reggen`
 
 
+TODO: add dcoknt kjaöfslkjonv d https://graphviz.gitlab.io/download/
+
 
 TODO: add license from RNATracker

@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 import pandas as pd
+from keras.utils import plot_model
+
 from dataloaders.GeneDataLoader import GeneDataLoader
 
 
@@ -51,3 +53,9 @@ class Func_Model(ABC):
         train_dataLoader = GeneDataLoader(train_data, **params_train_dataLoader)
         eval_dataLoader = GeneDataLoader(eval_data, shuffle=False,**params_eval_dataLoader)
         return self.model.fit(train_dataLoader, callbacks=callback, validation_data=eval_dataLoader, **params_train)
+
+    def print_model(self, path):
+        return plot_model(self.model, path, show_shapes=True)
+
+    def save_model(self, path):
+        self.model.save(path)

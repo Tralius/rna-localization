@@ -1,0 +1,45 @@
+The file is split into 2 sections:
+
+First section - information about the training
+
+optimization:
+ optimizer:
+ loss:
+ metrics:
+  -
+ epochs
+
+ Second section - information about th model:
+
+model:
+architecture: cdpcdpcpfee (layers to be used for the architecture)
+dropouts: (list of float numbers for the dropout layers)
+    -
+pooling: (list of integers for the pooling layers)
+    -
+conv_layers: (list of dictionaries for the conv layers. The input_shape is added at runtime)
+-
+  filters:
+  kernel_size:
+  activation:
+-
+   filters:
+   kernel_size:
+   activation:
+   padding:
+dense_layers: (list of dictionaries for the dense layers)
+-
+units:
+activation:
+-
+units:
+activation:
+
+attention_layers: (list of dictionaries for the attention layers)
+-
+
+flatten_layers: (list of dictionaries for the flatten layers)
+
+
+We can add as many parameters as we want as long as they correspond to the parameters in the layer constructors
+
