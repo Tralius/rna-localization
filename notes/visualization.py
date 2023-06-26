@@ -59,7 +59,7 @@ def box_plot(dataframe):
         showfliers=False
     )
     # Axis details
-    plt.title('Long Jump Finals')
+    plt.title('Distribution of RNA in Cellular Compartments')
     plt.ylabel('Probability')
     plt.xlabel('Cellular Compartments')
 
