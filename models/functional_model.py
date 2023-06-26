@@ -49,5 +49,5 @@ class Func_Model(ABC):
             params_train = {}
 
         train_dataLoader = GeneDataLoader(train_data, **params_train_dataLoader)
-        eval_dataLoader = GeneDataLoader(eval_data, **params_eval_dataLoader)
+        eval_dataLoader = GeneDataLoader(eval_data, shuffle=False,**params_eval_dataLoader)
         return self.model.fit(train_dataLoader, callbacks=callback, validation_data=eval_dataLoader, **params_train)
