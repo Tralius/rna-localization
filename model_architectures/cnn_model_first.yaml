@@ -1,3 +1,4 @@
+# Overfitted, but good learning
 optimization:
   optimizer: adam
   loss: categorical_crossentropy

@@ -1,3 +1,4 @@
+# lernt nichts wirklich
 optimization:
   optimizer: adam
   loss: categorical_crossentropy
