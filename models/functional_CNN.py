@@ -15,8 +15,7 @@ class CNN(Func_Model):
     p: 1D Max-Pooling layer
     """
     def __init__(self,
-                 input_size: Tuple, 
-                 architecure: str,
+                 input_size: Tuple,
                  optimizer = keras.optimizers.Adam(),
                  loss = keras.losses.CategoricalCrossentropy(),
                  metrics = ['accuracy'],
@@ -31,9 +30,11 @@ class CNN(Func_Model):
             compile = {}
         
         input_lay = keras.Input(shape=input_size)
-        params_check = params_model
-        params_check['architecture'] = architecure
-        utils.check_params(params_check)
+        #params_check = params_model
+
+        architecture = list(params_model.get('architecture'))
+        #params_check['architecture'] = architecure
+        utils.check_params(params_model)
 
         index = {}
         for key in params_model.keys():
@@ -41,7 +42,7 @@ class CNN(Func_Model):
             
         arch = []
 
-        for k, j in enumerate(list(architecure)):
+        for k, j in enumerate(list(architecture)):
             if k == 0:
                 arch, index = utils.add_layer(j, input_lay, index, params_model, arch)
             else:

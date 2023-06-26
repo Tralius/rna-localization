@@ -1,6 +1,6 @@
 param_dataLoader_train:
   padding_length:
-  batch_size: 32,
+  batch_size: 32
   shuffle: True
 
 param_dataLoader_valid:
@@ -9,16 +9,22 @@ param_dataLoader_valid:
   shuffle: True
 
 params_model:
+  architecture: cpfe
   conv:
     - filters: 64
       kernel_size: 9
-      activation: reLU
+      activation: relu
   dense:
     - units: 9
       activation: softmax
   pooling:
     - pool_size: 34518
       strides: 1
+  #skip:
+  #  - index: [0, 1]  # adding index
+  #  - 0
+
+      
 
 params_train:
   epochs: 10
