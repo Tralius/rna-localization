@@ -1,10 +1,8 @@
 param_dataLoader_train:
-  padding_length:
   batch_size: 32
   shuffle: True
 
 param_dataLoader_valid:
-  padding_length:
   batch_size: 32
   shuffle: True
 
@@ -24,7 +22,7 @@ params_model:
   #  - index: [0, 1]  # adding index
   #  - 0
 
-      
+
 
 params_train:
   epochs: 10

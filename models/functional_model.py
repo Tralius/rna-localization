@@ -36,3 +36,18 @@ class Func_Model(ABC):
 
     def summary(self):
         return self.model.summary()
+
+    def fit_and_evaluate(self, train_data, eval_data, callback, params_train_dataLoader, params_eval_dataLoader, params_train):
+        if params_train_dataLoader is None:
+            Warning('data Loader uses default arguments')
+            params_train_dataLoader = {}
+        if params_eval_dataLoader is None:
+            Warning('data Loader uses default arguments')
+            params_eval_dataLoader = {}
+        if params_train is None:
+            Warning('evalutation with default parameters')
+            params_train = {}
+
+        train_dataLoader = GeneDataLoader(train_data, **params_train_dataLoader)
+        eval_dataLoader = GeneDataLoader(eval_data, **params_eval_dataLoader)
+        return self.model.fit(train_dataLoader, callbacks=callback, validation_data=eval_dataLoader, **params_train)
