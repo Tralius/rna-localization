@@ -30,10 +30,8 @@ class CNN(Func_Model):
             compile = {}
         
         input_lay = keras.Input(shape=input_size)
-        #params_check = params_model
 
         architecture = list(params_model.get('architecture'))
-        #params_check['architecture'] = architecure
         utils.check_params(params_model)
 
         index = {}

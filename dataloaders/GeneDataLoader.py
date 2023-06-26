@@ -40,15 +40,15 @@ class GeneDataLoader(Sequence):
 
         # Initialize empty arrays for samples and labels
         padded_sequences = np.zeros((end_index - start_index, self.max_len, 4), dtype=np.float32)
-        batch_labels = np.zeros((end_index - start_index, 9), dtype=np.float32)
+        output = np.zeros((end_index - start_index, 9), dtype=np.float32)
 
         # Load padded sequences and labels for the current batch
         for i, idx in enumerate(self.indices[start_index:end_index]):
-            padded_sequences[i, :len(self.data['seq'].iloc[idx]), :] = self.data['seq'].iloc[idx]
+            padded_sequences[i, :len(self.data['seq'].iloc[idx]), :] = self.data['seq'].iloc[idx] #TODO invertiere padding
 
-            batch_labels[i, :] = self.data.iloc[idx, 0:9]
+            output[i, :] = self.data.iloc[idx, 0:9]
 
-        return padded_sequences, batch_labels
+        return padded_sequences, output
 
 
 def one_hot_emb(data: pd.DataFrame) -> pd.DataFrame:
