@@ -1,10 +1,10 @@
 from tensorflow import keras
 from tensorflow.keras.losses import CategoricalCrossentropy
 from tensorflow.keras.layers import Bidirectional
-
+from tensorflow.keras import metrics
 # DeepmRNALoc model from https://github.com/Thales-research-institute/DeepmRNALoc
 
-def build_model(max_len, layer_size: int = 128, learning_rate = 1e-3, dropout_rate = 0.3, out_size = 9):
+def build_model(max_len, layer_size: int = 128, learning_rate = 1e-2, dropout_rate = 0.3, out_size = 9):
     model = keras.models.Sequential()
     #model.add(keras.layers.Flatten(input_shape=[max_len]))
     model.add(keras.layers.Reshape((max_len*4, 1), input_shape=(max_len, 4)))
@@ -60,7 +60,7 @@ def build_model(max_len, layer_size: int = 128, learning_rate = 1e-3, dropout_ra
     loss = CategoricalCrossentropy(label_smoothing=0.01)
     lr_schedule = keras.optimizers.schedules.ExponentialDecay(
         initial_learning_rate=learning_rate,
-        decay_steps=200,
-        decay_rate=1e-3)
-    model.compile(loss=loss, optimizer=keras.optimizers.Adam(learning_rate=lr_schedule), metrics=['categorical_accuracy'])
+        decay_steps=1000,
+        decay_rate=0.9)
+    model.compile(loss=loss, optimizer=keras.optimizers.Adam(learning_rate=lr_schedule), metrics=metrics.CategoricalCrossentropy(name='categorical_crossentropy'))
     return model
