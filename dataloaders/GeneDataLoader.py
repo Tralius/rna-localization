@@ -47,7 +47,7 @@ class GeneDataLoader(Sequence):
             sequence = self.data['seq'].iloc[idx]
             label = self.data.iloc[idx, :4]
 
-            padded_sequences[i, :len(sequence), :] = sequence
+            padded_sequences[i, -len(sequence):, :] = sequence
 
             batch_labels[i, :] = label.to_numpy()
 
