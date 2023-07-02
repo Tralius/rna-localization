@@ -1,6 +1,7 @@
 from typing import Dict, Tuple, List
 import keras
 import pandas as pd
+import keras.losses as losses
 from models import utils, Func_Model
 
 
@@ -16,9 +17,9 @@ class CNN(Func_Model):
     """
     def __init__(self,
                  input_size: Tuple,
-                 optimizer = keras.optimizers.Adam(),
-                 loss = keras.losses.CategoricalCrossentropy(),
-                 metrics = ['accuracy'],
+                 optimizer = keras.optimizers.Nadam(),
+                 loss = losses.KLDivergence(),
+                 metrics = ['accuracy', utils.tf_pearson],
                  params_model: Dict[str, List[Dict]] = None,
                  compile: Dict = None) -> None:
 

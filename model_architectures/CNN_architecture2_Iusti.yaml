@@ -1,0 +1,42 @@
+# Initial Architecture
+param_dataLoader_train:
+  batch_size: 32
+  shuffle: True
+
+param_dataLoader_valid:
+  batch_size: 32
+
+params_model:
+  architecture: cdpcdpcpfee
+  conv:
+    - filters: 16
+      kernel_size: 9
+      activation: relu
+    - filters: 32
+      kernel_size: 6
+      activation: relu
+      padding: same
+    - filters: 64
+      kernel_size: 4
+      activation: relu
+      padding: same
+  dense:
+    - units: 512
+      activation: relu
+    - units: 4
+      activation: softmax
+  pooling:
+    - pool_size: 4
+    - pool_size: 3
+    - pool_size: 2
+  dropouts:
+    - rate: 0.1
+    - rate: 0.1
+  #skip:
+  #  - index: [0, 1]  # adding index
+  #  - 0
+
+params_train:
+  epochs: 10
+  use_multiprocessing: False
+

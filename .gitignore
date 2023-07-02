@@ -1,3 +1,6 @@
 *.idea
-final_data.csv
+datasets/final_data.csv
 models
+datasets
+model_outputs
+*.pyc

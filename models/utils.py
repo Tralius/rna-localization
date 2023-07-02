@@ -2,9 +2,12 @@ from typing import Dict, List
 from collections import Counter
 from keras.layers import Conv1D, Dense, Flatten, MaxPooling1D, Dropout, MultiHeadAttention, Reshape, LeakyReLU, \
     BatchNormalization, Concatenate, add
+from sklearn.metrics import roc_curve, roc_auc_score, precision_recall_curve
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import tensorflow_probability as tfp
+
 
 def check_params(parameters: Dict):
     architecture = parameters.get('architecture')
@@ -52,7 +55,8 @@ def check_params(parameters: Dict):
                 ValueError('number of skip connection layer not equal to number of skip parameters')
         else:
             NotImplementedError()
-            
+
+
 def add_layer(layer: str, arg, index: Dict, params: Dict, arch: List):
     if layer == 'a':
         arch.append(MultiHeadAttention(**params.get('attention')[index.get('attention')])(arg, arg))
@@ -95,7 +99,8 @@ def add_layer(layer: str, arg, index: Dict, params: Dict, arch: List):
         arch.append(add()(adding))
         index['skip'] = index.get('skip') + 1
         return arch, index
-    
+
+
 # summarize history for accuracy
 def plot_line_graph(data, title, ylabel, xlabel, legend):
     # for i in range(len(data)):
@@ -107,10 +112,9 @@ def plot_line_graph(data, title, ylabel, xlabel, legend):
     plt.legend(legend, loc='upper left')
     plt.show()
 
+
 def scatter_plot(pred, ground_truth):
-
     def get_classes(dataframe):
-
         processed_dataframe = dataframe.iloc[:, 0:9]
 
         sum_vec = processed_dataframe.sum(axis=1)
@@ -130,8 +134,10 @@ def scatter_plot(pred, ground_truth):
 
     plt.scatter(ground_truth_max_value, ground_truth_class, color="purple")
 
-def box_plot(dataframe):
+    plt.show()
 
+
+def box_plot(dataframe):
     loc_data = dataframe.iloc[:, 0:9]
 
     sum_vec = loc_data.sum(axis=1)
@@ -159,4 +165,18 @@ def box_plot(dataframe):
 
     plt.show()
 
-    
+
+def roc_curve_plot():
+    pass
+
+
+def aoc_curve_plot():
+    pass
+
+
+def tf_pearson(y_true, y_pred):
+    return tfp.stats.correlation(y_pred, y_true)[1]
+
+
+def save_plot(path):
+    plt.savefig(path)
