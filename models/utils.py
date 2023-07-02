@@ -166,16 +166,38 @@ def box_plot(dataframe):
     plt.show()
 
 
-def roc_curve_plot():
-    pass
+# https://towardsdatascience.com/how-to-calculate-roc-auc-score-for-regression-models-c0be4fdf76bb
+def roc_curve_plot(testY, predictedY):
+    fpr, tpr, _ = roc_curve(testY, predictedY)
+    # plot model roc curve
+    plt.plot(fpr, tpr, marker='.', label='Model')
+    # axis labels
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    # show the legend
+    plt.legend()
+    # show the plot
+    plt.show()
 
 
 def aoc_curve_plot():
     pass
 
 
-def tf_pearson(y_true, y_pred):
-    return tfp.stats.correlation(y_pred, y_true)[1]
+def tf_pearson(y_true, y_pred, sample_axis=0,
+                event_axis=None,
+                keepdims=False,
+                eps=0.001):
+    y_true /= (tfp.stats.stddev(y_true, sample_axis=sample_axis, keepdims=True)+eps)
+    if y_pred is not None:
+      y_pred /= (tfp.stats.stddev(y_pred, sample_axis=sample_axis, keepdims=True)+eps)
+
+    return tfp.stats.covariance(
+        x=y_true,
+        y=y_pred,
+        event_axis=event_axis,
+        sample_axis=sample_axis,
+        keepdims=keepdims)
 
 
 def save_plot(path):
