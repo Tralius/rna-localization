@@ -45,7 +45,7 @@ class Pearson(Metric):
     def reset_states(self):
         self.corr = None
         
-def tf_pearson(y_true, y_pred, sample_axis=0,
+def pearson(y_true, y_pred, sample_axis=0,
                 event_axis=None,
                 keepdims=False,
                 eps=0.001):
