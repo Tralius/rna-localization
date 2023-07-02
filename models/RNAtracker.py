@@ -1,4 +1,4 @@
-
+import keras
 from keras import regularizers
 #from keras.layers.core import Dense, Dropout, Flatten
 from keras.layers.convolutional import Convolution1D, MaxPooling1D
@@ -21,6 +21,7 @@ import os
 import scipy.stats as stats
 import csv
 import sys
+from keras.losses import CategoricalCrossentropy
 
 basedir = os.path.split(os.path.dirname(os.path.abspath(__file__)))[0]
 sys.path.append(basedir)
@@ -44,6 +45,7 @@ class RNATracker:
         self.is_built = False
         self.OUTPATH = save_path
         self.kfold_index = kfold_index
+        self.stored_history = None
 
     def build_model(self, nb_filters, filters_length, pooling_size, lstm_units, embedding_vec, attention_size=50):
         """
@@ -102,10 +104,11 @@ class RNATracker:
         preds = Dense(self.nb_classes, activation='softmax')(output)
         self.model = Model(inputs=[input], outputs=preds)
         from keras import optimizers
+
         # optim = optimizers.RMSprop(lr=0.001)
         optim = optimizers.nadam()
         self.model.compile(
-            loss='kld',
+            loss=CategoricalCrossentropy(),
             optimizer=optim,
             metrics=['acc']
         )
@@ -203,7 +206,7 @@ class RNATracker:
         optim = optimizers.Nadam() #nadam()
         # optim = optimizers.sgd()
         self.model.compile(
-            loss='kld',
+            loss=CategoricalCrossentropy(),
             optimizer=optim,  # todo
             metrics=['acc']
         )
@@ -808,6 +811,7 @@ class RNATracker:
         hist = self.model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs, verbose=1,
                               validation_data=(x_valid, y_valid), callbacks=[model_checkpoint], shuffle=True)
         # load best performing model
+        self.stored_history = hist
         self.model.load_weights(best_model_path)
         Train_Result_Optimizer = hist.history
         Train_Loss = np.asarray(Train_Result_Optimizer.get('loss'))

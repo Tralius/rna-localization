@@ -7,6 +7,8 @@ params_dataLoader_valid:
   # Never set shuffle!!
 
 params_branches:
+  learning_rate: 1e-4
+  optimizer: sgd  # or adam
   - architecture: cepf
     conv:
       - #Params for first CNN in branch

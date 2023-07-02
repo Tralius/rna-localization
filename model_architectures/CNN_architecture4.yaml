@@ -1,0 +1,45 @@
+# Steves Resnet approach 4
+# Bigger and regularized version of Jonas net
+
+param_dataLoader_train:
+  batch_size: 32
+  shuffle: True
+
+param_dataLoader_valid:
+  batch_size: 32
+
+params_model:
+  architecture: sdpsdpfee
+  learning_rate: 1e-4
+  optimizer: sgd
+  dense:
+    - units: 512
+      activation: softmax
+    - units: 9
+      activation: softmax
+  dropouts:
+    - rate: 0.5
+    - rate: 0.5
+  pooling:
+    - pool_size: 4
+      strides: 1
+    - pool_size: 4
+      strides: 1
+  skip:
+    - filters: 16   # first skip
+      kernel_size: 11
+      activation: relu
+      use_bn: True
+      kernel_regularizer: l1
+    - filters: 32
+      kernel_size: 11
+      activation: relu
+      use_bn: True
+      kernel_regularizer: l1
+
+
+
+params_train:
+  epochs: 30
+  use_multiprocessing: True
+

@@ -1,7 +1,10 @@
 from typing import Dict, List
 from collections import Counter
-from keras.layers import Conv1D, Dense, Flatten, MaxPooling1D, Dropout, Reshape, LeakyReLU, \
-    BatchNormalization, add, Layer, Activation, Lambda, Multiply
+from keras.layers import Conv1D, Dense, Flatten, MaxPooling1D, Dropout, MultiHeadAttention, Reshape, LeakyReLU, \
+    BatchNormalization, Concatenate, add, ReLU, GlobalAvgPool1D, Activation, Lambda, Multiply
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 from keras import backend as K
 
 def check_params(parameters: Dict):
@@ -28,6 +31,10 @@ def check_params(parameters: Dict):
             dropouts = parameters.get('dropouts')
             if occ != len(dropouts):
                 ValueError('number of dropouts not equal to number of dropout parameters')
+        elif layer == 'g':
+            globalavg = parameters.get('globalavg')
+            if occ != len(globalavg):
+                ValueError('number of Global Average layers not equal to number of Glb Avg parameters')
         elif layer == 'e':
             dense = parameters.get('dense')
             if occ != len(dense):
@@ -50,8 +57,9 @@ def check_params(parameters: Dict):
                 ValueError('number of skip connection layer not equal to number of skip parameters')
         else:
             NotImplementedError()
-
+            
 def add_layer(layer: str, arg, index: Dict, params: Dict, arch: List):
+    print("Add "+str(layer))
     if layer == 'a':
         arch.append(Attention(**params.get('attention')[index.get('attention')])(arg))
         index['attention'] = index.get('attention') + 1
@@ -87,12 +95,42 @@ def add_layer(layer: str, arg, index: Dict, params: Dict, arch: List):
         arch.append(Reshape(**params.get('reshape')[index.get('reshape')])(arg))
         index['reshape'] = index.get('reshape') + 1
         return arch, index
+    elif layer == 'g':
+        parameteres = params.get('globalavg')
+        parameteres = parameteres[index.get('globalavg')]
+        if parameteres is None:
+            arch.append(GlobalAvgPool1D()(arg))
+        else:
+            arch.append(GlobalAvgPool1D(**parameteres)(arg))
+        index['globalavg'] = index.get('globalavg') + 1
+        return arch, index
     elif layer == 's':
-        adding_index = params.get('skip')[index.get('skip')]
-        adding = [arch[i] for i in adding_index].get('index').append(arg)
-        arch.append(add()(adding))
+        parameters = params.get('skip')[index.get('skip')]
+        #adding = [arch[i] for i in adding_index].get('index').append(arg)
+        reg = None
+        try:
+            reg = parameters["kernel_regularizer"]
+        except Exception as e:
+            pass
+        out = resblock(arg, filters=parameters["filters"], kernel_size=parameters["kernel_size"], use_bn=parameters["use_bn"], kernel_regularizer=reg)
+        arch.append(out)
         index['skip'] = index.get('skip') + 1
         return arch, index
+
+def resblock(x, kernel_size, filters, use_bn, kernel_regularizer = None, **kwargs):
+
+    fx = Conv1D(kernel_size=kernel_size, filters=filters, activation='relu', padding='same')(x)
+    if use_bn:
+        fx = BatchNormalization()(fx)
+        fx = Conv1D(filters=filters, kernel_size= kernel_size, padding='same',kernel_regularizer=kernel_regularizer)(fx)
+    else:
+        fx = Conv1D(filters=filters, kernel_size=kernel_size, padding='same', kernel_regularizer=kernel_regularizer)(fx)
+    out = add([x, fx])
+    if use_bn:
+        out = BatchNormalization()(out)
+    out = ReLU()(out)
+
+    return out
 
 class Attention(Layer):
     def __init__(self, attention_size, activation_dense='tanh', activation_act='softmax', **kwargs):
@@ -101,6 +139,25 @@ class Attention(Layer):
         self.dense2 = Dense(units=1, use_bias=False)
         self.activation = Activation(activation=activation_act)
         self.lam = Lambda(lambda x: K.sum(x, axis=1, keepdims=False))
+
+    def call(self, inputs):
+        context = self.dense1(inputs)
+        attention = self.dense2(context)
+        scores = Flatten()(attention)
+        attention_weights = Reshape(target_shape=(2146, 1))(scores)
+        output = self.lam(Multiply()([inputs, attention_weights]))
+        return output
+
+# summarize history for accuracy
+def plot_line_graph(data, title, ylabel, xlabel, legend):
+    # for i in range(len(data)):
+    for dataset in data:
+        plt.plot(dataset)
+    plt.title(title)
+    plt.ylabel(ylabel)
+    plt.xlabel(xlabel)
+    plt.legend(legend, loc='upper left')
+    plt.show()
 
     def call(self, inputs):
         context = self.dense1(inputs)

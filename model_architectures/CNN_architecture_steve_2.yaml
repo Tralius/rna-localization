@@ -1,0 +1,54 @@
+# Steves Resnet approach
+
+param_dataLoader_train:
+  batch_size: 32
+  shuffle: True
+
+param_dataLoader_valid:
+  batch_size: 32
+
+params_model:
+  architecture: spdspdspfe
+  trainer: sgd
+  learning_rate: 1e-4
+  conv:
+    - filters: 64
+      kernel_size: 9
+      activation: relu
+    - filters:
+  dense:
+    - units: 9
+      activation: softmax
+  dropouts:
+    - rate: 0.5
+    - rate: 0.5
+  pooling:
+    - pool_size: 8
+      strides: 1
+    - pool_size: 16
+      strides: 1
+    - pool_size: 32
+      strides: 1
+  skip:
+    - filters: 16   # first skip
+      kernel_size: 9
+      activation: relu
+      use_bn: True
+      kernel_regularizer: l1
+    - filters: 32
+      kernel_size: 9
+      activation: relu
+      use_bn: True
+      kernel_regularizer: l1
+    - filters: 64
+      kernel_size: 9
+      activation: relu
+      use_bn: True
+      kernel_regularizer: l2
+
+
+
+params_train:
+  epochs: 10
+  use_multiprocessing: True
+
