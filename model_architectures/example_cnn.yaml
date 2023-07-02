@@ -35,8 +35,5 @@ model:
    -
     units: 9
     activation: softmax
-flatten_layers:
-  -
-
-attention_layers:
-  -
+  attention_layers:
+    - attention_size: 80

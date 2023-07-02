@@ -23,29 +23,29 @@ params_model:
     - { 'pool_size': 2 }
     - { 'pool_size': 2 }
   conv:
-    - { 'filters': 64, 'kernel_size': 7, 'activation': 'relu'}
-    - { 'filters': 64, 'kernel_size': 7, 'activation': 'relu', 'padding': 'same' }
-    - { 'filters': 128, 'kernel_size': 7, 'activation': 'relu', 'padding': 'same' }
-    - { 'filters': 128, 'kernel_size': 7, 'activation': 'relu', 'padding': 'same' }
-    - { 'filters': 256, 'kernel_size': 7, 'activation': 'relu', 'padding': 'same' }
-    - { 'filters': 256, 'kernel_size': 7, 'activation': 'relu', 'padding': 'same' }
-    - { 'filters': 512, 'kernel_size': 7, 'activation': 'relu', 'padding': 'same' }
-    - { 'filters': 512, 'kernel_size': 7, 'activation': 'relu', 'padding': 'same' }
+    - { 'filters': 64, 'kernel_size': 7, 'activation': 'relu', 'padding': 'valid'}
+    - { 'filters': 64, 'kernel_size': 7, 'activation': 'relu', 'padding': 'valid' }
+    - { 'filters': 128, 'kernel_size': 7, 'activation': 'relu', 'padding': 'valid' }
+    - { 'filters': 128, 'kernel_size': 7, 'activation': 'relu', 'padding': 'valid' }
+    - { 'filters': 256, 'kernel_size': 7, 'activation': 'relu', 'padding': 'valid' }
+    - { 'filters': 256, 'kernel_size': 7, 'activation': 'relu', 'padding': 'valid' }
+    - { 'filters': 512, 'kernel_size': 7, 'activation': 'relu', 'padding': 'valid' }
+    - { 'filters': 512, 'kernel_size': 7, 'activation': 'relu', 'padding': 'valid' }
   leaky:
-    - {alfa: 0.05}
-    - {alfa: 0.05}
-    - {alfa: 0.05}
-    - {alfa: 0.05}
-    - {alfa: 0.05}
-    - {alfa: 0.05}
-    - {alfa: 0.05}
-    - {alfa: 0.05}
-    - {alfa: 0.05}
-    - {alfa: 0.05}
+    - {'alpha': 0.05}
+    - {'alpha': 0.05}
+    - {'alpha': 0.05}
+    - {'alpha': 0.05}
+    - {'alpha': 0.05}
+    - {'alpha': 0.05}
+    - {'alpha': 0.05}
+    - {'alpha': 0.05}
+    - {'alpha': 0.05}
+    - {'alpha': 0.05}
   dense:
-    - {'units': 128, 'activation': 'softmax'}
-    - {'units': 256, 'activation': 'softmax'}
-    - {'units': 512, 'activation': 'softmax'}
+    - {'units': 128, 'activation': 'relu'}
+    - {'units': 256, 'activation': 'relu'}
+    - {'units': 512, 'activation': 'relu'}
     - {'units': 9, 'activation': 'softmax'}
   batch:
     - {}
@@ -59,4 +59,4 @@ params_model:
     - {}
     - {}
   attention:
-    - {'num_heads': 5, 'key_dim': 80}
+    - {'attention_size': 80}

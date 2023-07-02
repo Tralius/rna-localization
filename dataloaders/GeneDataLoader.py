@@ -44,7 +44,7 @@ class GeneDataLoader(Sequence):
 
         # Load padded sequences and labels for the current batch
         for i, idx in enumerate(self.indices[start_index:end_index]):
-            padded_sequences[i, :len(self.data['seq'].iloc[idx]), :] = self.data['seq'].iloc[idx] #TODO invertiere padding
+            padded_sequences[i, -len(self.data['seq'].iloc[idx]):, :] = self.data['seq'].iloc[idx]
 
             output[i, :] = self.data.iloc[idx, 0:9]
 

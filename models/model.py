@@ -1,11 +1,9 @@
-from abc import ABC, abstractmethod
-import pandas as pd
+from abc import ABC
 from keras.utils import plot_model
-
 from dataloaders.GeneDataLoader import GeneDataLoader
 
 
-class Func_Model(ABC):
+class Model(ABC):
     def __init__(self, **kwargs) -> None:
         self.model = None
 
@@ -27,18 +25,6 @@ class Func_Model(ABC):
             params_dataLoader = {}
         return self.model.evaluate(GeneDataLoader(eval_data, **params_dataLoader), **params_eval)
 
-    def predict(self, pred_data, params_dataLoader, params_predict):
-        if params_predict is None:
-            Warning('evalutation with default parameters')
-            params_predict = {}
-        if params_dataLoader is None:
-            Warning('data Loader uses default arguments')
-            params_dataLoader = {}
-        return self.model.predict(GeneDataLoader(pred_data, **params_dataLoader), **params_predict)
-
-    def summary(self):
-        return self.model.summary()
-
     def fit_and_evaluate(self, train_data, eval_data, callback, params_train_dataLoader, params_eval_dataLoader, params_train):
         if params_train_dataLoader is None:
             Warning('data Loader uses default arguments')
@@ -54,7 +40,21 @@ class Func_Model(ABC):
         eval_dataLoader = GeneDataLoader(eval_data, shuffle=False, **params_eval_dataLoader)
         return self.model.fit(train_dataLoader, callbacks=callback, validation_data=eval_dataLoader, **params_train)
 
+    def predict(self, pred_data, params_dataLoader, params_predict):
+        if params_predict is None:
+            Warning('evalutation with default parameters')
+            params_predict = {}
+        if params_dataLoader is None:
+            Warning('data Loader uses default arguments')
+            params_dataLoader = {}
+        return self.model.predict(GeneDataLoader(pred_data, **params_dataLoader), **params_predict)
+
+    def summary(self):
+        return self.model.summary()
+
     def print_model(self, path):
+        if path is None:
+            return plot_model(self.model, show_shapes=True)
         return plot_model(self.model, path, show_shapes=True)
 
     def save_model(self, path):

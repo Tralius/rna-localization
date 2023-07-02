@@ -4,10 +4,9 @@ param_dataLoader_train:
 
 param_dataLoader_valid:
   batch_size: 32
-  shuffle: True
 
-param_branches:
-  - architecture: cepr
+params_branches:
+  - architecture: cepf
     conv:
       - filters: 64
         kernel_size: 9
@@ -18,9 +17,7 @@ param_branches:
     pooling:
       - pool_size: 27740
         strides: 1
-    reshape:
-      - target_shape: (9,)
-  - architecture: cepr
+  - architecture: cepf
     conv:
       - filters: 64
         kernel_size: 7
@@ -32,7 +29,6 @@ param_branches:
       - pool_size: 27742
         strides: 1
     reshape:
-      - target_shape: (9,)
 
 param_consensus:
   units: 100

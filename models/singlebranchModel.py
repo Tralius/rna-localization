@@ -1,10 +1,10 @@
 from typing import Dict, Tuple, List
 import keras
 import pandas as pd
-from models import utils, Func_Model
+from models import utils, Model
 
 
-class CNN(Func_Model):
+class CNN(Model):
     """
     Architecture:
     a: Multihead-Attention layer (for singlehead set heads=1)
@@ -55,18 +55,6 @@ class CNN(Func_Model):
     def evaluate(self, eval_data: pd.DataFrame, params_dataLoader: Dict = None, params_eval: Dict = None):
         return super().evaluate(eval_data, params_dataLoader, params_eval)
 
-    def predict(self, pred_data, params_dataLoader: Dict = None, params_predict: Dict = None):
-        return super().predict(pred_data, params_dataLoader, params_predict)
-    
-    def summary(self):
-        return super().summary()
-
-    def print_model(self, path):
-        super().print_model(path)
-
-    def save_model(self, path):
-        super().save_model(path)
-
     def fit_and_evaluate(self, train_data, eval_data, callback: List[keras.callbacks.Callback] = None,
                          params_train_dataLoader: Dict = None,
                          params_eval_dataLoader: Dict = None,
@@ -75,5 +63,16 @@ class CNN(Func_Model):
                                         params_train_dataLoader,
                                         params_eval_dataLoader,
                                         params_train)
+
+    def predict(self, pred_data, params_dataLoader: Dict = None, params_predict: Dict = None):
+        return super().predict(pred_data, params_dataLoader, params_predict)
     
+    def summary(self):
+        return super().summary()
+
+    def print_model(self, path = None):
+        return super().print_model(path)
+
+    def save_model(self, path):
+        super().save_model(path)
     

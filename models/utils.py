@@ -1,10 +1,8 @@
 from typing import Dict, List
 from collections import Counter
-from keras.layers import Conv1D, Dense, Flatten, MaxPooling1D, Dropout, MultiHeadAttention, Reshape, LeakyReLU, \
-    BatchNormalization, Concatenate, add
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
+from keras.layers import Conv1D, Dense, Flatten, MaxPooling1D, Dropout, Reshape, LeakyReLU, \
+    BatchNormalization, add, Layer, Activation, Lambda, Multiply
+from keras import backend as K
 
 def check_params(parameters: Dict):
     architecture = parameters.get('architecture')
@@ -52,10 +50,10 @@ def check_params(parameters: Dict):
                 ValueError('number of skip connection layer not equal to number of skip parameters')
         else:
             NotImplementedError()
-            
+
 def add_layer(layer: str, arg, index: Dict, params: Dict, arch: List):
     if layer == 'a':
-        arch.append(MultiHeadAttention(**params.get('attention')[index.get('attention')])(arg, arg))
+        arch.append(Attention(**params.get('attention')[index.get('attention')])(arg))
         index['attention'] = index.get('attention') + 1
         return arch, index
     elif layer == 'b':
@@ -95,68 +93,19 @@ def add_layer(layer: str, arg, index: Dict, params: Dict, arch: List):
         arch.append(add()(adding))
         index['skip'] = index.get('skip') + 1
         return arch, index
-    
-# summarize history for accuracy
-def plot_line_graph(data, title, ylabel, xlabel, legend):
-    # for i in range(len(data)):
-    for dataset in data:
-        plt.plot(dataset)
-    plt.title(title)
-    plt.ylabel(ylabel)
-    plt.xlabel(xlabel)
-    plt.legend(legend, loc='upper left')
-    plt.show()
 
-def scatter_plot(pred, ground_truth):
+class Attention(Layer):
+    def __init__(self, attention_size, activation_dense='tanh', activation_act='softmax', **kwargs):
+        super().__init__()
+        self.dense1 = Dense(units=attention_size, activation=activation_dense)
+        self.dense2 = Dense(units=1, use_bias=False)
+        self.activation = Activation(activation=activation_act)
+        self.lam = Lambda(lambda x: K.sum(x, axis=1, keepdims=False))
 
-    def get_classes(dataframe):
-
-        processed_dataframe = dataframe.iloc[:, 0:9]
-
-        sum_vec = processed_dataframe.sum(axis=1)
-
-        processed_dataframe = processed_dataframe.divide(sum_vec, axis='index')
-
-        dataframe_max_values = processed_dataframe.max(axis=1)
-
-        dataframe_max_values_tags = processed_dataframe.idxmax(axis=1)
-
-        return dataframe_max_values, dataframe_max_values_tags
-
-    ground_truth_max_value, ground_truth_class = get_classes(ground_truth)
-    pred_max_value, pred_truth_class = get_classes(pred)
-
-    legend = list(ground_truth.columns[0:9])
-
-    plt.scatter(ground_truth_max_value, ground_truth_class, color="purple")
-
-def box_plot(dataframe):
-
-    loc_data = dataframe.iloc[:, 0:9]
-
-    sum_vec = loc_data.sum(axis=1)
-
-    loc_data = loc_data.divide(sum_vec, axis='index')
-
-    loc_data_dict = {}
-    for loc in loc_data.head():
-        loc_data_dict[loc] = loc_data[loc]
-
-    new_loc_data = pd.DataFrame(loc_data_dict)
-
-    # Plot
-    bp = plt.boxplot(
-        # A data frame needs to be converted to an array before it can be plotted this way
-        np.array(new_loc_data),
-        # You can use the column headings from the data frame as labels
-        labels=list(loc_data.columns),
-        showfliers=False
-    )
-    # Axis details
-    plt.title('Long Jump Finals')
-    plt.ylabel('Probability')
-    plt.xlabel('Cellular Compartments')
-
-    plt.show()
-
-    
+    def call(self, inputs):
+        context = self.dense1(inputs)
+        attention = self.dense2(context)
+        scores = Flatten()(attention)
+        attention_weights = Reshape(target_shape=(2146, 1))(scores)
+        output = self.lam(Multiply()([inputs, attention_weights]))
+        return output
