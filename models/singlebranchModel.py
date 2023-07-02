@@ -6,6 +6,7 @@ from keras.optimizers import Adam, SGD
 from keras.metrics import CategoricalCrossentropy, KLDivergence
 from keras.losses import CategoricalCrossentropy
 from keras.callbacks import ModelCheckpoint
+from metrics import tf_pearson
 
 class CNN(Model):
     """

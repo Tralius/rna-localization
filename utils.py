@@ -8,8 +8,8 @@ from sklearn.model_selection import train_test_split
 def read_model_file(path, padding, multibranched: bool = False):
     with open(path) as model_file:
         model_params = yaml.safe_load(model_file)
-    model_params['params_dataLoader_train']['padding_length'] = padding
-    model_params['params_dataLoader_valid']['padding_length'] = padding
+    model_params['param_dataLoader_train']['padding_length'] = padding
+    model_params['param_dataLoader_valid']['padding_length'] = padding
     if multibranched:
         for i in range(len(model_params['params_branches'])):
             if 'attention' in list(model_params['params_branches'][i].keys()):
@@ -46,16 +46,16 @@ def set_variables(name: str, max_seq_len, multibranch: bool = False):
     params_dict = read_model_file(f'model_architectures/{name}.yaml', max_seq_len, multibranch)
     
     if multibranch:
-        params_dataLoader_valid = params_dict['params_dataLoader_valid']
-        params_dataLoader_train = params_dict['params_dataLoader_train']
+        params_dataLoader_valid = params_dict['param_dataLoader_valid']
+        params_dataLoader_train = params_dict['param_dataLoader_train']
         params_branches = params_dict['params_branches']
         params_consensus = params_dict['params_consensus']
-        params_train = params_dict['paramss_train']
+        params_train = params_dict['params_train']
         
         return model_architecture_path, model_output_path, params_dataLoader_train, params_dataLoader_valid, params_branches, params_consensus, params_train
     else:
-        params_dataLoader_valid = params_dict['params_dataLoader_valid']
-        params_dataLoader_train = params_dict['params_dataLoader_train']
+        params_dataLoader_valid = params_dict['param_dataLoader_valid']
+        params_dataLoader_train = params_dict['param_dataLoader_train']
         params_model = params_dict['params_model']
         params_train = params_dict['params_train']
         

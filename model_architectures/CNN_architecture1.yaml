@@ -1,4 +1,6 @@
-params_dataLoader_train:
+# Original architecture of Jonas
+
+param_dataLoader_train:
   batch_size: 32
   shuffle: True
 

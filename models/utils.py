@@ -1,7 +1,7 @@
 from typing import Dict, List
 from collections import Counter
 from keras.layers import Conv1D, Dense, Flatten, MaxPooling1D, Dropout, MultiHeadAttention, Reshape, LeakyReLU, \
-    BatchNormalization, Concatenate, add, ReLU, GlobalAvgPool1D, Activation, Lambda, Multiply
+    BatchNormalization, Concatenate, add, ReLU, GlobalAvgPool1D, Activation, Lambda, Multiply, Layer
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
