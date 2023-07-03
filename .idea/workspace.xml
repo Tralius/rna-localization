@@ -5,24 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="52db749d-89b6-4485-b261-7f1b8eaaf8a7" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/model_architecture_viz/cnn_model_first.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model_architecture_viz/simple_cnn.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model_architectures/cnn_model_first.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model_architectures/example_cnn.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model_architectures/example_multibranch.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model_architectures/model_convention_cnn.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model_architectures/model_convention_multibranch.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model_architectures/simple_cnn_model.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/model_architectures/CNN_architecture2.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dataPipeline_CustomCNN.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/dataPipeline_CustomCNN.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model_architectures/CNN_architecture1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/model_architectures/CNN_architecture1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/CNN.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/MultibranchedModel.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataPipeline_func_Multibranch.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/dataPipeline_func_Multibranch.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataloaders/GeneDataLoader.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataloaders/GeneDataLoader.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model_architecture_viz/simple_cnn.png" beforeDir="false" afterPath="$PROJECT_DIR$/model_architecture_viz/simple_cnn.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model_architectures/deepRNA_adapt.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/model_architectures/deepRNA_adapt.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model_architectures/example_cnn.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/model_architectures/example_cnn.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model_outputs/simple_cnn_2023-06-26.h5" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/RNAtracker.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/RNAtracker.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/functional_CNN.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/functional_CNN.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/functional_MultibranchedModel.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/functional_MultibranchedModel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/functional_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/functional_model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notes/model.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notes/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/notes/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notes/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/notes/utils.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,6 +33,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RESET_MODE" value="MIXED" />
   </component>
@@ -61,7 +62,7 @@
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
     &quot;full.screen.before.presentation.mode&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/steve/Documents/main_storage/STUDY RESOURCES/Regulatory Genomics/project/files2/rna-localization&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/jonasflor/Desktop/TUM/rna-localization/model_architectures&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -71,6 +72,9 @@
   }
 }</component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/model_architectures" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/notes" />
       <recent name="$PROJECT_DIR$/dataloaders" />
@@ -119,6 +123,8 @@
       <workItem from="1686907335153" duration="40000" />
       <workItem from="1687158075688" duration="4076000" />
       <workItem from="1687765938039" duration="741000" />
+      <workItem from="1687983742165" duration="363000" />
+      <workItem from="1688209737954" duration="1920000" />
     </task>
     <servers />
   </component>
@@ -135,17 +141,6 @@
         </entry>
       </map>
     </option>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/models/RNAtracker.py</url>
-          <line>202</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/rna_localization$script.coverage" NAME="script Coverage Results" MODIFIED="1686903315925" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />

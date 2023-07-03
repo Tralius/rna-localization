@@ -11,4 +11,6 @@ dependencies:
     - jupyter
     - matplotlib
     - scikit-learn
+    - pydot
+    - tensorflow_probability
 prefix: /home/usr/anaconda3/envs/reggen

@@ -1,0 +1,62 @@
+param_dataLoader_train:
+  batch_size: 32
+  shuffle: True
+
+param_dataLoader_valid:
+  batch_size: 32
+
+params_train:
+  epochs: 10
+  use_multiprocessing: True
+
+params_model:
+  architecture: 'cblcblpdcblcblpdcblcblpdcblcblpdaebleblee'
+  dropouts:
+    - { 'rate': .3 }
+    - { 'rate': .3 }
+    - { 'rate': .3 }
+    - { 'rate': .3 }
+    - { 'rate': .3 }
+  pooling:
+    - { 'pool_size': 2 }
+    - { 'pool_size': 2 }
+    - { 'pool_size': 2 }
+    - { 'pool_size': 2 }
+  conv:
+    - { 'filters': 64, 'kernel_size': 7, 'activation': 'relu', 'padding': 'valid'}
+    - { 'filters': 64, 'kernel_size': 7, 'activation': 'relu', 'padding': 'valid' }
+    - { 'filters': 128, 'kernel_size': 7, 'activation': 'relu', 'padding': 'valid' }
+    - { 'filters': 128, 'kernel_size': 7, 'activation': 'relu', 'padding': 'valid' }
+    - { 'filters': 256, 'kernel_size': 7, 'activation': 'relu', 'padding': 'valid' }
+    - { 'filters': 256, 'kernel_size': 7, 'activation': 'relu', 'padding': 'valid' }
+    - { 'filters': 512, 'kernel_size': 7, 'activation': 'relu', 'padding': 'valid' }
+    - { 'filters': 512, 'kernel_size': 7, 'activation': 'relu', 'padding': 'valid' }
+  leaky:
+    - {'alpha': 0.05}
+    - {'alpha': 0.05}
+    - {'alpha': 0.05}
+    - {'alpha': 0.05}
+    - {'alpha': 0.05}
+    - {'alpha': 0.05}
+    - {'alpha': 0.05}
+    - {'alpha': 0.05}
+    - {'alpha': 0.05}
+    - {'alpha': 0.05}
+  dense:
+    - {'units': 128, 'activation': 'relu'}
+    - {'units': 256, 'activation': 'relu'}
+    - {'units': 512, 'activation': 'relu'}
+    - {'units': 9, 'activation': 'softmax'}
+  batch:
+    - {}
+    - {}
+    - {}
+    - {}
+    - {}
+    - {}
+    - {}
+    - {}
+    - {}
+    - {}
+  attention:
+    - {'attention_size': 80}

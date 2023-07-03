@@ -1,0 +1,38 @@
+# This is probably one of Jonas earlier architectures
+# Perforance: reportedly bad 
+
+param_dataLoader_train:
+  batch_size: 32
+  shuffle: True
+
+param_dataLoader_valid:
+  batch_size: 32
+
+params_model:
+  architecture: ccpaee
+  learning_rate: 1e-4
+  optimizer: adam
+  conv:
+    - filters: 64
+      kernel_size: 9
+      padding: valid
+      use_bias: False
+    - filters: 32
+      kernel_size: 9
+      padding: valid
+      use_bias: False
+  pooling:
+    - pool_size: 8
+      strides: 8
+  attention:
+    - attention_size: 80
+  dense:
+    - units: 512
+      activation: relu
+    - units: 9
+      activation: softmax
+
+params_train:
+  epochs: 1
+  use_multiprocessing: True
+

@@ -4,15 +4,16 @@
 
 ## Installation
 
-1. Install conda
+1. Install graphviz:
+   - Please see https://graphviz.gitlab.io/download/ for that
 
-2. Perform `conda env create -n reggen -f environment.yml`
+2. Install conda (check if conda is already installed with `conda --version`, if not then get it from https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html)
+
+3. Perform `conda env create -n reggen -f environment.yml`
     - If you have already installed and activated a conda environment, **before you do the above command** deactivate the previous conda env with `conda deactivate`
 
-3. Activate the conda environement with `conda activate reggen`
+4. Activate the conda environement with `conda activate reggen`
 
-
-TODO: add dcoknt kjaöfslkjonv d https://graphviz.gitlab.io/download/
-
+With the enabled conda environments you are then free to execute the jupyter notebooks
 
 TODO: add license from RNATracker

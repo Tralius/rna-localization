@@ -84,7 +84,7 @@ def build_lstm(max_len, layer_size=128, learning_rate=1e-3, dropout_rate=0.03, o
     model.add(keras.layers.BatchNormalization())
     model.add(keras.layers.LeakyReLU(alpha=0.05))
     model.add(keras.layers.MaxPooling1D(2))
-    model.add(keras.layers.Dropout(dropout_rate))sla
+    model.add(keras.layers.Dropout(dropout_rate))
     model.add(keras.layers.Conv1D(128, 3, strides=2, padding="same"))
     model.add(keras.layers.BatchNormalization())
     model.add(keras.layers.LeakyReLU(alpha=0.05))

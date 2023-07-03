@@ -1,2 +1,4 @@
 *.idea
 final_data.csv
+model_outputs
+/model_outputs

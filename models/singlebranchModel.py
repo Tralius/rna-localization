@@ -1,10 +1,14 @@
 from typing import Dict, Tuple, List
 import keras
 import pandas as pd
-from models import utils, Func_Model
+from models import utils, Model
+from keras.optimizers import Adam, SGD
+from keras.metrics import CategoricalCrossentropy, KLDivergence
+from keras.losses import CategoricalCrossentropy
+from keras.callbacks import ModelCheckpoint
+from metrics import tf_pearson
 
-
-class CNN(Func_Model):
+class CNN(Model):
     """
     Architecture:
     a: Multihead-Attention layer (for singlehead set heads=1)
@@ -17,10 +21,12 @@ class CNN(Func_Model):
     def __init__(self,
                  input_size: Tuple,
                  optimizer = keras.optimizers.Adam(),
-                 loss = keras.losses.CategoricalCrossentropy(),
-                 metrics = ['accuracy'],
+                 loss = CategoricalCrossentropy(),
+                 metrics = ['accuracy', KLDivergence(name="kullback_leibler_divergence"), tf_pearson],
                  params_model: Dict[str, List[Dict]] = None,
-                 compile: Dict = None) -> None:
+                 compile: Dict = None,
+                 checkpoint_filepath = None) -> None:
+
 
         super().__init__()
         
@@ -30,10 +36,8 @@ class CNN(Func_Model):
             compile = {}
         
         input_lay = keras.Input(shape=input_size)
-        #params_check = params_model
 
         architecture = list(params_model.get('architecture'))
-        #params_check['architecture'] = architecure
         utils.check_params(params_model)
 
         index = {}
@@ -48,7 +52,19 @@ class CNN(Func_Model):
             else:
                 arch, index = utils.add_layer(j, arch[len(arch)-1], index, params_model, arch)
         
-        self.model = keras.Model(inputs=input_lay, outputs=arch[len(arch)-1])
+        self.model = keras.Model(inputs=input_lay, outputs=arch[-1])  # TODO: in model.utils
+        learning_rate = float(params_model.get('learning_rate'))
+        if "optimizer" in params_model.keys():
+            if params_model["optimizer"] == "sgd":
+                optimizer = SGD(learning_rate=learning_rate)
+            elif params_model["optimizer"] == "adam":
+                optimizer = Adam(
+                    learning_rate=learning_rate)
+        else:
+            optimizer = Adam(
+                learning_rate=learning_rate)
+
+
         self.model.compile(optimizer=optimizer, loss=loss, metrics=metrics, **compile)
 
     def fit(self, train_data: pd.DataFrame, params_dataLoader: Dict = None, params_train: Dict = None):
@@ -56,18 +72,6 @@ class CNN(Func_Model):
     
     def evaluate(self, eval_data: pd.DataFrame, params_dataLoader: Dict = None, params_eval: Dict = None):
         return super().evaluate(eval_data, params_dataLoader, params_eval)
-
-    def predict(self, pred_data, params_dataLoader: Dict = None, params_predict: Dict = None):
-        return super().predict(pred_data, params_dataLoader, params_predict)
-    
-    def summary(self):
-        return super().summary()
-
-    def print_model(self, path):
-        super().print_model(path)
-
-    def save_model(self, path):
-        super().save_model(path)
 
     def fit_and_evaluate(self, train_data, eval_data, callback: List[keras.callbacks.Callback] = None,
                          params_train_dataLoader: Dict = None,
@@ -77,5 +81,15 @@ class CNN(Func_Model):
                                         params_train_dataLoader,
                                         params_eval_dataLoader,
                                         params_train)
-    
-    
+
+    def predict(self, pred_data, params_dataLoader: Dict = None, params_predict: Dict = None):
+        return super().predict(pred_data, params_dataLoader, params_predict)
+
+    def summary(self):
+        return super().summary()
+
+    def print_model(self, path=None):
+        return super().print_model(path)
+
+    def save_model(self, path):
+        super().save_model(path)

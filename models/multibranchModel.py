@@ -1,28 +1,11 @@
 import keras
 import numpy as np
-from keras.layers import Conv1D, Dense, Flatten, MaxPooling1D, Dropout, MultiHeadAttention, Reshape, LeakyReLU, \
-    BatchNormalization, Concatenate, add
-from models import Func_Model, utils
+from keras.layers import Dense, Concatenate
+from models import Model, utils
 from typing import Dict, Tuple, List
-from collections import Counter
-from dataloaders import GeneDataLoader
 
 
-class MultiBranch(Func_Model):
-    """
-
-    TODO: refine docs
-    ...
-
-    Architecture:
-    a: Multihead-Attention layer (for singlehead set heads=1)
-    c: 1D Convolution
-    d: Dropout layer
-    e: Dense layer
-    f: Flatten layer
-    p: 1D Max-Pooling layer
-    r: Reshape layer
-    """
+class MultiBranch(Model):
 
     def __init__(self,
                  input_size: Tuple,
@@ -75,15 +58,6 @@ class MultiBranch(Func_Model):
     def evaluate(self, eval_data, params_dataLoader: Dict = None, params_eval: Dict = None):
         return super().evaluate(eval_data, params_dataLoader, params_eval)
 
-    def predict(self, pred_data, params_dataLoader: Dict = None, params_predict: Dict = None):
-        return super().predict(pred_data, params_dataLoader, params_predict)
-
-    def summary(self):
-        return super().summary()
-
-    def save_model(self, path):
-        super().save_model(path)
-
     def fit_and_evaluate(self, train_data, eval_data, callback: List[keras.callbacks.Callback] = None,
                          params_train_dataLoader: Dict = None,
                          params_eval_dataLoader: Dict = None,
@@ -93,5 +67,15 @@ class MultiBranch(Func_Model):
                                         params_eval_dataLoader,
                                         params_train)
 
-    def print_model(self, path):
-        super().print_model(path)
+    def predict(self, pred_data, params_dataLoader: Dict = None, params_predict: Dict = None):
+        return super().predict(pred_data, params_dataLoader, params_predict)
+
+    def summary(self):
+        return super().summary()
+
+    def print_model(self, path = None):
+        return super().print_model(path)
+
+    def save_model(self, path):
+        super().save_model(path)
+        
