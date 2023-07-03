@@ -17,9 +17,9 @@ class CNN(Func_Model):
     """
     def __init__(self,
                  input_size: Tuple,
-                 optimizer = keras.optimizers.Nadam(),
-                 loss = losses.KLDivergence(),
-                 metrics = ['accuracy', utils.tf_pearson],
+                 optimizer = keras.optimizers.SGD(),
+                 loss = losses.CategoricalCrossentropy(),
+                 metrics = [utils.tf_pearson, "accuracy"],
                  params_model: Dict[str, List[Dict]] = None,
                  compile: Dict = None) -> None:
 
