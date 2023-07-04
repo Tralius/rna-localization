@@ -6,7 +6,7 @@ from keras.optimizers import Adam, SGD
 from keras.metrics import CategoricalCrossentropy, KLDivergence
 from keras.losses import CategoricalCrossentropy
 from keras.callbacks import ModelCheckpoint
-from metrics import tf_pearson
+from metrics import pearson
 
 class CNN(Model):
     """
@@ -22,14 +22,14 @@ class CNN(Model):
                  input_size: Tuple,
                  optimizer = keras.optimizers.Adam(),
                  loss = CategoricalCrossentropy(),
-                 metrics = ['accuracy', KLDivergence(name="kullback_leibler_divergence"), tf_pearson],
+                 metrics = ['accuracy', KLDivergence(name="kullback_leibler_divergence"), pearson],
                  params_model: Dict[str, List[Dict]] = None,
                  compile: Dict = None,
                  checkpoint_filepath = None) -> None:
 
 
         super().__init__()
-        
+
         if params_model is None:
             params_model = {}
         if compile is None:
@@ -63,7 +63,6 @@ class CNN(Model):
         else:
             optimizer = Adam(
                 learning_rate=learning_rate)
-
 
         self.model.compile(optimizer=optimizer, loss=loss, metrics=metrics, **compile)
 

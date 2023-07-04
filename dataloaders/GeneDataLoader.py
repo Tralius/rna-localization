@@ -6,7 +6,7 @@ from typing import Tuple
 
 class GeneDataLoader(Sequence):
     def __init__(self, data_table: pd.DataFrame, padding_length: int, batch_size: int = 32, shuffle: bool = True,
-                 struct: bool = False):
+                 struct: bool = False, truncate: bool = False, truncate_length: int = 32):
 
         transformed_data = data_table.dropna()
         transformed_data = output_normalization(transformed_data.iloc[:, 0:9])
@@ -20,6 +20,9 @@ class GeneDataLoader(Sequence):
         self.shuffle = shuffle
         self.indices = np.arange(self.data.shape[0])
         self.max_len = padding_length
+
+        self.truncate_len = truncate_length
+        self.truncate = truncate
 
         # Calculate the number of batches
         self.num_batches = self.data.shape[0] // batch_size
@@ -40,16 +43,35 @@ class GeneDataLoader(Sequence):
         end_index = min((index + 1) * self.batch_size, self.data.shape[0])
 
         # Initialize empty arrays for samples and labels
-        padded_sequences = np.zeros((end_index - start_index, self.max_len, 4), dtype=np.float32)
-        output = np.zeros((end_index - start_index, 9), dtype=np.float32)
+        if self.truncate:
+            sequences = np.zeros((end_index - start_index, self.truncate_len, 4), dtype=np.float32)
+            output = np.zeros((end_index - start_index, 9), dtype=np.float32)
 
-        # Load padded sequences and labels for the current batch
-        for i, idx in enumerate(self.indices[start_index:end_index]):
-            padded_sequences[i, -len(self.data['seq'].iloc[idx]):, :] = self.data['seq'].iloc[idx]
+            # Load padded sequences and labels for the current batch
+            for i, idx in enumerate(self.indices[start_index:end_index]):
+                seq_length = len(self.data['seq'].iloc[idx])
 
-            output[i, :] = self.data.iloc[idx, 0:9]
+                if seq_length < self.truncate_len:
+                    sequences[i, -seq_length:, :] = self.data['seq'].iloc[idx]
+                else:
+                    copy_length = seq_length - self.truncate_len
+                    sequences[i] = self.data['seq'].iloc[idx][copy_length:]
 
-        return padded_sequences, output
+                output[i, :] = self.data.iloc[idx, 0:9]
+
+            return sequences, output
+
+        else:
+            padded_sequences = np.zeros((end_index - start_index, self.max_len, 4), dtype=np.float32)
+            output = np.zeros((end_index - start_index, 9), dtype=np.float32)
+
+            # Load padded sequences and labels for the current batch
+            for i, idx in enumerate(self.indices[start_index:end_index]):
+                padded_sequences[i, -len(self.data['seq'].iloc[idx]):, :] = self.data['seq'].iloc[idx]
+
+                output[i, :] = self.data.iloc[idx, 0:9]
+
+            return padded_sequences, output
 
 
 def one_hot_emb(data: pd.DataFrame) -> pd.DataFrame:

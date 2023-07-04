@@ -2,10 +2,13 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 from sklearn.metrics import roc_curve, auc
+from scipy.stats import pearsonr
+
 
 # summarize history for accuracy
 def plot_line_graph(data, title, ylabel, xlabel, legend):
     # for i in range(len(data)):
+    plt.rcParams["figure.figsize"] = (20, 10)
     for dataset in data:
         plt.plot(dataset)
     plt.title(title)
@@ -16,11 +19,6 @@ def plot_line_graph(data, title, ylabel, xlabel, legend):
 
 
 def roc_curve_plot(testY, predictedY):
-
-    testY = testY.iloc[:, 0:9]
-    sum_vec = testY.sum(axis=1)
-    testY = testY.divide(sum_vec, axis='index')
-
     classes = list(testY.columns)
 
     fpr = dict()
@@ -44,7 +42,7 @@ def roc_curve_plot(testY, predictedY):
     testY = np.array(y_label_hot_encoding)
     predictedY = np.array(pred_label_hot_encoding)
 
-    plt.rcParams["figure.figsize"] = (20,10)
+    plt.rcParams["figure.figsize"] = (20, 10)
 
     # calculate the roc_curve for every class
     for i, location in enumerate(classes):
@@ -56,7 +54,7 @@ def roc_curve_plot(testY, predictedY):
         "blue", "orange", "green", "red", "purple", "brown", "pink", "gray", "olive"
     ]
     for i in range(len(classes)):
-        plt.plot(fpr[i], tpr[i], color=colors[i], marker='.', label=f"{classes[i]}: {round(auc_score[i],2)}")
+        plt.plot(fpr[i], tpr[i], color=colors[i], marker='.', label=f"{classes[i]}: {round(auc_score[i], 2)}")
     # axis labels
 
     plt.xlabel('False Positive Rate')
@@ -66,12 +64,8 @@ def roc_curve_plot(testY, predictedY):
     # show the plot
     plt.show()
 
+
 def scatter_plot(ground_truth, pred):
-
-    ground_truth = ground_truth.iloc[:, 0:9]
-    sum_vec = ground_truth.sum(axis=1)
-    ground_truth = ground_truth.divide(sum_vec, axis='index')
-
     classes = list(ground_truth.columns)
 
     # for i, loc in enumerate(classes):
@@ -85,12 +79,25 @@ def scatter_plot(ground_truth, pred):
     plt.legend()
 
 
+def bar_plot(ground_truth, pred, mode):
+    if mode == "pearson":
+        pearson_of_comp = dict()
+        compartments = list(ground_truth.columns)
+
+        for i, compartment in enumerate(compartments):
+            pearson_of_comp[compartment] = pearsonr(ground_truth[compartment], pred[:, i]).statistic
+
+        plt.rcParams["figure.figsize"] = (20, 10)
+        plt.bar(compartments, pearson_of_comp.values(), color='blue', width=0.4)
+
+        plt.xlabel("Compartments")
+        plt.ylabel("Pearson Correlation")
+        plt.title("Pearson Correlation for Compartments")
+        plt.show()
+
+
 def box_plot(dataframe):
-    loc_data = dataframe.iloc[:, 0:9]
-
-    sum_vec = loc_data.sum(axis=1)
-
-    loc_data = loc_data.divide(sum_vec, axis='index')
+    loc_data = dataframe
 
     loc_data_dict = {}
     for loc in loc_data.head():
@@ -107,7 +114,7 @@ def box_plot(dataframe):
         showfliers=False
     )
     # Axis details
-    plt.title('Long Jump Finals')
+    plt.title('Cellular Compartments Data Distribution')
     plt.ylabel('Probability')
     plt.xlabel('Cellular Compartments')
 

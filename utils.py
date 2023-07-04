@@ -5,9 +5,14 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 
 
-def read_model_file(path, padding, multibranched: bool = False):
+def read_model_file(path, padding, truncate_len, multibranched: bool = False):
     with open(path) as model_file:
         model_params = yaml.safe_load(model_file)
+
+    if model_params['param_dataLoader_train']['truncate'] and model_params['param_dataLoader_valid']['truncate']:
+        model_params['param_dataLoader_train']['truncate_length'] = truncate_len
+        model_params['param_dataLoader_valid']['truncate_length'] = truncate_len
+
     model_params['param_dataLoader_train']['padding_length'] = padding
     model_params['param_dataLoader_valid']['padding_length'] = padding
     if multibranched:
@@ -61,4 +66,9 @@ def set_variables(name: str, max_seq_len, multibranch: bool = False):
         
         return model_architecture_path, model_output_path, params_dataLoader_train, params_dataLoader_valid, params_model, params_train
     
-    
+
+def extractY(data):
+    testY = data.iloc[:, 0:9]
+    sum_vec = testY.sum(axis=1)
+    testY = testY.divide(sum_vec, axis='index')
+    return testY

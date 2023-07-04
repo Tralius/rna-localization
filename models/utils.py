@@ -147,22 +147,3 @@ class Attention(Layer):
         attention_weights = Reshape(target_shape=(2146, 1))(scores)
         output = self.lam(Multiply()([inputs, attention_weights]))
         return output
-
-# summarize history for accuracy
-def plot_line_graph(data, title, ylabel, xlabel, legend):
-    # for i in range(len(data)):
-    for dataset in data:
-        plt.plot(dataset)
-    plt.title(title)
-    plt.ylabel(ylabel)
-    plt.xlabel(xlabel)
-    plt.legend(legend, loc='upper left')
-    plt.show()
-
-    def call(self, inputs):
-        context = self.dense1(inputs)
-        attention = self.dense2(context)
-        scores = Flatten()(attention)
-        attention_weights = Reshape(target_shape=(2146, 1))(scores)
-        output = self.lam(Multiply()([inputs, attention_weights]))
-        return output
