@@ -19,7 +19,6 @@ class CNN(Model):
     """
     def __init__(self,
                  input_size: Tuple,
-                 optimizer = keras.optimizers.Adam(),
                  loss = CategoricalCrossentropy(),
                  metrics = ['accuracy', KLDivergence(name="kullback_leibler_divergence")],
                  params_model: Dict = None,

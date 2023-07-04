@@ -29,8 +29,7 @@ params_model:
   reshape:
     - #...
   skip:
-    - # parameters for first skip 
-    - # parameters for second skip...
+    - #...
 
 params_train:
   epochs: 3

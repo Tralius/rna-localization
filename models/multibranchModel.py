@@ -13,7 +13,6 @@ class MultiBranch(Model):
                  param_branches: List[Dict[str, List[Dict]]],
                  param_consensus: Dict,
                  loss=keras.losses.CategoricalCrossentropy(),
-                 optimizer=keras.optimizers.Adam(),
                  metrics=['accuracy'],
                  compile: Dict = None):
         super().__init__()
