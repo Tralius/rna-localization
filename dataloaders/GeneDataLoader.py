@@ -8,7 +8,8 @@ class GeneDataLoader(Sequence):
     def __init__(self, data_table: pd.DataFrame, padding_length: int, batch_size: int = 32, shuffle: bool = True,
                  struct: bool = False):
 
-        transformed_data = output_normalization(data_table.iloc[:, 0:9])
+        transformed_data = data_table.dropna()
+        transformed_data = output_normalization(transformed_data.iloc[:, 0:9])
         transformed_data = pd.concat([transformed_data, one_hot_emb(data_table['seq'])], axis=1)
         if struct:
             transformed_data = pd.concat([transformed_data, data_table['struct']], axis=1)
