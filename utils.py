@@ -29,7 +29,7 @@ def prepare_data(colab: bool = False, path=None):
     np.random.seed(3)
 
     if colab:
-        url = 'https://www.dropbox.com/s/hv4uau8q4wwg00k/final_data.csv?dl=1'
+        url = 'https://www.dropbox.com/s/0r8nmwbthhkf2zi/seq_from_prim_and_icshape_withchrm_no_scaff.csv?dl=1'
         data_org = pd.read_csv(url)
     else:
         data_org = pd.read_csv(path)

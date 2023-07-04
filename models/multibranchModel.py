@@ -49,6 +49,16 @@ class MultiBranch(Model):
         x = Dense(**param_consensus)(x)
         out = Dense(units=9, activation='softmax')(x)
         self.model = keras.Model(inputs=input_lay, outputs=out)
+
+        if "optimizer" not in params_model.keys():
+            optimizer = 'adam'
+        else:
+            optimizer = params_model['optimizer']
+        if 'learning_rate' not in params_model.keys():
+            learning_rate = None
+        else:
+            learning_rate = float(params_model['learning_rate'])
+        optimizer = utils.set_optimizer(optimizer, learning_rate)
         self.model.compile(loss=loss, optimizer=optimizer, metrics=metrics, **compile)
 
     def fit(self, train_data, params_dataLoader: Dict = None, params_train: Dict = None):

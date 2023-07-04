@@ -2,7 +2,6 @@ from typing import Dict, List
 from collections import Counter
 from keras.layers import Conv1D, Dense, Flatten, MaxPooling1D, Dropout, Reshape, LeakyReLU, \
     BatchNormalization, add, ReLU, GlobalAvgPool1D, Activation, Lambda, Multiply, Layer
-import matplotlib.pyplot as plt
 from keras import backend as K
 from keras.optimizers import SGD, Adam, Nadam
 
@@ -60,7 +59,6 @@ def check_params(parameters: Dict):
 
 
 def add_layer(layer: str, arg, index: Dict, params: Dict, arch: List):
-    # print("Add " + str(layer))
     if layer == 'a':
         arch.append(Attention(**params.get('attention')[index.get('attention')])(arg))
         index['attention'] = index.get('attention') + 1
@@ -120,7 +118,7 @@ def add_layer(layer: str, arg, index: Dict, params: Dict, arch: List):
         return arch, index
 
 
-def resblock(x, kernel_size, filters, use_bn, kernel_regularizer=None, **kwargs):
+def resblock(x, kernel_size, filters, use_bn, kernel_regularizer=None, **kwargs):  # TODO reforulate into Layer
     fx = Conv1D(kernel_size=kernel_size, filters=filters, activation='relu', padding='same')(x)
     if use_bn:
         fx = BatchNormalization()(fx)
@@ -133,24 +131,6 @@ def resblock(x, kernel_size, filters, use_bn, kernel_regularizer=None, **kwargs)
     out = ReLU()(out)
 
     return out
-
-
-def set_optimizer(optimizer: str, learning_rate: float):
-    if optimizer == 'adam':
-        if learning_rate is None:
-            return Adam()
-        else:
-            return Adam(learning_rate=learning_rate)
-    if optimizer == 'sgd':
-        if learning_rate is None:
-            return SGD()
-        else:
-            return SGD(learning_rate=learning_rate)
-    if optimizer == 'nadam':
-        if learning_rate is None:
-            return Nadam()
-        else:
-            return Nadam(learning_rate=learning_rate)
 
 
 class Attention(Layer):
@@ -170,21 +150,19 @@ class Attention(Layer):
         return output
 
 
-# summarize history for accuracy
-def plot_line_graph(data, title, ylabel, xlabel, legend):
-    # for i in range(len(data)):
-    for dataset in data:
-        plt.plot(dataset)
-    plt.title(title)
-    plt.ylabel(ylabel)
-    plt.xlabel(xlabel)
-    plt.legend(legend, loc='upper left')
-    plt.show()
-
-    def call(self, inputs):
-        context = self.dense1(inputs)
-        attention = self.dense2(context)
-        scores = Flatten()(attention)
-        attention_weights = Reshape(target_shape=(2146, 1))(scores)
-        output = self.lam(Multiply()([inputs, attention_weights]))
-        return output
+def set_optimizer(optimizer: str, learning_rate: float):
+    if optimizer == 'adam':
+        if learning_rate is None:
+            return Adam()
+        else:
+            return Adam(learning_rate=learning_rate)
+    if optimizer == 'sgd':
+        if learning_rate is None:
+            return SGD()
+        else:
+            return SGD(learning_rate=learning_rate)
+    if optimizer == 'nadam':
+        if learning_rate is None:
+            return Nadam()
+        else:
+            return Nadam(learning_rate=learning_rate)

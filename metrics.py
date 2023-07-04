@@ -2,6 +2,7 @@ import tensorflow_probability as tfp
 from keras.metrics import Metric
 import numpy as np
 
+
 class Pearson(Metric):
 
     def __init__(self, name='person', sample_axis=0, event_axis=None, keepdims=False, eps=1e-3,
@@ -20,12 +21,12 @@ class Pearson(Metric):
         if y_true_std == 0:
             y_true /= self.eps
         else:
-            y_true /= (y_true + np.sign(y_true_std)*self.eps)
+            y_true /= (y_true + np.sign(y_true_std) * self.eps)
         if y_pred is not None:
             if y_pred_std == 0:
                 y_pred /= self.eps
             else:
-                y_pred /= (y_pred_std + np.sign(y_pred_std)*self.eps)
+                y_pred /= (y_pred_std + np.sign(y_pred_std) * self.eps)
 
         result = tfp.stats.covariance(x=y_true,
                                       y=y_pred,
@@ -53,14 +54,15 @@ class Pearson(Metric):
 
     def reset_states(self):
         self.corr = None
-        
+
+
 def pearson(y_true, y_pred, sample_axis=0,
-                event_axis=None,
-                keepdims=False,
-                eps=0.001):
-    y_true /= (tfp.stats.stddev(y_true, sample_axis=sample_axis, keepdims=True)+eps)
+            event_axis=None,
+            keepdims=False,
+            eps=0.001):
+    y_true /= (tfp.stats.stddev(y_true, sample_axis=sample_axis, keepdims=True) + eps)
     if y_pred is not None:
-      y_pred /= (tfp.stats.stddev(y_pred, sample_axis=sample_axis, keepdims=True)+eps)
+        y_pred /= (tfp.stats.stddev(y_pred, sample_axis=sample_axis, keepdims=True) + eps)
 
     return tfp.stats.covariance(
         x=y_true,
