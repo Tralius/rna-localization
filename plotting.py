@@ -85,7 +85,8 @@ def bar_plot(ground_truth, pred, mode):
         compartments = list(ground_truth.columns)
 
         for i, compartment in enumerate(compartments):
-            pearson_of_comp[compartment] = pearsonr(ground_truth[compartment], pred[:, i]).statistic
+            correlation, pvalue = pearsonr(pred[:, i], ground_truth[compartment])
+            pearson_of_comp[compartment] = correlation
 
         plt.rcParams["figure.figsize"] = (20, 10)
         plt.bar(compartments, pearson_of_comp.values(), color='blue', width=0.4)

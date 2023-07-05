@@ -9,19 +9,27 @@ param_dataLoader_valid:
   truncate: False
 
 params_model:
-  architecture: cpdcpdcpdfede
+  architecture: cpdcpdcpdcpdcpdfede
   learning_rate: 1e-4
   optimizer: nadam
   conv:
-    - filters: 32
-      kernel_size: 13
+    - filters: 16
+      kernel_size: 10
       activation: relu
-    - filters: 32
-      kernel_size: 13
+    - filters: 16
+      kernel_size: 10
       activation: relu
       padding: valid
-    - filters: 32
-      kernel_size: 13
+    - filters: 16
+      kernel_size: 10
+      activation: relu
+      padding: valid
+    - filters: 16
+      kernel_size: 10
+      activation: relu
+      padding: valid
+    - filters: 16
+      kernel_size: 10
       activation: relu
       padding: valid
   dense:
@@ -33,7 +41,11 @@ params_model:
     - pool_size: 3
     - pool_size: 3
     - pool_size: 3
+    - pool_size: 3
+    - pool_size: 3
   dropouts:
+    - rate: 0.4
+    - rate: 0.4
     - rate: 0.4
     - rate: 0.4
     - rate: 0.4

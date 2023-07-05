@@ -14,14 +14,14 @@ params_model:
   optimizer: nadam
   conv:
     - filters: 32
-      kernel_size: 13
+      kernel_size: 15
       activation: relu
     - filters: 32
-      kernel_size: 13
+      kernel_size: 15
       activation: relu
       padding: valid
     - filters: 32
-      kernel_size: 13
+      kernel_size: 15
       activation: relu
       padding: valid
   dense:
