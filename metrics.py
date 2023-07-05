@@ -1,11 +1,12 @@
 import tensorflow_probability as tfp
+import tensorflow as tf
 from keras.metrics import Metric
 import numpy as np
 
 
 class Pearson(Metric):
 
-    def __init__(self, name='person', sample_axis=0, event_axis=None, keepdims=False, eps=1e-3,
+    def __init__(self, name='pearson', sample_axis=0, event_axis=None, keepdims=False, eps=1e-3,
                  return_dict: bool = False, **kwargs):
         super().__init__(name, **kwargs)
         self.sample_axis = sample_axis
@@ -13,7 +14,10 @@ class Pearson(Metric):
         self.keepdims = keepdims
         self.eps = eps
         self.return_dict = return_dict
-        self.corr = None
+        if self.return_dict:
+            self.corr = {}
+        else:
+            self.corr = tf.zeros([9])
 
     def update_state(self, y_true, y_pred, sample_weight = None):
         y_true_std = tfp.stats.stddev(y_true, sample_axis=self.sample_axis, keepdims=True)
@@ -47,7 +51,10 @@ class Pearson(Metric):
         return self.corr
 
     def reset_states(self):
-        self.corr = None
+        if self.return_dict:
+            self.corr = {}
+        else:
+            self.corr = tf.zeros([9])
 
 
 def pearson(y_true, y_pred, sample_axis=0,

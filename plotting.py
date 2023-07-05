@@ -1,7 +1,9 @@
+from typing import Dict, List
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 from sklearn.metrics import roc_curve, auc
+import seaborn as sns
 
 # summarize history for accuracy
 def plot_line_graph(data, title, ylabel, xlabel, legend):
@@ -13,7 +15,18 @@ def plot_line_graph(data, title, ylabel, xlabel, legend):
     plt.xlabel(xlabel)
     plt.legend(legend, loc='upper left')
     plt.show()
-
+    
+def multiplot_pearson(data: Dict[str, List[float]], title: str = 'Correlation after Compartment'):
+    headers = ['ERM', 'KDEL', 'LMA', 'MITO', 'NES', 'NIK', 'NLS', 'NUCP', 'OMM', 
+               'val_ERM', 'val_KDEL', 'val_LMA', 'val_MITO', 'val_NES', 'val_NIK', 'val_NLS', 'val_NUCP', 'val_OMM'
+               ]
+    data_list = [data[ind] for ind in headers]
+    data_list.append(list(range(len(data['loss']))))
+    data_panda = np.array(data_list).transpose()
+    headers.append('epoch')
+    dataframe = pd.DataFrame(data_panda, columns=headers)
+    plot_data = dataframe.melt(id_vars=['epoch'], var_name='compartment', value_name='correlation')
+    return sns.lineplot(plot_data, x='epoch', y='correlation', hue='compartment').set(title=title)
 
 def roc_curve_plot(testY, predictedY):
 
