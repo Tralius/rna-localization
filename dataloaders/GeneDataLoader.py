@@ -52,7 +52,7 @@ class GeneDataLoader(Sequence):
             output[i, :] = self.data.iloc[idx, 0:9]
             if self.struct:
                 tmp = self.data['struct'].iloc[idx]
-                padded_mask_struct = np.expand_dims(np.array(tmp != 'nan'), axis=1)
+                padded_mask_struct = np.expand_dims(np.array(tmp != 'nan'), axis=1) #TODO eventuell herausnehmen
                 tmp[tmp == 'nan'] = -1
                 padded_struct = np.expand_dims(tmp, axis=1).astype('float64')
                 seq_data = np.concatenate([seq_data, padded_mask_struct, padded_struct], axis=1)

@@ -15,19 +15,13 @@ class Pearson(Metric):
         self.return_dict = return_dict
         self.corr = None
 
-    def update_state(self, y_true, y_pred):
+    def update_state(self, y_true, y_pred, sample_weight = None):
         y_true_std = tfp.stats.stddev(y_true, sample_axis=self.sample_axis, keepdims=True)
         y_pred_std = tfp.stats.stddev(y_pred, sample_axis=self.sample_axis, keepdims=True)
-        if y_true_std == 0:
-            y_true /= self.eps
-        else:
-            y_true /= (y_true + np.sign(y_true_std) * self.eps)
-        if y_pred is not None:
-            if y_pred_std == 0:
-                y_pred /= self.eps
-            else:
-                y_pred /= (y_pred_std + np.sign(y_pred_std) * self.eps)
-
+        
+        y_true /= (y_true_std + self.eps)
+        y_pred /= (y_pred_std + self.eps)
+        
         result = tfp.stats.covariance(x=y_true,
                                       y=y_pred,
                                       event_axis=self.event_axis,

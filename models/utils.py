@@ -145,7 +145,7 @@ class Attention(Layer):
         context = self.dense1(inputs)
         attention = self.dense2(context)
         scores = Flatten()(attention)
-        attention_weights = Reshape(target_shape=(533, 1))(scores)
+        attention_weights = Reshape(target_shape=(4313, 1))(scores)
         output = self.lam(Multiply()([inputs, attention_weights]))
         return output
 

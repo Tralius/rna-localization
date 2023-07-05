@@ -4,14 +4,7 @@ from dataloaders.GeneDataLoader import GeneDataLoader
 
 
 class Model(ABC):
-    def __init__(self,
-                 input_size,
-                 param_branches,
-                 param_consensus,
-                 loss,
-                 metrics,
-                 compile,
-                 **kwargs) -> None:
+    def __init__(self, **kwargs) -> None:
         self.model = None
 
     def fit(self, train_data, params_dataLoader, params_train):
