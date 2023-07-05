@@ -3,7 +3,7 @@ from keras import regularizers
 #from keras.layers.core import Dense, Dropout, Flatten
 from keras.layers.convolutional import Convolution1D, MaxPooling1D
 from keras.layers import Embedding, BatchNormalization, LSTM, Bidirectional, Input, \
-    Concatenate, Multiply, Dot, Reshape, Activation, Lambda, Masking
+    Concatenate, Multiply, Dot, Reshape, Activation, Lambda, Masking, Dropout, Dense
 from keras.models import Model
 from six.moves import range
 import numpy as np
@@ -22,6 +22,7 @@ import scipy.stats as stats
 import csv
 import sys
 from keras.losses import CategoricalCrossentropy
+from metrics import tf_pearson
 
 basedir = os.path.split(os.path.dirname(os.path.abspath(__file__)))[0]
 sys.path.append(basedir)
@@ -110,7 +111,7 @@ class RNATracker:
         self.model.compile(
             loss=CategoricalCrossentropy(),
             optimizer=optim,
-            metrics=['acc']
+            metrics=['acc', tf_pearson]
         )
         self.is_built = True
         self.bn = True
@@ -208,7 +209,7 @@ class RNATracker:
         self.model.compile(
             loss=CategoricalCrossentropy(),
             optimizer=optim,  # todo
-            metrics=['acc']
+            metrics=['accuracy', tf_pearson]
         )
         if load_weights:
             import h5py
@@ -827,10 +828,15 @@ class RNATracker:
         np.savetxt(self.OUTPATH + 'Train_Acc_fold_{}.txt'.format(self.kfold_index), Train_Acc, delimiter=',')
         np.savetxt(self.OUTPATH + 'Valid_Acc_fold_{}.txt'.format(self.kfold_index), Valid_Acc, delimiter=',')
 
+    def save(self, path):
+        self.model.save(path)
+
+    def save_model(self, path):
+        self.model.save(path)
+
     def evaluate(self, x_test, y_test, dataset):
-        score, acc = self.model.evaluate(x_test, y_test, verbose=0)
-        print('Test loss:', score)
-        print('Test accuracy:', acc)
+        a = self.model.evaluate(x_test, y_test, verbose=0)
+        print('Test loss: ' + str(a))
 
         y_predict = self.model.predict(x_test)
         # save label and predicted values for future plotting
@@ -852,8 +858,11 @@ class RNATracker:
                 'Nuclear Pore',
                 'Outer Mitochondrial Membrane'
             }
-        self.multiclass_roc_and_pr(y_test, y_predict, locations)
-        return score, acc
+        try:
+            self.multiclass_roc_and_pr(y_test, y_predict, locations)
+        except Exception as e:
+            pass
+        return a
 
     def multiclass_roc_and_pr(self, y_label, y_predict, locations):
         """

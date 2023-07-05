@@ -1,0 +1,64 @@
+# Steves Resnet approach 8
+# Can also be used for STRUCT training
+
+param_dataLoader_train:
+  batch_size: 32
+  shuffle: True
+
+param_dataLoader_valid:
+  batch_size: 32
+
+params_model:
+  architecture: sdpsdcpfee
+  learning_rate: 1e-4
+  optimizer: adam
+  conv:
+    - filters: 64
+      kernel_size: 5
+      activation: relu
+      padding: valid
+      kernel_regularizer: l1
+      strides: 5
+  dense:
+    - units: 512
+      activation: relu
+    - units: 9
+      activation: softmax
+  dropouts:
+    - rate: 0.5
+    - rate: 0.5
+  pooling:
+    - pool_size: 4
+      strides: 2
+    - pool_size: 4
+      strides: 2
+  skip:
+    - filters: 24   # first skip
+      kernel_size: 9
+      activation: relu
+      use_bn: True
+      kernel_regularizer: l1
+      padding: valid
+    - filters: 48
+      kernel_size: 9
+      activation: relu
+      use_bn: True
+      kernel_regularizer: l1
+      padding: valid
+
+#  encompassing_skip:
+#    - first_cnn:
+#        filters: 16
+#        kernel_size: 9
+##        activation: relu
+#        use_bn: True
+#        kernel_regularizer: l1
+#        padding: valid
+#      dropout: 0.5
+#
+#sdp
+
+params_train:
+  epochs: 80
+  use_multiprocessing: True
+

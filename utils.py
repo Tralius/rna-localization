@@ -44,15 +44,15 @@ def set_variables(name: str, max_seq_len, multibranch: bool = False):
     model_architecture_path = f'model_architectures_viz/{name}_{datetime.datetime.now().date()}.png'
     model_output_path = f'model_outputs/{name}_{datetime.datetime.now().date()}.h5'
     params_dict = read_model_file(f'model_architectures/{name}.yaml', max_seq_len, multibranch)
-    
     if multibranch:
         params_dataLoader_valid = params_dict['param_dataLoader_valid']
         params_dataLoader_train = params_dict['param_dataLoader_train']
         params_branches = params_dict['params_branches']
         params_consensus = params_dict['params_consensus']
         params_train = params_dict['params_train']
+        params_train_for_compile = params_dict['params_train_for_compile']
         
-        return model_architecture_path, model_output_path, params_dataLoader_train, params_dataLoader_valid, params_branches, params_consensus, params_train
+        return model_architecture_path, model_output_path, params_dataLoader_train, params_dataLoader_valid, params_branches, params_consensus, params_train,params_train_for_compile
     else:
         params_dataLoader_valid = params_dict['param_dataLoader_valid']
         params_dataLoader_train = params_dict['param_dataLoader_train']
