@@ -16,10 +16,12 @@ def plot_line_graph(data, title, ylabel, xlabel, legend):
     plt.legend(legend, loc='upper left')
     plt.show()
     
-def multiplot_pearson(data: Dict[str, List[float]], title: str = 'Correlation after Compartment'):
-    headers = ['ERM', 'KDEL', 'LMA', 'MITO', 'NES', 'NIK', 'NLS', 'NUCP', 'OMM', 
+def multiplot_pearson(data: Dict[str, List[float]], training: bool = False,title: str = 'Correlation after Compartment'):
+    headers = [
                'val_ERM', 'val_KDEL', 'val_LMA', 'val_MITO', 'val_NES', 'val_NIK', 'val_NLS', 'val_NUCP', 'val_OMM'
                ]
+    if training:
+        headers = ['ERM', 'KDEL', 'LMA', 'MITO', 'NES', 'NIK', 'NLS', 'NUCP', 'OMM'].extend(headers)
     data_list = [data[ind] for ind in headers]
     data_list.append(list(range(len(data['loss']))))
     data_panda = np.array(data_list).transpose()
