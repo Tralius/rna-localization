@@ -128,8 +128,8 @@ def resblock(x, kernel_size, filters, use_bn, kernel_regularizer = None, padding
     else:
         fx = Conv1D(filters=filters, kernel_size=kernel_size, padding=padding, kernel_regularizer=kernel_regularizer)(fx)
     out = add([x, fx])
-    if use_bn:
-        out = BatchNormalization()(out)
+    #if use_bn:
+    #    out = BatchNormalization()(out)
     out = ReLU()(out)
 
     return out

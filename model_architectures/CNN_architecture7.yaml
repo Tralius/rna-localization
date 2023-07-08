@@ -26,14 +26,11 @@ params_model:
   dropouts:
     - rate: 0.5
     - rate: 0.5
-    - rate: 0.5
   pooling:
-    - pool_size: 3
+    - pool_size: 4
       strides: 1
     - pool_size: 4
-      strides: 2
-    - pool_size: 4
-      strides: 4
+      strides: 1
   skip:
     - filters: 8   # first skip
       kernel_size: 9
