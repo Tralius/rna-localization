@@ -33,19 +33,20 @@ params_model:
       strides: 8
   attention:
     - attention_size: 120
+      reshape_size: 4314
   dropouts:
     - rate: 0.3
   skip:
     - filters: 64   # first skip
-      kernel_size: 11
+      kernel_size: 7
       activation: relu
-      use_bn: True
       kernel_regularizer: l1
+      use_bn: False
     - filters: 64
-      kernel_size: 11
+      kernel_size: 7
       activation: relu
-      use_bn: True
       kernel_regularizer: l1
+      use_bn: False
 
 params_train:
   epochs: 100

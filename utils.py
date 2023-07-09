@@ -58,9 +58,10 @@ def set_variables(name: str, max_seq_len, multibranch: bool = False):
         params_dataLoader_train = params_dict['param_dataLoader_train']
         params_branches = params_dict['params_branches']
         params_consensus = params_dict['params_consensus']
+        params_model = params_dict['params_model']
         params_train = params_dict['params_train']
 
-        return model_architecture_path, model_output_path, params_dataLoader_train, params_dataLoader_valid, params_branches, params_consensus, params_train
+        return model_architecture_path, model_output_path, params_dataLoader_train, params_dataLoader_valid, params_branches, params_model, params_consensus, params_train
     else:
         params_dataLoader_valid = params_dict['param_dataLoader_valid']
         params_dataLoader_train = params_dict['param_dataLoader_train']

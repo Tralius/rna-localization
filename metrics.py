@@ -51,10 +51,7 @@ class Pearson(Metric):
         return self.corr
 
     def reset_states(self):
-        if self.return_dict:
-            self.corr = {}
-        else:
-            self.corr = tf.zeros([9])
+        pass
 
 
 def pearson(y_true, y_pred, sample_axis=0,
