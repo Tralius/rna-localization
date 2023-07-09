@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from keras import backend as K
+from keras.optimizers import SGD, Adam, Nadam
+
 
 def check_params(parameters: Dict):
     architecture = parameters.get('architecture')
@@ -146,25 +148,24 @@ class Attention(Layer):
         context = self.dense1(inputs)
         attention = self.dense2(context)
         scores = Flatten()(attention)
-        attention_weights = Reshape(target_shape=(2146, 1))(scores)
+        attention_weights = Reshape(target_shape=(4314, 1))(scores)
         output = self.lam(Multiply()([inputs, attention_weights]))
         return output
 
-# summarize history for accuracy
-def plot_line_graph(data, title, ylabel, xlabel, legend):
-    # for i in range(len(data)):
-    for dataset in data:
-        plt.plot(dataset)
-    plt.title(title)
-    plt.ylabel(ylabel)
-    plt.xlabel(xlabel)
-    plt.legend(legend, loc='upper left')
-    plt.show()
 
-    def call(self, inputs):
-        context = self.dense1(inputs)
-        attention = self.dense2(context)
-        scores = Flatten()(attention)
-        attention_weights = Reshape(target_shape=(2146, 1))(scores)
-        output = self.lam(Multiply()([inputs, attention_weights]))
-        return output
+def set_optimizer(optimizer: str, learning_rate: float):
+    if optimizer == 'adam':
+        if learning_rate is None:
+            return Adam()
+        else:
+            return Adam(learning_rate=learning_rate)
+    if optimizer == 'sgd':
+        if learning_rate is None:
+            return SGD()
+        else:
+            return SGD(learning_rate=learning_rate)
+    if optimizer == 'nadam':
+        if learning_rate is None:
+            return Nadam()
+        else:
+            return Nadam(learning_rate=learning_rate)

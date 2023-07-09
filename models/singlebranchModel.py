@@ -53,17 +53,16 @@ class CNN(Model):
                 arch, index = utils.add_layer(j, arch[len(arch)-1], index, params_model, arch)
         
         self.model = keras.Model(inputs=input_lay, outputs=arch[-1])  # TODO: in model.utils
-        learning_rate = float(params_model.get('learning_rate'))
-        if "optimizer" in params_model.keys():
-            if params_model["optimizer"] == "sgd":
-                optimizer = SGD(learning_rate=learning_rate)
-            elif params_model["optimizer"] == "adam":
-                optimizer = Adam(
-                    learning_rate=learning_rate)
-        else:
-            optimizer = Adam(
-                learning_rate=learning_rate)
 
+        if "optimizer" not in params_model.keys():
+            optimizer = 'adam'
+        else:
+            optimizer = params_model['optimizer']
+        if 'learning_rate' not in params_model.keys():
+            learning_rate = None
+        else:
+            learning_rate = float(params_model['learning_rate'])
+        optimizer = utils.set_optimizer(optimizer, learning_rate)
 
         self.model.compile(optimizer=optimizer, loss=loss, metrics=metrics, **compile)
 

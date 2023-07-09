@@ -8,12 +8,13 @@ class GeneDataLoader(Sequence):
     def __init__(self, data_table: pd.DataFrame, padding_length: int, batch_size: int = 32, shuffle: bool = True,
                  struct: bool = False):
 
-        transformed_data = output_normalization(data_table.iloc[:, 0:9])
+        transformed_data = data_table.dropna()
+        transformed_data = output_normalization(transformed_data.iloc[:, 0:9])
         transformed_data = pd.concat([transformed_data, one_hot_emb(data_table['seq'])], axis=1)
         if struct:
-            transformed_data = pd.concat([transformed_data, data_table.iloc[:, 10:]], axis=1)
+            transformed_data = pd.concat([transformed_data, data_table['struct']], axis=1)
         self.data = transformed_data
-        self.struct = struct  # TODO for future use
+        self.struct = struct
 
         self.batch_size = batch_size
         self.shuffle = shuffle
@@ -39,15 +40,24 @@ class GeneDataLoader(Sequence):
         end_index = min((index + 1) * self.batch_size, self.data.shape[0])
 
         # Initialize empty arrays for samples and labels
-        padded_sequences = np.zeros((end_index - start_index, self.max_len, 4), dtype=np.float32)
+        if self.struct:
+            padded_sequences = np.zeros((end_index - start_index, self.max_len, 6), dtype=np.float32)
+        else:
+            padded_sequences = np.zeros((end_index - start_index, self.max_len, 4), dtype=np.float32)
         output = np.zeros((end_index - start_index, 9), dtype=np.float32)
 
         # Load padded sequences and labels for the current batch
         for i, idx in enumerate(self.indices[start_index:end_index]):
-            padded_sequences[i, -len(self.data['seq'].iloc[idx]):, :] = self.data['seq'].iloc[idx]
-
+            seq_data = self.data['seq'].iloc[idx]
             output[i, :] = self.data.iloc[idx, 0:9]
+            if self.struct:
+                tmp = self.data['struct'].iloc[idx]
+                padded_mask_struct = np.expand_dims(np.array(tmp != 'nan'), axis=1) #TODO eventuell herausnehmen
+                tmp[tmp == 'nan'] = -1
+                padded_struct = np.expand_dims(tmp, axis=1).astype('float64')
+                seq_data = np.concatenate([seq_data, padded_mask_struct, padded_struct], axis=1)
 
+            padded_sequences[i, -len(self.data['seq'].iloc[idx]):, :] = seq_data
         return padded_sequences, output
 
 

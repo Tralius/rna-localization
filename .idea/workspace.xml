@@ -5,14 +5,54 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="52db749d-89b6-4485-b261-7f1b8eaaf8a7" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/model_architectures/CNN_architecture9.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MotifTest.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flor_CNN_Att0.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flor_CNN_Att1.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flor_CNN_Att2.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flor_CNN_Att3.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flor_CNN_Att4.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flor_CNN_Att5.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flor_CNN_Att6.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flor_CNN_Att7.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/flor_CNN_Att8.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/model_architecture_viz/flor_CNN_Att1_2023-07-05.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/model_architecture_viz/flor_CNN_Att2_2023-07-05.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/model_architecture_viz/flor_CNN_Att3_2023-07-06.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/model_architecture_viz/flor_CNN_Att4_2023-07-06.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/model_architecture_viz/flor_CNN_Att5_2023-07-06.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/model_architecture_viz/flor_CNN_Att6_2023-07-06.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/model_architectures/CNN_architecture2.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/model_architectures/flor_CNN_Att0.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/model_architectures/flor_CNN_Att1.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/model_architectures/flor_CNN_Att2.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/model_architectures/flor_CNN_Att3.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/model_architectures/flor_CNN_Att4.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/model_architectures/flor_CNN_Att5.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/model_architectures/flor_CNN_Att6.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/model_architectures/flor_CNN_Att7.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/model_architectures/flor_CNN_Att8.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/model_architectures/flor_arch1.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/model_architectures/flor_arch2.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/motif_search/motif_utilities.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/metrics.py" beforeDir="false" afterPath="$PROJECT_DIR$/metrics.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model_architectures/CNN_architecture7.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/model_architectures/CNN_architecture7.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model_architectures/CNN_architecture8.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/model_architectures/CNN_architecture8.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/singlebranchModel.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/singlebranchModel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataPipeline_CustomCNN.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/dataPipeline_CustomCNN.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataloaders/GeneDataLoader.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataloaders/GeneDataLoader.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model_architectures/CNN_architecture1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/model_architectures/CNN_architecture1.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model_architectures/CNN_architecture1_Iusti.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/model_architectures/CNN_architecture1_Iusti.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model_architectures/CNN_architecture2_Iusti.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/model_architectures/CNN_architecture2_Iusti.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model_architectures/CNN_architecture3.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/model_architectures/CNN_architecture3.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model_architectures/CNN_architecture6.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/model_architectures/CNN_architecture6.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model_architectures/CNN_architecture_jonas_2.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/model_architectures/CNN_architecture_jonas_2.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model_architectures/CNN_architecture_steve_2.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/model_architectures/CNN_architecture_steve_2.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model_architectures/derivativeRNATrack1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/model_architectures/derivativeRNATrack1.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model_architectures/model_convention_cnn.txt" beforeDir="false" afterPath="$PROJECT_DIR$/model_architectures/model_convention_cnn.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model_architectures/model_convention_multibranch.txt" beforeDir="false" afterPath="$PROJECT_DIR$/model_architectures/model_convention_multibranch.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/RNAtracker.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/RNAtracker.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/multibranchModel.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/multibranchModel.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/multibranch_notebook.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/multibranch_notebook.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plotting.py" beforeDir="false" afterPath="$PROJECT_DIR$/plotting.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/singlebranch_notebook.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/singlebranch_notebook.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils.py" afterDir="false" />
     </list>
@@ -130,6 +170,7 @@
       <workItem from="1688642284891" duration="621000" />
       <workItem from="1688660342254" duration="4952000" />
       <workItem from="1688724391305" duration="706000" />
+      <workItem from="1688853100174" duration="925000" />
     </task>
     <servers />
   </component>

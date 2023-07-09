@@ -1,25 +1,27 @@
-param_dataLoader_train:
+params_dataLoader_train:
   batch_size: 32
   shuffle: True
 
-param_dataLoader_valid:
+params_dataLoader_valid:
   batch_size: 32
 
 params_model:
+  optimizer: nadam
+  learning_rate: 1e-4
   architecture: cpdcpdfee
   dropouts:
-    - rate: .2
-    - rate: .2
+    - rate: .5
+    - rate: .5
   pooling:
     - pool_size: 4
     - pool_size: 4
   conv:
-    - filters: 64
+    - filters: 32
       kernel_size: 7
       activation: relu
       padding: valid
       use_bias: False
-    - filters: 32
+    - filters: 64
       kernel_size: 7
       activation: relu
       padding: valid
@@ -33,6 +35,6 @@ params_model:
 
 
 params_train:
-  epochs: 10
+  epochs: 120
   use_multiprocessing: True
 

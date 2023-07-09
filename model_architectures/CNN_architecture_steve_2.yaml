@@ -1,4 +1,4 @@
-# Steves first Resnet approach
+# Steves Resnet approach
 
 param_dataLoader_train:
   batch_size: 32
