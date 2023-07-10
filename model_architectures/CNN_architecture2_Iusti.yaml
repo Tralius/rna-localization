@@ -1,6 +1,4 @@
 # Initial Architecture
-# Author: Iusti
-
 param_dataLoader_train:
   batch_size: 32
   shuffle: True
@@ -10,8 +8,6 @@ param_dataLoader_valid:
 
 params_model:
   architecture: cdpcdpcpfee
-  learning_rate: 1e-4
-  optimizer: adam
   conv:
     - filters: 16
       kernel_size: 9

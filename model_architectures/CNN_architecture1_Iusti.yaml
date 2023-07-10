@@ -9,17 +9,17 @@ param_dataLoader_valid:
 params_model:
   architecture: cpdcpdcpdfede
   conv:
-    - filters: 32
+    - filters: 16
       kernel_size: 17
       activation: relu
-    - filters: 64
+    - filters: 32
       kernel_size: 11
       activation: relu
-      padding: same
-    - filters: 92
+      padding: valid
+    - filters: 64
       kernel_size: 7
       activation: relu
-      padding: same
+      padding: valid
   dense:
     - units: 512
       activation: relu
@@ -30,15 +30,15 @@ params_model:
     - pool_size: 4
     - pool_size: 4
   dropouts:
-    - rate: 0.3
-    - rate: 0.3
-    - rate: 0.3
-    - rate: 0.3
+    - rate: 0.5
+    - rate: 0.5
+    - rate: 0.5
+    - rate: 0.5
   #skip:
   #  - index: [0, 1]  # adding index
   #  - 0
 
 params_train:
-  epochs: 10
+  epochs: 20
   use_multiprocessing: False
 

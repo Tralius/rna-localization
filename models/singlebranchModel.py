@@ -6,7 +6,6 @@ from keras.optimizers import Adam, SGD
 from keras.metrics import CategoricalCrossentropy, KLDivergence
 from keras.losses import CategoricalCrossentropy
 from keras.callbacks import ModelCheckpoint
-from metrics import tf_pearson
 
 class CNN(Model):
     """
@@ -20,10 +19,9 @@ class CNN(Model):
     """
     def __init__(self,
                  input_size: Tuple,
-                 optimizer = keras.optimizers.Adam(),
                  loss = CategoricalCrossentropy(),
-                 metrics = ['accuracy', KLDivergence(name="kullback_leibler_divergence"), tf_pearson],
-                 params_model: Dict[str, List[Dict]] = None,
+                 metrics = ['accuracy', KLDivergence(name="kullback_leibler_divergence")],
+                 params_model: Dict = None,
                  compile: Dict = None,
                  checkpoint_filepath = None) -> None:
 
@@ -52,19 +50,17 @@ class CNN(Model):
             else:
                 arch, index = utils.add_layer(j, arch[len(arch)-1], index, params_model, arch)
         
-        self.model = keras.Model(inputs=input_lay, outputs=arch[-1])  # TODO: in model.utils
-        learning_rate = float(params_model.get('learning_rate'))
-        if "optimizer" in params_model.keys():
-            if params_model["optimizer"] == "sgd":
-                optimizer = SGD(learning_rate=learning_rate)
-            elif params_model["optimizer"] == "adam":
-                optimizer = Adam(
-                    learning_rate=learning_rate)
+        self.model = keras.Model(inputs=input_lay, outputs=arch[-1])
+
+        if "optimizer" not in params_model.keys():
+            optimizer = 'adam'
         else:
-            optimizer = Adam(
-                learning_rate=learning_rate)
-
-
+            optimizer = params_model['optimizer']
+        if 'learning_rate' not in params_model.keys():
+            learning_rate = None
+        else:
+            learning_rate = float(params_model['learning_rate'])
+        optimizer = utils.set_optimizer(optimizer, learning_rate)
         self.model.compile(optimizer=optimizer, loss=loss, metrics=metrics, **compile)
 
     def fit(self, train_data: pd.DataFrame, params_dataLoader: Dict = None, params_train: Dict = None):

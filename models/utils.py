@@ -1,11 +1,10 @@
 from typing import Dict, List
 from collections import Counter
-from keras.layers import Conv1D, Dense, Flatten, MaxPooling1D, Dropout, MultiHeadAttention, Reshape, LeakyReLU, \
-    BatchNormalization, Concatenate, add, ReLU, GlobalAvgPool1D, Activation, Lambda, Multiply, Layer
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
+from keras.layers import Conv1D, Dense, Flatten, MaxPooling1D, Dropout, Reshape, LeakyReLU, \
+    BatchNormalization, add, ReLU, GlobalAvgPool1D, Activation, Lambda, Multiply, Layer
 from keras import backend as K
+from keras.optimizers import SGD, Adam, Nadam
+
 
 def check_params(parameters: Dict):
     architecture = parameters.get('architecture')
@@ -57,9 +56,9 @@ def check_params(parameters: Dict):
                 ValueError('number of skip connection layer not equal to number of skip parameters')
         else:
             NotImplementedError()
-            
+
+
 def add_layer(layer: str, arg, index: Dict, params: Dict, arch: List):
-    print("Add "+str(layer))
     if layer == 'a':
         arch.append(Attention(**params.get('attention')[index.get('attention')])(arg))
         index['attention'] = index.get('attention') + 1
@@ -106,23 +105,24 @@ def add_layer(layer: str, arg, index: Dict, params: Dict, arch: List):
         return arch, index
     elif layer == 's':
         parameters = params.get('skip')[index.get('skip')]
-        #adding = [arch[i] for i in adding_index].get('index').append(arg)
+        # adding = [arch[i] for i in adding_index].get('index').append(arg)
         reg = None
         try:
             reg = parameters["kernel_regularizer"]
         except Exception as e:
             pass
-        out = resblock(arg, filters=parameters["filters"], kernel_size=parameters["kernel_size"], use_bn=parameters["use_bn"], kernel_regularizer=reg)
+        out = resblock(arg, filters=parameters["filters"], kernel_size=parameters["kernel_size"],
+                       use_bn=parameters["use_bn"], kernel_regularizer=reg)
         arch.append(out)
         index['skip'] = index.get('skip') + 1
         return arch, index
 
-def resblock(x, kernel_size, filters, use_bn, kernel_regularizer = None, **kwargs):
 
+def resblock(x, kernel_size, filters, use_bn, kernel_regularizer=None, **kwargs):  # TODO reforulate into Layer
     fx = Conv1D(kernel_size=kernel_size, filters=filters, activation='relu', padding='same')(x)
     if use_bn:
         fx = BatchNormalization()(fx)
-        fx = Conv1D(filters=filters, kernel_size= kernel_size, padding='same',kernel_regularizer=kernel_regularizer)(fx)
+        fx = Conv1D(filters=filters, kernel_size=kernel_size, padding='same', kernel_regularizer=kernel_regularizer)(fx)
     else:
         fx = Conv1D(filters=filters, kernel_size=kernel_size, padding='same', kernel_regularizer=kernel_regularizer)(fx)
     out = add([x, fx])
@@ -131,6 +131,7 @@ def resblock(x, kernel_size, filters, use_bn, kernel_regularizer = None, **kwarg
     out = ReLU()(out)
 
     return out
+
 
 class Attention(Layer):
     def __init__(self, attention_size, activation_dense='tanh', activation_act='softmax', **kwargs):
@@ -144,25 +145,24 @@ class Attention(Layer):
         context = self.dense1(inputs)
         attention = self.dense2(context)
         scores = Flatten()(attention)
-        attention_weights = Reshape(target_shape=(2146, 1))(scores)
+        attention_weights = Reshape(target_shape=(4314, 1))(scores)
         output = self.lam(Multiply()([inputs, attention_weights]))
         return output
 
-# summarize history for accuracy
-def plot_line_graph(data, title, ylabel, xlabel, legend):
-    # for i in range(len(data)):
-    for dataset in data:
-        plt.plot(dataset)
-    plt.title(title)
-    plt.ylabel(ylabel)
-    plt.xlabel(xlabel)
-    plt.legend(legend, loc='upper left')
-    plt.show()
 
-    def call(self, inputs):
-        context = self.dense1(inputs)
-        attention = self.dense2(context)
-        scores = Flatten()(attention)
-        attention_weights = Reshape(target_shape=(2146, 1))(scores)
-        output = self.lam(Multiply()([inputs, attention_weights]))
-        return output
+def set_optimizer(optimizer: str, learning_rate: float):
+    if optimizer == 'adam':
+        if learning_rate is None:
+            return Adam()
+        else:
+            return Adam(learning_rate=learning_rate)
+    if optimizer == 'sgd':
+        if learning_rate is None:
+            return SGD()
+        else:
+            return SGD(learning_rate=learning_rate)
+    if optimizer == 'nadam':
+        if learning_rate is None:
+            return Nadam()
+        else:
+            return Nadam(learning_rate=learning_rate)

@@ -1,7 +1,7 @@
 import keras
 from keras import regularizers
-#from keras.layers.core import Dense, Dropout, Flatten
-from keras.layers.convolutional import Convolution1D, MaxPooling1D
+from keras.layers import Dense, Dropout, Flatten
+from keras.layers import Convolution1D, MaxPooling1D
 from keras.layers import Embedding, BatchNormalization, LSTM, Bidirectional, Input, \
     Concatenate, Multiply, Dot, Reshape, Activation, Lambda, Masking
 from keras.models import Model
