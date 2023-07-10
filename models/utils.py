@@ -117,12 +117,12 @@ def add_layer(layer: str, arg, index: Dict, params: Dict, arch: List):
         index['skip'] = index.get('skip') + 1
         return arch, index
 
+def resblock(x, kernel_size, filters, use_bn, kernel_regularizer = None, **kwargs):
 
-def resblock(x, kernel_size, filters, use_bn, kernel_regularizer=None, **kwargs):  # TODO reforulate into Layer
     fx = Conv1D(kernel_size=kernel_size, filters=filters, activation='relu', padding='same')(x)
     if use_bn:
         fx = BatchNormalization()(fx)
-        fx = Conv1D(filters=filters, kernel_size=kernel_size, padding='same', kernel_regularizer=kernel_regularizer)(fx)
+        fx = Conv1D(filters=filters, kernel_size= kernel_size, padding='same',kernel_regularizer=kernel_regularizer)(fx)
     else:
         fx = Conv1D(filters=filters, kernel_size=kernel_size, padding='same', kernel_regularizer=kernel_regularizer)(fx)
     out = add([x, fx])
@@ -134,18 +134,19 @@ def resblock(x, kernel_size, filters, use_bn, kernel_regularizer=None, **kwargs)
 
 
 class Attention(Layer):
-    def __init__(self, attention_size, activation_dense='tanh', activation_act='softmax', **kwargs):
+    def __init__(self, attention_size, reshape_size, activation_dense='tanh', activation_act='softmax', **kwargs):
         super().__init__()
         self.dense1 = Dense(units=attention_size, activation=activation_dense)
         self.dense2 = Dense(units=1, use_bias=False)
         self.activation = Activation(activation=activation_act)
         self.lam = Lambda(lambda x: K.sum(x, axis=1, keepdims=False))
+        self.reshape_size = reshape_size
 
     def call(self, inputs):
         context = self.dense1(inputs)
         attention = self.dense2(context)
         scores = Flatten()(attention)
-        attention_weights = Reshape(target_shape=(4314, 1))(scores)
+        attention_weights = Reshape(target_shape=(self.reshape_size, 1))(scores)
         output = self.lam(Multiply()([inputs, attention_weights]))
         return output
 
