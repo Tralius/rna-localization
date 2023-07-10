@@ -125,7 +125,7 @@ def resblock(x, kernel_size, filters, use_bn, kernel_regularizer = None, padding
         x = Conv1D(kernel_size= 1, filters= filters, padding=padding, activation='relu', kernel_initializer='he_normal')(x) # 1x1 conv to adjust kernel size
     fx = Conv1D(kernel_size=kernel_size, filters=filters, activation='relu', padding=padding)(x)
     if use_bn:
-        fx = BatchNormalization()(fx)
+        fx = BatchNormalization(scale=False)(fx)
         fx = Conv1D(filters=filters, kernel_size= kernel_size, padding=padding,kernel_regularizer=kernel_regularizer)(fx)
     else:
         fx = Conv1D(filters=filters, kernel_size=kernel_size, padding=padding, kernel_regularizer=kernel_regularizer)(fx)
@@ -148,7 +148,7 @@ class Attention(Layer):
         context = self.dense1(inputs)
         attention = self.dense2(context)
         scores = Flatten()(attention)
-        attention_weights = Reshape(target_shape=(4314, 1))(scores)
+        attention_weights = Reshape(target_shape=(8631, 1))(scores)
         output = self.lam(Multiply()([inputs, attention_weights]))
         return output
 
