@@ -1,9 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
-from matplotlib import cm
-from matplotlib.colors import ListedColormap, LinearSegmentedColormap
-from tensorflow import keras
+import tensorflow as tf
 
 def plot_a(ax, base, left_edge, height, color):
     a_polygon_coords = [
@@ -148,3 +146,15 @@ def plot_score_track(arr, threshold=None, figsize=(20,2), **kwargs):
     ax = fig.add_subplot(111)
     plot_score_track_given_ax(arr, threshold=threshold, ax=ax, **kwargs)
     plt.show()
+
+
+def get_gradients(model, x):
+    x_tensor = tf.convert_to_tensor(x, dtype=tf.float32)
+
+    with tf.GradientTape() as tape:
+        tape.watch(x_tensor)
+        model_output = model(x_tensor)
+
+    grad = tape.gradient(model_output, x_tensor)
+
+    return grad
