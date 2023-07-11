@@ -37,5 +37,5 @@ params_model:
     - rate: 0.3
 
 params_train:
-  epochs: 10
+  epochs: 100
   use_multiprocessing: True

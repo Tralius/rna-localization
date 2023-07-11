@@ -9,7 +9,7 @@ param_dataLoader_valid:
   struct: True
 
 params_model:
-  architecture: cscsdpaee
+  architecture: ccdpaee
   learning_rate: 1e-5
   optimizer: nadam
   conv:
@@ -18,11 +18,13 @@ params_model:
       activation: relu
       use_bias: False
       padding: valid
+      dilation_rate: 2
     - filters: 64
       kernel_size: 7
       activation: relu
       use_bias: False
       padding: valid
+      dilation_rate: 4
   dense:
     - units: 50
       activation: relu
@@ -33,19 +35,9 @@ params_model:
       strides: 8
   attention:
     - attention_size: 120
+      reshape_size: 4311
   dropouts:
     - rate: 0.3
-  skip:
-    - filters: 64   # first skip
-      kernel_size: 11
-      activation: relu
-      use_bn: True
-      kernel_regularizer: l1
-    - filters: 64
-      kernel_size: 11
-      activation: relu
-      use_bn: True
-      kernel_regularizer: l1
 
 params_train:
   epochs: 100

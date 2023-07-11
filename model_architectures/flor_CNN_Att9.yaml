@@ -10,7 +10,7 @@ param_dataLoader_valid:
 
 params_model:
   architecture: cscsdpaee
-  learning_rate: 1e-5
+  learning_rate: 1e-3
   optimizer: nadam
   conv:
     - filters: 64
