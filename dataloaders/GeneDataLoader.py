@@ -7,15 +7,21 @@ import re
 
 class GeneDataLoader(Sequence):
     def __init__(self, data_table: pd.DataFrame, padding_length: int, batch_size: int = 32, shuffle: bool = True,
-                 struct: bool = False):
+                 struct: bool = False, m6A: bool = False):
 
         transformed_data = data_table.dropna()
         transformed_data = output_normalization(transformed_data.iloc[:, 0:9])
         transformed_data = pd.concat([transformed_data, one_hot_emb(data_table['seq'])], axis=1)
+
         if struct:
             transformed_data = pd.concat([transformed_data, data_table['struct']], axis=1)
+
+        if m6A:
+            transformed_data = pd.concat([transformed_data, data_table[['m6A_5UTR', 'm6A_CDS', 'm6A_3UTR']]], axis=1)
+
         self.data = transformed_data
         self.struct = struct
+        self.m6A = m6A
 
         self.batch_size = batch_size
         self.shuffle = shuffle
@@ -45,7 +51,11 @@ class GeneDataLoader(Sequence):
             padded_sequences = np.zeros((end_index - start_index, self.max_len, 5), dtype=np.float32)
         else:
             padded_sequences = np.zeros((end_index - start_index, self.max_len, 4), dtype=np.float32)
+
         output = np.zeros((end_index - start_index, 9), dtype=np.float32)
+
+        if self.m6A:
+            m6A_values = np.zeros((end_index - start_index, 3), dtype=np.float32)
 
         # Load padded sequences and labels for the current batch
         for i, idx in enumerate(self.indices[start_index:end_index]):
@@ -58,8 +68,20 @@ class GeneDataLoader(Sequence):
                 padded_struct = np.expand_dims(tmp, axis=1).astype('float64')
                 seq_data = np.concatenate([seq_data, padded_struct], axis=1)
 
+            if self.m6A:
+                m6A_values[i, :] = self.data[['m6A_5UTR', 'm6A_CDS', 'm6A_3UTR']].iloc[idx].values
+                #m6A = np.array(self.data[['m6A_5UTR', 'm6A_CDS', 'm6A_3UTR']].iloc[idx])
+                #m6A = np.concatenate(self.data[['m6A_5UTR', 'm6A_CDS', 'm6A_3UTR']].iloc[idx], axis = 1)
+
+
+
             padded_sequences[i, -len(self.data['seq'].iloc[idx]):, :] = seq_data
+
+        if self.m6A:
+            return padded_sequences, m6A_values, output
+
         return padded_sequences, output
+
 
 
 def one_hot_emb(data: pd.DataFrame) -> pd.DataFrame:
