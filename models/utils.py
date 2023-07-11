@@ -4,6 +4,7 @@ from keras.layers import Conv1D, Dense, Flatten, MaxPooling1D, Dropout, Reshape,
     BatchNormalization, add, ReLU, GlobalAvgPool1D, Activation, Lambda, Multiply, Layer
 from keras import backend as K
 from keras.optimizers import SGD, Adam, Nadam
+import keras
 
 
 def check_params(parameters: Dict):
@@ -133,22 +134,39 @@ def resblock(x, kernel_size, filters, use_bn, kernel_regularizer = None, **kwarg
     return out
 
 
+@keras.saving.register_keras_serializable(package='Attention')
 class Attention(Layer):
-    def __init__(self, attention_size, reshape_size, activation_dense='tanh', activation_act='softmax', **kwargs):
+    def __init__(self, attention_size, reshape_size, activation_dense='tanh', **kwargs):
         super().__init__()
-        self.dense1 = Dense(units=attention_size, activation=activation_dense)
-        self.dense2 = Dense(units=1, use_bias=False)
-        self.activation = Activation(activation=activation_act)
-        self.lam = Lambda(lambda x: K.sum(x, axis=1, keepdims=False))
+        self.attention_size = attention_size
+        self.activation_dense = activation_dense
         self.reshape_size = reshape_size
+        
+    def build(self, input_shape):
+        self.dense1 = Dense(units=self.attention_size, activation=self.activation_dense)
+        self.dense2 = Dense(units=1, use_bias=False)
+        self.reshape = Reshape(target_shape=(self.reshape_size, 1))
+        self.lam = Lambda(lambda x: K.sum(x, axis=1, keepdims=False))
+        self.mult = Multiply()
 
     def call(self, inputs):
         context = self.dense1(inputs)
         attention = self.dense2(context)
         scores = Flatten()(attention)
-        attention_weights = Reshape(target_shape=(self.reshape_size, 1))(scores)
-        output = self.lam(Multiply()([inputs, attention_weights]))
+        attention_weights = self.reshape(scores)
+        output = self.lam(self.mult([inputs, attention_weights]))
         return output
+    
+    def get_config(self):
+        config = super().get_config()
+        config.update(
+            {
+                'attention_size': self.attention_size,
+                'reshape_size': self.reshape_size,
+                'activation_dense': self.activation_dense
+                }
+            )
+        return config
 
 
 def set_optimizer(optimizer: str, learning_rate: float):

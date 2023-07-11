@@ -89,3 +89,6 @@ class CNN(Model):
 
     def save_model(self, path):
         super().save_model(path)
+        
+    def load_weights(self, path):
+        return super().load_weights(path)

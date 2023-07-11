@@ -59,3 +59,6 @@ class Model(ABC):
 
     def save_model(self, path):
         self.model.save(path)
+        
+    def load_weights(self, path):
+        return self.model.load_weights(path)
