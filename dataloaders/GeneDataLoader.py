@@ -6,7 +6,7 @@ from typing import Tuple
 
 class GeneDataLoader(Sequence):
     def __init__(self, data_table: pd.DataFrame, padding_length: int, batch_size: int = 32, shuffle: bool = True,
-                 struct: bool = False):
+                 struct: bool = False, rand: bool = False):
 
         transformed_data = data_table.dropna()
         transformed_data = output_normalization(transformed_data.iloc[:, 0:9])
@@ -20,6 +20,7 @@ class GeneDataLoader(Sequence):
         self.shuffle = shuffle
         self.indices = np.arange(self.data.shape[0])
         self.max_len = padding_length
+        self.rand = rand
 
         # Calculate the number of batches
         self.num_batches = self.data.shape[0] // batch_size
@@ -49,7 +50,11 @@ class GeneDataLoader(Sequence):
         # Load padded sequences and labels for the current batch
         for i, idx in enumerate(self.indices[start_index:end_index]):
             seq_data = self.data['seq'].iloc[idx]
-            output[i, :] = self.data.iloc[idx, 0:9]
+            if self.rand:
+                np.random.seed(3)
+                output[i, :] = self.data.iloc[idx, 0:9].sample(frac=1)
+            else:
+                output[i, :] = self.data.iloc[idx, 0:9]
             if self.struct:
                 tmp = self.data['struct'].iloc[idx]
                 padded_mask_struct = np.expand_dims(np.array(tmp != 'nan'), axis=1) #TODO eventuell herausnehmen
