@@ -78,7 +78,7 @@ class GeneDataLoader(Sequence):
             padded_sequences[i, -len(self.data['seq'].iloc[idx]):, :] = seq_data
 
         if self.m6A:
-            return padded_sequences, m6A_values, output
+            return [padded_sequences, m6A_values], output
 
         return padded_sequences, output
 
