@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from keras.utils import Sequence, to_categorical
 from typing import Tuple
+import re
 
 
 class GeneDataLoader(Sequence):
@@ -41,7 +42,7 @@ class GeneDataLoader(Sequence):
 
         # Initialize empty arrays for samples and labels
         if self.struct:
-            padded_sequences = np.zeros((end_index - start_index, self.max_len, 6), dtype=np.float32)
+            padded_sequences = np.zeros((end_index - start_index, self.max_len, 5), dtype=np.float32)
         else:
             padded_sequences = np.zeros((end_index - start_index, self.max_len, 4), dtype=np.float32)
         output = np.zeros((end_index - start_index, 9), dtype=np.float32)
@@ -52,10 +53,10 @@ class GeneDataLoader(Sequence):
             output[i, :] = self.data.iloc[idx, 0:9]
             if self.struct:
                 tmp = self.data['struct'].iloc[idx]
-                padded_mask_struct = np.expand_dims(np.array(tmp != 'nan'), axis=1) #TODO eventuell herausnehmen
-                tmp[tmp == 'nan'] = -1
+                tmp = np.fromstring(re.search(r'(?<=\[)[^\[\]]+(?=\])', tmp).group(), dtype=float, sep=',')
+                tmp[np.isnan(tmp)] = -1
                 padded_struct = np.expand_dims(tmp, axis=1).astype('float64')
-                seq_data = np.concatenate([seq_data, padded_mask_struct, padded_struct], axis=1)
+                seq_data = np.concatenate([seq_data, padded_struct], axis=1)
 
             padded_sequences[i, -len(self.data['seq'].iloc[idx]):, :] = seq_data
         return padded_sequences, output
