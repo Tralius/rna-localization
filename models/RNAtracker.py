@@ -22,7 +22,7 @@ import scipy.stats as stats
 import csv
 import sys
 from keras.losses import CategoricalCrossentropy
-from metrics import tf_pearson
+
 
 basedir = os.path.split(os.path.dirname(os.path.abspath(__file__)))[0]
 sys.path.append(basedir)
@@ -38,6 +38,7 @@ pretrained_model_score = [0.8, 0.62, 0.88, 0.89, 0.63, 0.94, 0.97, 0.94, 0.62, 0
 
 global OUTPATH
 
+load_path = ""  # < input path for loading model
 class RNATracker:
 
     def __init__(self, max_len, nb_classes, save_path, kfold_index):
@@ -47,6 +48,9 @@ class RNATracker:
         self.OUTPATH = save_path
         self.kfold_index = kfold_index
         self.stored_history = None
+        self.pearson_attr = None
+        self.pearson_class_attr = None
+        self.pearson_class_attr_no_dict = None
 
     def build_model(self, nb_filters, filters_length, pooling_size, lstm_units, embedding_vec, attention_size=50):
         """
@@ -111,7 +115,7 @@ class RNATracker:
         self.model.compile(
             loss=CategoricalCrossentropy(),
             optimizer=optim,
-            metrics=['acc', tf_pearson]
+            metrics=['acc', self.pearson_attr, self.pearson_class_attr]
         )
         self.is_built = True
         self.bn = True
@@ -209,15 +213,17 @@ class RNATracker:
         self.model.compile(
             loss=CategoricalCrossentropy(),
             optimizer=optim,  # todo
-            metrics=['accuracy', tf_pearson]
+            metrics=['accuracy', self.pearson_attr, self.pearson_class_attr]
         )
         if load_weights:
             import h5py
             weights_path = os.path.join(w_par_dir, 'weights.h5')
-            weights = h5py.File(weights_path)
-            first_cnn.set_weights([weights['model_weights']['conv1d_1'][w.name] for w in first_cnn.trainable_weights])
-            second_cnn.set_weights([weights['model_weights']['conv1d_2'][w.name] for w in second_cnn.trainable_weights])
-            bilstm.set_weights([weights['model_weights']['bidirectional_1'][w.name] for w in bilstm.trainable_weights])
+
+            self.model.load_weights(load_path)
+            #weights = h5py.File(weights_path)
+            #first_cnn.set_weights([weights['model_weights']['conv1d_1'][w.name] for w in first_cnn.trainable_weights])
+            #second_cnn.set_weights([weights['model_weights']['conv1d_2'][w.name] for w in second_cnn.trainable_weights])
+            #bilstm.set_weights([weights['model_weights']['bidirectional_1'][w.name] for w in bilstm.trainable_weights])
             # context.set_weights([weights['model_weights']['dense_1'][w.name] for w in context.weights])
             # attention.set_weights([weights['model_weights']['dense_2'][w.name] for w in attention.weights])
 
@@ -323,7 +329,7 @@ class RNATracker:
         self.model.compile(
             loss='kld',
             optimizer='nadam',
-            metrics=['acc']
+            metrics=['acc', self.pearson_attr, self.pearson_class_attr]
         )
         self.is_built = True
         self.bn = False
@@ -399,7 +405,7 @@ class RNATracker:
         self.model.compile(
             loss='kld',
             optimizer='nadam',
-            metrics=['acc']
+            metrics=['acc', self.pearson_attr, self.pearson_class_attr]
         )
         self.is_built = True
         self.bn = False
@@ -823,10 +829,10 @@ class RNATracker:
         Train_Acc = np.array([Train_Acc]).T
         Valid_Acc = np.asarray(Train_Result_Optimizer.get('val_acc'))
         Valid_Acc = np.asarray([Valid_Acc]).T
-        np.savetxt(self.OUTPATH + 'Train_Loss_fold_{}.txt'.format(self.kfold_index), Train_Loss, delimiter=',')
-        np.savetxt(self.OUTPATH + 'Valid_Loss_fold_{}.txt'.format(self.kfold_index), Valid_Loss, delimiter=',')
-        np.savetxt(self.OUTPATH + 'Train_Acc_fold_{}.txt'.format(self.kfold_index), Train_Acc, delimiter=',')
-        np.savetxt(self.OUTPATH + 'Valid_Acc_fold_{}.txt'.format(self.kfold_index), Valid_Acc, delimiter=',')
+        np.savetxt(self.OUTPATH + 'Train_Loss_fold.txt', Train_Loss, delimiter=',')
+        np.savetxt(self.OUTPATH + 'Valid_Loss_fold.txt', Valid_Loss, delimiter=',')
+        np.savetxt(self.OUTPATH + 'Train_Acc_fold.txt', Train_Acc, delimiter=',')
+        np.savetxt(self.OUTPATH + 'Valid_Acc_fold.txt', Valid_Acc, delimiter=',')
 
     def save(self, path):
         self.model.save(path)
