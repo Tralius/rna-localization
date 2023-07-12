@@ -1,0 +1,49 @@
+# Initial Architecture with updated values on the basis of RNA "Zip Codes" length
+param_dataLoader_train:
+  batch_size: 32
+  shuffle: True
+  struct: False
+
+param_dataLoader_valid:
+  batch_size: 32
+
+params_model:
+  architecture: cpdcpdcpdfede
+  optimizer: nadam
+  conv:
+    - filters: 16
+      kernel_size: 17
+      activation: relu
+      kernel_regularizer: L1
+    - filters: 32
+      kernel_size: 11
+      activation: relu
+      padding: valid
+      kernel_regularizer: L1
+    - filters: 64
+      kernel_size: 7
+      activation: relu
+      padding: valid
+      kernel_regularizer: L1
+  dense:
+    - units: 512
+      activation: relu
+    - units: 9
+      activation: softmax
+  pooling:
+    - pool_size: 4
+    - pool_size: 4
+    - pool_size: 4
+  dropouts:
+    - rate: 0.5
+    - rate: 0.5
+    - rate: 0.5
+    - rate: 0.5
+  #skip:
+  #  - index: [0, 1]  # adding index
+  #  - 0
+
+params_train:
+  epochs: 60
+  use_multiprocessing: False
+

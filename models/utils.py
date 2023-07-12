@@ -133,7 +133,7 @@ def resblock(x, kernel_size, filters, use_bn, kernel_regularizer = None, **kwarg
 
     return out
 
-
+'''
 @keras.saving.register_keras_serializable(package='Attention')
 class Attention(Layer):
     def __init__(self, attention_size, reshape_size, activation_dense='tanh', **kwargs):
@@ -167,7 +167,7 @@ class Attention(Layer):
                 }
             )
         return config
-
+'''
 
 def set_optimizer(optimizer: str, learning_rate: float):
     if optimizer == 'adam':
