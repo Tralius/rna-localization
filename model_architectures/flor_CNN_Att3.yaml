@@ -31,6 +31,7 @@ params_model:
       strides: 8
   attention:
     - attention_size: 120
+      reshape_size: 4313
   dropouts:
     - rate: 0.3
 

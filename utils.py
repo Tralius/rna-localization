@@ -25,7 +25,7 @@ def read_model_file(path, padding, multibranched: bool = False):
 def prepare_data(colab: bool = False, path=None):
     if path is None:
         Warning('Using default local path')
-        path = '~/Downloads/final_data.csv'
+        path = 'seq_from_prim_and_icshape_withchrm_no_scaff.m6A.csv'
     np.random.seed(3)
 
     if colab:
@@ -51,7 +51,7 @@ def prepare_data(colab: bool = False, path=None):
 def set_variables(name: str, max_seq_len, multibranch: bool = False):
     model_architecture_path = f'model_architecture_viz/{name}_{datetime.datetime.now().date()}.png'
     model_output_path = f'model_outputs/{name}_{datetime.datetime.now().date()}.h5'
-    params_dict = read_model_file(f'model_architectures/{name}.yaml', max_seq_len, multibranch)
+    params_dict = read_model_file(f'model_architectures_iusti/{name}.yaml', max_seq_len, multibranch)
 
     if multibranch:
         params_dataLoader_valid = params_dict['param_dataLoader_valid']
