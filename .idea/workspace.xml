@@ -5,10 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="52db749d-89b6-4485-b261-7f1b8eaaf8a7" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/dataPipeline_RNATracker.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/dataPipeline_RNATracker.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flor_CNN_Att8.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/flor_CNN_Att8.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/RNAtracker.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/RNAtracker.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/singlebranch_notebook.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/singlebranch_notebook.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MotifTest.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/MotifTest.ipynb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

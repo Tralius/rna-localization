@@ -19,6 +19,7 @@ class GeneDataLoader(Sequence):
         if m6A:
             transformed_data = pd.concat([transformed_data, data_table[['m6A_5UTR', 'm6A_CDS', 'm6A_3UTR']]], axis=1)
 
+        print(struct)
         self.data = transformed_data
         self.struct = struct
         self.m6A = m6A

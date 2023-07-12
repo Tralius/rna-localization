@@ -74,6 +74,7 @@ def plot_weights_given_ax(ax, array,
     assert len(array.shape)==2, array.shape
     if (array.shape[0]==4 and array.shape[1] != 4):
         array = array.transpose(1,0)
+    print("array.shape " + str(array.shape))
     assert array.shape[1]==4
     max_pos_height = 0.0
     min_neg_height = 0.0
