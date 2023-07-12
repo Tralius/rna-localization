@@ -7,7 +7,7 @@ import re
 
 class GeneDataLoader(Sequence):
     def __init__(self, data_table: pd.DataFrame, padding_length: int, batch_size: int = 32, shuffle: bool = True,
-                 struct: bool = False, m6A: bool = False):
+                 struct: bool = False, rand: bool = False, m6A: bool = False):
 
         transformed_data = data_table.dropna()
         transformed_data = output_normalization(transformed_data.iloc[:, 0:9])
@@ -27,6 +27,7 @@ class GeneDataLoader(Sequence):
         self.shuffle = shuffle
         self.indices = np.arange(self.data.shape[0])
         self.max_len = padding_length
+        self.rand = rand
 
         # Calculate the number of batches
         self.num_batches = self.data.shape[0] // batch_size
@@ -48,7 +49,7 @@ class GeneDataLoader(Sequence):
 
         # Initialize empty arrays for samples and labels
         if self.struct:
-            padded_sequences = np.zeros((end_index - start_index, self.max_len, 5), dtype=np.float32)
+            padded_sequences = np.zeros((end_index - start_index, self.max_len, 6), dtype=np.float32)
         else:
             padded_sequences = np.zeros((end_index - start_index, self.max_len, 4), dtype=np.float32)
 
@@ -60,20 +61,20 @@ class GeneDataLoader(Sequence):
         # Load padded sequences and labels for the current batch
         for i, idx in enumerate(self.indices[start_index:end_index]):
             seq_data = self.data['seq'].iloc[idx]
-            output[i, :] = self.data.iloc[idx, 0:9]
+            if self.rand:
+                np.random.seed(3)
+                output[i, :] = self.data.iloc[idx, 0:9].sample(frac=1)
+            else:
+                output[i, :] = self.data.iloc[idx, 0:9]
             if self.struct:
                 tmp = self.data['struct'].iloc[idx]
-                tmp = np.fromstring(re.search(r'(?<=\[)[^\[\]]+(?=\])', tmp).group(), dtype=float, sep=',')
-                tmp[np.isnan(tmp)] = -1
+                padded_mask_struct = np.expand_dims(np.array(tmp != 'nan'), axis=1)
+                tmp[tmp == 'nan'] = -1
                 padded_struct = np.expand_dims(tmp, axis=1).astype('float64')
-                seq_data = np.concatenate([seq_data, padded_struct], axis=1)
+                seq_data = np.concatenate([seq_data, padded_mask_struct, padded_struct], axis=1)
 
             if self.m6A:
                 m6A_values[i, :] = self.data[['m6A_5UTR', 'm6A_CDS', 'm6A_3UTR']].iloc[idx].values
-                #m6A = np.array(self.data[['m6A_5UTR', 'm6A_CDS', 'm6A_3UTR']].iloc[idx])
-                #m6A = np.concatenate(self.data[['m6A_5UTR', 'm6A_CDS', 'm6A_3UTR']].iloc[idx], axis = 1)
-
-
 
             padded_sequences[i, -len(self.data['seq'].iloc[idx]):, :] = seq_data
 
@@ -81,7 +82,6 @@ class GeneDataLoader(Sequence):
             return [padded_sequences, m6A_values], output
 
         return padded_sequences, output
-
 
 
 def one_hot_emb(data: pd.DataFrame) -> pd.DataFrame:

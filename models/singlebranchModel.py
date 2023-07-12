@@ -20,7 +20,7 @@ class CNN(Model):
     def __init__(self,
                  input_size: Tuple,
                  loss = CategoricalCrossentropy(),
-                 metrics = ['accuracy', KLDivergence(name="kullback_leibler_divergence")],
+                 metrics = [KLDivergence(name="kullback_leibler_divergence")],
                  params_model: Dict = None,
                  compile: Dict = None,
                  checkpoint_filepath = None) -> None:
@@ -89,3 +89,6 @@ class CNN(Model):
 
     def save_model(self, path):
         super().save_model(path)
+        
+    def load_weights(self, path):
+        return super().load_weights(path)

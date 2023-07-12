@@ -12,6 +12,7 @@ class MultiBranch(Model):
                  number_branches: int,
                  param_branches: List[Dict[str, List[Dict]]],
                  param_consensus: Dict,
+                 params_model,
                  loss=keras.losses.CategoricalCrossentropy(),
                  metrics=['accuracy'],
                  compile: Dict = None):
