@@ -69,3 +69,10 @@ def set_variables(name: str, max_seq_len, multibranch: bool = False):
         params_train = params_dict['params_train']
 
         return model_architecture_path, model_output_path, params_dataLoader_train, params_dataLoader_valid, params_model, params_train
+
+
+def extractY(data):
+    testY = data.iloc[:, 0:9]
+    sum_vec = testY.sum(axis=1)
+    testY = testY.divide(sum_vec, axis='index')
+    return testY
