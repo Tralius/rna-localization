@@ -1,7 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
-import tensorflow as tf
+from matplotlib import cm
+from matplotlib.colors import ListedColormap, LinearSegmentedColormap
+from tensorflow import keras
 
 def plot_a(ax, base, left_edge, height, color):
     a_polygon_coords = [
@@ -74,7 +76,6 @@ def plot_weights_given_ax(ax, array,
     assert len(array.shape)==2, array.shape
     if (array.shape[0]==4 and array.shape[1] != 4):
         array = array.transpose(1,0)
-    print("array.shape " + str(array.shape))
     assert array.shape[1]==4
     max_pos_height = 0.0
     min_neg_height = 0.0

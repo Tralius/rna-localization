@@ -1,10 +1,7 @@
 from typing import Dict, List
 from collections import Counter
-from keras.layers import Conv1D, Dense, Flatten, MaxPooling1D, Dropout, MultiHeadAttention, Reshape, LeakyReLU, \
-    BatchNormalization, Concatenate, add, ReLU, GlobalAvgPool1D, Activation, Lambda, Multiply, Layer
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
+from keras.layers import Conv1D, Dense, Flatten, MaxPooling1D, Dropout, Reshape, LeakyReLU, \
+    BatchNormalization, add, ReLU, GlobalAvgPool1D, Activation, Lambda, Multiply, Layer
 from keras import backend as K
 from keras.optimizers import SGD, Adam, Nadam
 import keras
@@ -137,7 +134,7 @@ def resblock(x, kernel_size, filters, use_bn, kernel_regularizer = None, padding
 
     return out
 
-'''
+
 @keras.saving.register_keras_serializable(package='Attention')
 class Attention(Layer):
     def __init__(self, attention_size, reshape_size, activation_dense='tanh', **kwargs):
@@ -171,7 +168,7 @@ class Attention(Layer):
                 }
             )
         return config
-'''
+
 
 def set_optimizer(optimizer: str, learning_rate: float):
     if optimizer == 'adam':

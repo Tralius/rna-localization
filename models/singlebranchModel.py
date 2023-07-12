@@ -52,7 +52,7 @@ class CNN(Model):
             else:
                 arch, index = utils.add_layer(j, arch[len(arch)-1], index, params_model, arch)
         
-        self.model = keras.Model(inputs=input_lay, outputs=arch[-1])  # TODO: in model.utils
+        self.model = keras.Model(inputs=input_lay, outputs=arch[-1])
 
         if "optimizer" not in params_model.keys():
             optimizer = 'adam'
@@ -92,3 +92,6 @@ class CNN(Model):
 
     def save_model(self, path):
         super().save_model(path)
+
+    def load_weights(self, path):
+        return super().load_weights(path)
