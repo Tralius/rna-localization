@@ -44,6 +44,6 @@ params_model:
   #  - 0
 
 params_train:
-  epochs: 60
+  epochs: 50
   use_multiprocessing: False
 

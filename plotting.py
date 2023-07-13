@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 from sklearn.metrics import roc_curve, auc
+from scipy.stats import pearsonr
 import seaborn as sns
 
 # summarize history for accuracy
@@ -126,8 +127,29 @@ def box_plot(dataframe):
         showfliers=False
     )
     # Axis details
-    plt.title('Long Jump Finals')
+    plt.title('Cellular Compoartments Data Distribution')
     plt.ylabel('Probability')
     plt.xlabel('Cellular Compartments')
 
     plt.show()
+
+
+def bar_plot(ground_truth, pred, mode):
+    if mode == "pearson":
+        pearson_of_comp = dict()
+        compartments = list(ground_truth.columns)
+
+        for i, compartment in enumerate(compartments):
+            correlation, pvalue = pearsonr(pred[:, i], ground_truth[compartment])
+            pearson_of_comp[compartment] = correlation
+
+        compartments.append("Mean")
+        pearson_of_comp["Mean"] = sum(pearson_of_comp.values()) / len(pearson_of_comp)
+
+        plt.rcParams["figure.figsize"] = (20, 10)
+        plt.bar(compartments, pearson_of_comp.values(), color='blue', width=0.4)
+
+        plt.xlabel("Compartments")
+        plt.ylabel("Pearson Correlation")
+        plt.title("Pearson Correlation for Compartments")
+        plt.show()
