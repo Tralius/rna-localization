@@ -22,11 +22,11 @@ import scipy.stats as stats
 import csv
 import sys
 from keras.losses import CategoricalCrossentropy
+from keras.callbacks import EarlyStopping
 
-
-basedir = os.path.split(os.path.dirname(os.path.abspath(__file__)))[0]
-sys.path.append(basedir)
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+basedir = "" # os.path.split(os.path.dirname(os.path.abspath(__file__)))[0]
+#sys.path.append(basedir)
+#sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 plt.style.use('ggplot')
 matplotlib.rcParams.update(
@@ -216,10 +216,10 @@ class RNATracker:
             metrics=['accuracy', self.pearson_attr, self.pearson_class_attr]
         )
         if load_weights:
-            import h5py
-            weights_path = os.path.join(w_par_dir, 'weights.h5')
+            #import h5py
+            #weights_path = os.path.join(w_par_dir, 'weights.h5')
 
-            self.model.load_weights(load_path)
+            self.model.load_weights(w_par_dir)
             #weights = h5py.File(weights_path)
             #first_cnn.set_weights([weights['model_weights']['conv1d_1'][w.name] for w in first_cnn.trainable_weights])
             #second_cnn.set_weights([weights['model_weights']['conv1d_2'][w.name] for w in second_cnn.trainable_weights])
@@ -816,7 +816,7 @@ class RNATracker:
         print(self.model.evaluate(x_train, y_train, batch_size=batch_size))
         print(self.model.evaluate(x_valid, y_valid, batch_size=batch_size))
         hist = self.model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs, verbose=1,
-                              validation_data=(x_valid, y_valid), callbacks=[model_checkpoint], shuffle=True)
+                              validation_data=(x_valid, y_valid), callbacks=[model_checkpoint, EarlyStopping(monitor='val_loss', patience=3)], shuffle=True)
         # load best performing model
         self.stored_history = hist
         self.model.load_weights(best_model_path)
@@ -829,10 +829,10 @@ class RNATracker:
         Train_Acc = np.array([Train_Acc]).T
         Valid_Acc = np.asarray(Train_Result_Optimizer.get('val_acc'))
         Valid_Acc = np.asarray([Valid_Acc]).T
-        np.savetxt(self.OUTPATH + 'Train_Loss_fold.txt', Train_Loss, delimiter=',')
-        np.savetxt(self.OUTPATH + 'Valid_Loss_fold.txt', Valid_Loss, delimiter=',')
-        np.savetxt(self.OUTPATH + 'Train_Acc_fold.txt', Train_Acc, delimiter=',')
-        np.savetxt(self.OUTPATH + 'Valid_Acc_fold.txt', Valid_Acc, delimiter=',')
+        #np.savetxt(self.OUTPATH + 'Train_Loss_fold.txt', Train_Loss, delimiter=',')
+        #np.savetxt(self.OUTPATH + 'Valid_Loss_fold.txt', Valid_Loss, delimiter=',')
+        #np.savetxt(self.OUTPATH + 'Train_Acc_fold.txt', Train_Acc, delimiter=',')
+        #np.savetxt(self.OUTPATH + 'Valid_Acc_fold.txt', Valid_Acc, delimiter=',')
 
     def save(self, path):
         self.model.save(path)
@@ -1030,10 +1030,10 @@ class NoATTModel:
         Train_Acc = np.array([Train_Acc]).T
         Valid_Acc = np.asarray(Train_Result_Optimizer.get('val_acc'))
         Valid_Acc = np.asarray([Valid_Acc]).T
-        np.savetxt(OUTPATH + 'Train_Loss_fold_{}.txt'.format(self.kfold_index), Train_Loss, delimiter=',')
-        np.savetxt(OUTPATH + 'Valid_Loss_fold_{}.txt'.format(self.kfold_index), Valid_Loss, delimiter=',')
-        np.savetxt(OUTPATH + 'Train_Acc_fold_{}.txt'.format(self.kfold_index), Train_Acc, delimiter=',')
-        np.savetxt(OUTPATH + 'Valid_Acc_fold_{}.txt'.format(self.kfold_index), Valid_Acc, delimiter=',')
+        #np.savetxt(OUTPATH + 'Train_Loss_fold_{}.txt'.format(self.kfold_index), Train_Loss, delimiter=',')
+        #np.savetxt(OUTPATH + 'Valid_Loss_fold_{}.txt'.format(self.kfold_index), Valid_Loss, delimiter=',')
+        #np.savetxt(OUTPATH + 'Train_Acc_fold_{}.txt'.format(self.kfold_index), Train_Acc, delimiter=',')
+        #np.savetxt(OUTPATH + 'Valid_Acc_fold_{}.txt'.format(self.kfold_index), Valid_Acc, delimiter=',')
 
     def evaluate(self, x_test, y_test, dataset):
         score, acc = self.model.evaluate(x_test, y_test, verbose=0)
