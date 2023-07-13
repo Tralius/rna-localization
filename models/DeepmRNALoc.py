@@ -73,7 +73,7 @@ def DeepmRNALoc(max_len, layer_size: int = 128, learning_rate = 1e-3, dropout_ra
 
 
 
-def CNN_FFNN(max_len, layer_size=128, learning_rate=1e-3, dropout_rate=0.2, out_size=9):
+def CNN_FFNN(max_len, layer_size=128, learning_rate=1e-4, dropout_rate=0.2, out_size=9):
     model = keras.models.Sequential()
     #model.add(keras.layers.Flatten(input_shape=(max_len, 4)))
     #model.add(keras.layers.Reshape((max_len * 4, 1)))
@@ -218,10 +218,10 @@ def m6A_model(max_len, layer_size=128, learning_rate=1e-3, dropout_rate=0.2, out
     LReLu4 = keras.layers.LeakyReLU(alpha=0.05)(bn6)
     drop3 = keras.layers.Dropout(dropout_rate)(LReLu4)
 
-    flat_layer = keras.layers.Flatten()(drop3)
+    #flat_layer = keras.layers.Flatten()(drop3)
 
     # Concatenate the convolutional features and the vector input
-    concat_layer = keras.layers.Concatenate()([m6A_input, flat_layer])
+    concat_layer = keras.layers.Concatenate()([m6A_input, drop3])
     dense1 = keras.layers.Dense(layer_size, kernel_initializer='glorot_uniform')(concat_layer)
     bn7 = keras.layers.BatchNormalization()(dense1)
     LReLu5 = keras.layers.LeakyReLU(alpha=0.05)(bn7)
@@ -252,7 +252,7 @@ def m6A_relu(max_len, layer_size=128, learning_rate=1e-3, dropout_rate=0.2, out_
     conv2 = keras.layers.Conv1D(64, 17, strides=2, padding="same")(batchnorm1)
     bn2 = keras.layers.BatchNormalization()(conv2)
     LReLu1 = keras.layers.ReLU()(bn2)
-    conv3 = keras.layers.Conv1D(64, 11, strides=1, padding="same")(LReLu1)
+    conv3 = keras.layers.Conv1D(64, 17, strides=1, padding="same")(LReLu1)
     bn3 = keras.layers.BatchNormalization()(conv3)
     LReLu2 = keras.layers.ReLU()(bn3)
     mp1d1 = keras.layers.MaxPooling1D(2)(LReLu2)
@@ -285,7 +285,7 @@ def m6A_relu(max_len, layer_size=128, learning_rate=1e-3, dropout_rate=0.2, out_
     lstm2 = keras.layers.LSTM(units=512, return_sequences=True)(LReLu4)
     bn7 = keras.layers.BatchNormalization()(lstm2)
     LReLu5 = keras.layers.LeakyReLU(alpha=0.05)(bn7)
-    lstm3 = keras.layers.LSTM(units=256)(LReLu5)
+    lstm3 = keras.layers.LSTM(units=512)(LReLu5)
     bn8 = keras.layers.BatchNormalization()(lstm3)
     LReLu6 = keras.layers.LeakyReLU(alpha=0.05)(bn8)
     drop3 = keras.layers.Dropout(dropout_rate)(LReLu6)

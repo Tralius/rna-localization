@@ -5,17 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="52db749d-89b6-4485-b261-7f1b8eaaf8a7" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/flor_CNN_Att15.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model_architecture_viz/flor_CNN_Att15_2023-07-13.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model_architecture_viz/flor_CNN_Att1_2023-07-12.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model_architecture_viz/flor_CNN_Att2_2023-07-09.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model_architecture_viz/flor_CNN_Att4_2023-07-12.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model_architecture_viz/flor_CNN_Att5_2023-07-11.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model_architecture_viz/flor_CNN_Att6_2023-07-11.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model_architectures/flor_CNN_Att15.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testing_Att.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flor_CNN_Att1.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/flor_CNN_Att1.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flor_CNN_Att4.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/flor_CNN_Att4.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/models/CNN_RNN_models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/DeepmRNALoc.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/DeepmRNALoc.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tmp.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/tmp.ipynb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
