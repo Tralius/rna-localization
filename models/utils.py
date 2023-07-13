@@ -123,6 +123,7 @@ def resblock(x, kernel_size, filters, use_bn, kernel_regularizer = None, padding
     padding = 'same' # overwrite for now TODO!!
     if x.shape[-1] != filters:
         x = Conv1D(kernel_size= 1, filters= filters, padding=padding, activation='relu', kernel_initializer='he_normal')(x) # 1x1 conv to adjust kernel size
+    fx = x
     if specific_reg:
         kernel_reg = specific_reg["kernel_regularizer"]
         bias_reg = specific_reg["bias_regularizer"]
@@ -134,9 +135,9 @@ def resblock(x, kernel_size, filters, use_bn, kernel_regularizer = None, padding
                     kernel_regularizer = kernel_reg, 
                     bias_regularizer = bias_reg,
                     activity_regularizer = activity_reg,
-                    filters=filters, activation='relu', padding=padding)(x)
+                    filters=filters, activation='relu', padding=padding)(fx)
     else:
-        fx = Conv1D(kernel_size=kernel_size, filters=filters, activation='relu', padding=padding)(x)
+        fx = Conv1D(kernel_size=kernel_size, filters=filters, activation='relu', padding=padding)(fx)
 
     if use_bn:
         fx = BatchNormalization(scale=False)(fx)
@@ -152,7 +153,7 @@ def resblock(x, kernel_size, filters, use_bn, kernel_regularizer = None, padding
                     kernel_regularizer = kernel_reg, 
                     bias_regularizer = bias_reg,
                     activity_regularizer = activity_reg,
-                    filters=filters, activation='relu', padding=padding)(x)
+                    filters=filters, activation='relu', padding=padding)(fx)
     else:
         fx = Conv1D(filters=filters, kernel_size=kernel_size, padding=padding, kernel_regularizer=kernel_regularizer)(fx)
 
