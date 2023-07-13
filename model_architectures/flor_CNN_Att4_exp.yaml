@@ -17,12 +17,7 @@ params_model:
       kernel_size: 9
       activation: relu
       use_bias: False
-      padding: valid
-    - filters: 64
-      kernel_size: 9
-      activation: relu
-      use_bias: False
-      padding: valid
+      padding: same
   dense:
     - units: 50
       activation: relu
