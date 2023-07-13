@@ -215,3 +215,9 @@ def set_optimizer(optimizer: str, learning_rate: float):
             return Nadam()
         else:
             return Nadam(learning_rate=learning_rate)
+
+def extractY(data):
+    testY = data.iloc[:, 0:9]
+    sum_vec = testY.sum(axis=1)
+    testY = testY.divide(sum_vec, axis='index')
+    return testY
