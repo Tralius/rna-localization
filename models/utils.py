@@ -5,6 +5,8 @@ from keras.layers import Conv1D, Dense, Flatten, MaxPooling1D, Dropout, Reshape,
 from keras import backend as K
 from keras.optimizers import SGD, Adam, Nadam
 import keras
+from keras import regularizers
+
 
 
 def check_params(parameters: Dict):
@@ -117,16 +119,43 @@ def add_layer(layer: str, arg, index: Dict, params: Dict, arch: List):
         index['skip'] = index.get('skip') + 1
         return arch, index
 
-def resblock(x, kernel_size, filters, use_bn, kernel_regularizer = None, padding = 'same', activation=None):
+def resblock(x, kernel_size, filters, use_bn, kernel_regularizer = None, padding = 'same', activation=None, specific_reg = None):
     padding = 'same' # overwrite for now TODO!!
     if x.shape[-1] != filters:
         x = Conv1D(kernel_size= 1, filters= filters, padding=padding, activation='relu', kernel_initializer='he_normal')(x) # 1x1 conv to adjust kernel size
-    fx = Conv1D(kernel_size=kernel_size, filters=filters, activation='relu', padding=padding)(x)
+    if specific_reg:
+        kernel_reg = specific_reg["kernel_regularizer"]
+        bias_reg = specific_reg["bias_regularizer"]
+        activity_reg = specific_reg["activity_regularizer"]
+        kernel_reg = regularizers.L1L2(l1=float(kernel_reg["l1"]), l2=float(kernel_reg["l2"]))
+        bias_reg = regularizers.L2(float(bias_reg["l2"]))
+        activity_reg = regularizers.L2(float(activity_reg["l2"]))
+        fx = Conv1D(kernel_size=kernel_size, 
+                    kernel_regularizer = kernel_reg, 
+                    bias_regularizer = bias_reg,
+                    activity_regularizer = activity_reg,
+                    filters=filters, activation='relu', padding=padding)(x)
+    else:
+        fx = Conv1D(kernel_size=kernel_size, filters=filters, activation='relu', padding=padding)(x)
+
     if use_bn:
         fx = BatchNormalization(scale=False)(fx)
-        fx = Conv1D(filters=filters, kernel_size= kernel_size, padding=padding,kernel_regularizer=kernel_regularizer)(fx)
+    
+    if specific_reg:
+        kernel_reg = specific_reg["kernel_regularizer"]
+        bias_reg = specific_reg["bias_regularizer"]
+        activity_reg = specific_reg["activity_regularizer"]
+        kernel_reg = regularizers.L1L2(l1=float(kernel_reg["l1"]), l2=float(kernel_reg["l2"]))
+        bias_reg = regularizers.L2(float(bias_reg["l2"]))
+        activity_reg = regularizers.L2(float(activity_reg["l2"]))
+        fx = Conv1D(kernel_size=kernel_size, 
+                    kernel_regularizer = kernel_reg, 
+                    bias_regularizer = bias_reg,
+                    activity_regularizer = activity_reg,
+                    filters=filters, activation='relu', padding=padding)(x)
     else:
         fx = Conv1D(filters=filters, kernel_size=kernel_size, padding=padding, kernel_regularizer=kernel_regularizer)(fx)
+
     out = add([x, fx])
     #if use_bn:
     #    out = BatchNormalization()(out)
