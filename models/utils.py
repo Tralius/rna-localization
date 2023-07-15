@@ -4,6 +4,7 @@ from keras.layers import Conv1D, Dense, Flatten, MaxPooling1D, Dropout, Reshape,
     BatchNormalization, add, ReLU, GlobalAvgPool1D, Activation, Lambda, Multiply, Layer
 from keras import backend as K
 from keras.optimizers import SGD, Adam, Nadam
+from keras.activations import tanh
 import keras
 from keras import regularizers
 
@@ -41,10 +42,10 @@ def check_params(parameters: Dict):
             dense = parameters.get('dense')
             if occ != len(dense):
                 ValueError('number of dense layers not equal to number of dense parameters')
-        elif layer == 'l':
-            leaky = parameters.get('leaky')
-            if occ != len(leaky):
-                ValueError('number of leakyReLU layer not equal to number of leaky parameters')
+        elif layer == 'z':
+            activation = parameters.get("activation")
+            if occ != len(activation):
+                ValueError('number of activation layer not equal to number of activation parameters')
         elif layer == 'p':
             padding = parameters.get('pooling')
             if occ != len(padding):
@@ -70,6 +71,16 @@ def add_layer(layer: str, arg, index: Dict, params: Dict, arch: List):
         arch.append(BatchNormalization()(arg))
         index['batch'] = index.get('batch') + 1
         return arch, index
+    elif layer == 'z':
+        parameters = params.get('activation')[index.get('activation')]
+        activation = None
+        if parameters["type"] == "LeakyRelu":
+            activation = LeakyReLU(float(parameters["alpha"]))
+        elif parameteres["type"] == "Relu":
+            activation = ReLU()
+        arch.append(activation(arg))
+        index['activation'] = index.get('activation') + 1
+        return arch, index
     elif layer == 'c':
         arch.append(Conv1D(**params.get('conv')[index.get('conv')])(arg))
         index['conv'] = index.get('conv') + 1
@@ -84,10 +95,6 @@ def add_layer(layer: str, arg, index: Dict, params: Dict, arch: List):
         return arch, index
     elif layer == 'f':
         arch.append(Flatten()(arg))
-        return arch, index
-    elif layer == 'l':
-        arch.append(LeakyReLU(**params.get('leaky')[index.get('leaky')])(arg))
-        index['leaky'] = index.get('leaky') + 1
         return arch, index
     elif layer == 'p':
         arch.append(MaxPooling1D(**params.get('pooling')[index.get('pooling')])(arg))
@@ -119,11 +126,17 @@ def add_layer(layer: str, arg, index: Dict, params: Dict, arch: List):
         index['skip'] = index.get('skip') + 1
         return arch, index
 
-def resblock(x, kernel_size, filters, use_bn, kernel_regularizer = None, padding = 'same', activation=None, specific_reg = None):
+def resblock(x, kernel_size, filters, use_bn, kernel_regularizer = None, padding = 'same', activation='relu', specific_reg = None, specific_act=None, use_bias=True):
     padding = 'same' # overwrite for now TODO!!
     if x.shape[-1] != filters:
-        x = Conv1D(kernel_size= 1, filters= filters, padding=padding, activation='relu', kernel_initializer='he_normal')(x) # 1x1 conv to adjust kernel size
+        x = Conv1D(kernel_size= 1, filters= filters, padding=padding, activation=activation, kernel_initializer='he_normal')(x) # 1x1 conv to adjust kernel size
     fx = x
+    if specific_act:
+        if specific_act["type"] == "LeakyRelu":
+            activation = LeakyReLU(float(specific_act["alpha"]))
+        elif specific_act["type"] == "tanh":
+            activation = tanh()
+        
     if specific_reg:
         kernel_reg = specific_reg["kernel_regularizer"]
         bias_reg = specific_reg["bias_regularizer"]
@@ -134,10 +147,16 @@ def resblock(x, kernel_size, filters, use_bn, kernel_regularizer = None, padding
         fx = Conv1D(kernel_size=kernel_size, 
                     kernel_regularizer = kernel_reg, 
                     bias_regularizer = bias_reg,
+                    use_bias = use_bias,
                     activity_regularizer = activity_reg,
-                    filters=filters, activation='relu', padding=padding)(fx)
+                    filters=filters, activation=activation, 
+                    padding=padding)(fx)
     else:
-        fx = Conv1D(kernel_size=kernel_size, filters=filters, activation='relu', padding=padding)(fx)
+        fx = Conv1D(kernel_size=kernel_size, 
+                    filters=filters, 
+                    activation=activation, 
+                    kernel_regularizer=kernel_regularizer,
+                    padding=padding)(fx)
 
     if use_bn:
         fx = BatchNormalization(scale=False)(fx)
@@ -152,20 +171,32 @@ def resblock(x, kernel_size, filters, use_bn, kernel_regularizer = None, padding
         fx = Conv1D(kernel_size=kernel_size, 
                     kernel_regularizer = kernel_reg, 
                     bias_regularizer = bias_reg,
+                    use_bias = use_bias,
                     activity_regularizer = activity_reg,
-                    filters=filters, activation='relu', padding=padding)(fx)
+                    filters=filters, activation=activation, 
+                    padding=padding)(fx)
     else:
-        fx = Conv1D(filters=filters, kernel_size=kernel_size, padding=padding, kernel_regularizer=kernel_regularizer)(fx)
+        fx = Conv1D(filters=filters, 
+                    kernel_size=kernel_size, 
+                    padding=padding, 
+                    kernel_regularizer=kernel_regularizer,
+                    use_bias = use_bias,)(fx)
 
     out = add([x, fx])
     #if use_bn:
     #    out = BatchNormalization()(out)
-    out = ReLU()(out)
+    final_activation = ReLU()
+    if specific_act:
+        if specific_act["type"] == "LeakyRelu":
+            final_activation = LeakyReLU(float(specific_act["alpha"]))
+        elif specific_act["type"] == "tanh":
+            final_activation = tanh()
+    out = final_activation(out)
 
     return out
 
 
-@keras.saving.register_keras_serializable(package='Attention')
+#@keras.saving.register_keras_serializable(package='Attention')
 class Attention(Layer):
     def __init__(self, attention_size, reshape_size, activation_dense='tanh', **kwargs):
         super().__init__()

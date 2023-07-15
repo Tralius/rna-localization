@@ -5,10 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="52db749d-89b6-4485-b261-7f1b8eaaf8a7" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/models/CNN_RNN_models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/DeepmRNALoc.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/DeepmRNALoc.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tmp.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/tmp.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/singlebranch_notebook.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/singlebranch_notebook.ipynb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -127,6 +126,7 @@
       <workItem from="1688853100174" duration="2181000" />
       <workItem from="1688984860938" duration="8000" />
       <workItem from="1689191963051" duration="517000" />
+      <workItem from="1689343794214" duration="693000" />
     </task>
     <servers />
   </component>
