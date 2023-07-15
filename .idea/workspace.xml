@@ -6,17 +6,25 @@
   <component name="ChangeListManager">
     <list default="true" id="52db749d-89b6-4485-b261-7f1b8eaaf8a7" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CNN_Baseline_4Conv_Struct_ext.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/CNN_Baseline_4Conv_Struct_ext.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CNN_Baseline_4Conv_Struct_ext2.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RNATrack1Corr.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/acc.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/dataloaders/GeneDataLoader.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataloaders/GeneDataLoader.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model_architectures/CNN_Baseline_4Conv_Struct_ext.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/model_architectures/CNN_Baseline_4Conv_Struct_ext.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model_architectures/CNN_Baseline_4Conv_Struct_ext3.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/model_architectures/CNN_Baseline_4Conv_Struct_ext3.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/singlebranchModel.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/singlebranchModel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/singlebranch_notebook.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/singlebranch_notebook.ipynb" afterDir="false" />
-    </list>
-    <list id="27850a01-4b3f-483c-83ed-a454a7e32907" name="Changes by jonasflor" comment="">
+      <change beforePath="$PROJECT_DIR$/flor_CNN_Att4_exp.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/flor_CNN_Att4_exp.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flor_CNN_Att4_exp2.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flor_arch1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/model.png" beforeDir="false" afterPath="$PROJECT_DIR$/model.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model_architecture_viz/CNN_Baseline_4Conv_Struct_ext2_2023-07-13.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/model_architecture_viz/CNN_Baseline_4Conv_Struct_ext_2023-07-13.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/model_architecture_viz/CNN_Baseline_4Conv_Struct_ext_2023-07-14.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/model_architecture_viz/flor_CNN_Att4_exp2_2023-07-13.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/model_architecture_viz/flor_CNN_Att4_exp_2023-07-13.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/model_architectures/CNN_architecture6 copy.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/model_architectures/CNN_architecture6 copy.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/model.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/singlebranchModel.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/singlebranchModel.py" afterDir="false" />
     </list>
+    <list id="27850a01-4b3f-483c-83ed-a454a7e32907" name="Changes by jonasflor" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -45,17 +53,6 @@
     <setting file="file://$USER_HOME$/anaconda3/envs/reggen/lib/python3.11/site-packages/keras/layers/merging/add.py" root0="SKIP_INSPECTION" />
     <setting file="file://$USER_HOME$/anaconda3/envs/reggen/lib/python3.11/site-packages/keras/layers/pooling/global_average_pooling1d.py" root0="SKIP_INSPECTION" />
     <setting file="file://$USER_HOME$/anaconda3/envs/reggen/lib/python3.11/site-packages/keras/layers/reshaping/flatten.py" root0="SKIP_INSPECTION" />
-  </component>
-  <component name="LineStatusTrackerManager">
-    <file path="$PROJECT_DIR$/models/singlebranchModel.py">
-      <ranges>
-        <range start1="37" end1="38" start2="37" end2="39" changelist="52db749d-89b6-4485-b261-7f1b8eaaf8a7" />
-        <range start1="39" end1="40" start2="40" end2="41" changelist="27850a01-4b3f-483c-83ed-a454a7e32907" />
-        <range start1="48" end1="49" start2="49" end2="50" changelist="27850a01-4b3f-483c-83ed-a454a7e32907" />
-        <range start1="54" end1="55" start2="55" end2="56" changelist="52db749d-89b6-4485-b261-7f1b8eaaf8a7" />
-        <range start1="67" end1="67" start2="68" end2="70" changelist="52db749d-89b6-4485-b261-7f1b8eaaf8a7" />
-      </ranges>
-    </file>
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -146,6 +143,7 @@
       <workItem from="1688984860938" duration="8000" />
       <workItem from="1689191963051" duration="517000" />
       <workItem from="1689343794214" duration="6378000" />
+      <workItem from="1689422812591" duration="483000" />
     </task>
     <servers />
   </component>
