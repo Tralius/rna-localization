@@ -1,7 +1,7 @@
 from typing import Dict, List
 from collections import Counter
 from keras.layers import Conv1D, Dense, Flatten, MaxPooling1D, Dropout, Reshape, LeakyReLU, \
-    BatchNormalization, add, ReLU, GlobalAvgPool1D, Activation, Lambda, Multiply, Layer, Concatenate
+    BatchNormalization, add, ReLU, GlobalAvgPool1D, Activation, Lambda, Multiply, Layer, Concatenate, LSTM
 from keras import backend as K
 from keras.optimizers import SGD, Adam, Nadam
 from keras.activations import tanh
@@ -132,6 +132,11 @@ def add_layer(layer: str, args, index: Dict, params: Dict, arch: List):
         result = [result] + args[1:]
         arch.append(result)
         index['globalavg'] = index.get('globalavg') + 1
+        return arch, index
+    elif layer == 'l':
+        result = [LSTM(**params.get('lstm')[index.get('lstm')])(args[0])] + args[1:]
+        arch.append(result)
+        index['lstm'] = index.get('lstm') + 1
         return arch, index
     elif layer == 's':
         parameters = params.get('skip')[index.get('skip')]
