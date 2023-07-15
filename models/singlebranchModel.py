@@ -36,7 +36,7 @@ class CNN(Model):
             compile = {}
         
         input_lay = keras.Input(shape=input_size) # Input layer of the RNA sequence (and struct if given)
-        second_lay = keras.Input(shape=(3,)) # Input layer for m6a if applicable
+        second_lay = keras.Input(shape=(3)) # Input layer for m6a if applicable
 
         self.architecture = list(params_model.get('architecture'))
         utils.check_params(params_model)
@@ -49,11 +49,11 @@ class CNN(Model):
 
         for k, j in enumerate(list(self.architecture)):
             if k == 0:
-                arch, index = utils.add_layer(j, input_lay, index, params_model, arch)
+                arch, index = utils.add_layer(j, [input_lay, second_lay], index, params_model, arch)
             else:
                 arch, index = utils.add_layer(j, arch[len(arch)-1], index, params_model, arch)
         
-        self.model = keras.Model(inputs=[input_lay,second_lay], outputs=arch[-1][0])
+        self.model = keras.Model(inputs=[input_lay, second_lay], outputs=arch[-1][0])
 
         if "optimizer" not in params_model.keys():
             optimizer = 'adam'
