@@ -23,8 +23,8 @@ def check_params(parameters: Dict):
             if occ != len(attention):
                 ValueError('number of multihead attention not equal to number of attention parameters')
         elif layer == 'b':
-            reshape = parameters.get('batch')
-            if occ != len(reshape):
+            batch = parameters.get('batch')
+            if occ != len(batch):
                 ValueError('number of batch normalization layers not equal to number of batch parameters')
         elif layer == 'c':
             conv = parameters.get('conv')
