@@ -1,7 +1,7 @@
 from typing import Dict, List
 from collections import Counter
 from keras.layers import Conv1D, Dense, Flatten, MaxPooling1D, Dropout, Reshape, LeakyReLU, \
-    BatchNormalization, add, ReLU, GlobalAvgPool1D, Activation, Lambda, Multiply, Layer
+    BatchNormalization, add, ReLU, GlobalAvgPool1D, Activation, Lambda, Multiply, Layer, Concatenate
 from keras import backend as K
 from keras.optimizers import SGD, Adam, Nadam
 from keras.activations import tanh
@@ -62,13 +62,15 @@ def check_params(parameters: Dict):
             NotImplementedError()
 
 
-def add_layer(layer: str, arg, index: Dict, params: Dict, arch: List):
+def add_layer(layer: str, args, index: Dict, params: Dict, arch: List):
     if layer == 'a':
-        arch.append(Attention(**params.get('attention')[index.get('attention')])(arg))
+        result = [Attention(**params.get('attention')[index.get('attention')])(args[0])] + args[1:]
+        arch.append(result)
         index['attention'] = index.get('attention') + 1
         return arch, index
     elif layer == 'b':
-        arch.append(BatchNormalization()(arg))
+        result = [BatchNormalization()(args[0])] + args[1:]
+        arch.append(result)
         index['batch'] = index.get('batch') + 1
         return arch, index
     elif layer == 'z':
@@ -76,41 +78,59 @@ def add_layer(layer: str, arg, index: Dict, params: Dict, arch: List):
         activation = None
         if parameters["type"] == "LeakyRelu":
             activation = LeakyReLU(float(parameters["alpha"]))
-        elif parameteres["type"] == "Relu":
+        elif parameters["type"] == "Relu":
             activation = ReLU()
-        arch.append(activation(arg))
+        result = [activation(args[0])] + args[1:]
+        arch.append(result)
         index['activation'] = index.get('activation') + 1
         return arch, index
     elif layer == 'c':
-        arch.append(Conv1D(**params.get('conv')[index.get('conv')])(arg))
+        result = [Conv1D(**params.get('conv')[index.get('conv')])(args[0])] + args[1:]
+        arch.append(result)
         index['conv'] = index.get('conv') + 1
         return arch, index
+    elif layer == 'i':
+        concatlayer = Concatenate()
+        c = concatlayer([args[0],args[1]])
+        result = [c] + args[1:]
+        arch.append(result)
+        return arch, index
     elif layer == 'd':
-        arch.append(Dropout(**params.get('dropouts')[index.get('dropouts')])(arg))
+
+        result = [Dropout(**params.get('dropouts')[index.get('dropouts')])(args[0])] + args[1:]
+        arch.append(result)
         index['dropouts'] = index.get('dropouts') + 1
         return arch, index
     elif layer == 'e':
-        arch.append(Dense(**params.get('dense')[index.get('dense')])(arg))
+
+        result = [Dense(**params.get('dense')[index.get('dense')])(args[0])] + args[1:]
+        arch.append(result)
         index['dense'] = index.get('dense') + 1
         return arch, index
     elif layer == 'f':
-        arch.append(Flatten()(arg))
+        result = [Flatten()(args[0])] + args[1:]
+        arch.append(result)
         return arch, index
     elif layer == 'p':
-        arch.append(MaxPooling1D(**params.get('pooling')[index.get('pooling')])(arg))
+        result = [MaxPooling1D(**params.get('pooling')[index.get('pooling')])(args[0])] + args[1:]
+        arch.append(result)
         index['pooling'] = index.get('pooling') + 1
         return arch, index
     elif layer == 'r':
-        arch.append(Reshape(**params.get('reshape')[index.get('reshape')])(arg))
+        result = [Reshape(**params.get('reshape')[index.get('reshape')])(args[0])] + args[1:]
+        arch.append(result)
         index['reshape'] = index.get('reshape') + 1
         return arch, index
     elif layer == 'g':
-        parameteres = params.get('globalavg')
-        parameteres = parameteres[index.get('globalavg')]
-        if parameteres is None:
-            arch.append(GlobalAvgPool1D()(arg))
+        parameters = params.get('globalavg')
+        parameters = parameters[index.get('globalavg')]
+        result = None
+        if parameters is None:
+            result = GlobalAvgPool1D()(args[0])
         else:
-            arch.append(GlobalAvgPool1D(**parameteres)(arg))
+            result = GlobalAvgPool1D(**parameters)(args[0])
+        result = [result] + args[1:]
+        arch.append(result)
         index['globalavg'] = index.get('globalavg') + 1
         return arch, index
     elif layer == 's':
@@ -121,8 +141,8 @@ def add_layer(layer: str, arg, index: Dict, params: Dict, arch: List):
             reg = parameters["kernel_regularizer"]
         except Exception as e:
             pass
-        out = resblock(arg, **parameters)
-        arch.append(out)
+        out = resblock(args[0], **parameters)
+        arch.append([out] + args[1:])
         index['skip'] = index.get('skip') + 1
         return arch, index
 

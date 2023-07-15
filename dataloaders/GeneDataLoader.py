@@ -42,7 +42,7 @@ class GeneDataLoader(Sequence):
     def __len__(self) -> int:
         return self.num_batches
 
-    def __getitem__(self, index: int) -> Tuple[np.ndarray, np.ndarray]:
+    def __getitem__(self, index: int):
         # Calculate the start and end indices for the current batch
         start_index = index * self.batch_size
         end_index = min((index + 1) * self.batch_size, self.data.shape[0])
@@ -81,7 +81,7 @@ class GeneDataLoader(Sequence):
         if self.m6A:
             return [padded_sequences, m6A_values], output
 
-        return padded_sequences, output
+        return [padded_sequences, [0,0,0]], output
 
 
 def one_hot_emb(data: pd.DataFrame) -> pd.DataFrame:

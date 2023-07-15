@@ -1,10 +1,10 @@
 param_dataLoader_train:
-  batch_size: 32
+  batch_size: 64
   shuffle: True
   struct: True
 
 param_dataLoader_valid:
-  batch_size: 32
+  batch_size: 64
   struct: True
 
 params_model:

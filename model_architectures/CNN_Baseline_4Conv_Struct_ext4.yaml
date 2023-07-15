@@ -1,19 +1,18 @@
 param_dataLoader_train:
-  batch_size: 32
+  batch_size: 64
   shuffle: True
   struct: True
 
 param_dataLoader_valid:
-  batch_size: 32
+  batch_size: 64
   struct: True
 
 params_model:
-  architecture: cpspdspdspfede
+  architecture: czpspdspdspfede
   optimizer: nadam
   conv:
     - filters: 16
       kernel_size: 17
-      activation: relu
   dense:
     - units: 512
       activation: relu
@@ -22,56 +21,74 @@ params_model:
   pooling:
     - pool_size: 4
     - pool_size: 4
+      strides: 2
     - pool_size: 4
+      strides: 4
     - pool_size: 4
+      strides: 4
   dropouts:
     - rate: 0.4
     - rate: 0.4
     - rate: 0.4
+  activation:
+    - type: LeakyRelu
+      alpha: 0.01
   skip:
     - filters: 32 
       kernel_size: 14
       activation: relu
+      use_bias: True
+      specific_act:
+        type: LeakyRelu
+        alpha: 0.01
       use_bn: False
       padding: valid
       specific_reg:
         kernel_regularizer:
           l1: 1e-5
-          l2: 1e-4
+          l2: 5e-4
         bias_regularizer:
-          l2: 1e-5
+          l2: 5e-5
         activity_regularizer:
-          l2: 1e-5
+          l2: 5e-5
       kernel_regularizer: l1
     - filters: 64 
       kernel_size: 11
       activation: relu
       use_bn: False
+      use_bias: False
       padding: valid
+      specific_act:
+        type: LeakyRelu
+        alpha: 0.01
       specific_reg:
         kernel_regularizer:
           l1: 1e-5
-          l2: 1e-4
+          l2: 5e-4
         bias_regularizer:
-          l2: 1e-5
+          l2: 5e-5
         activity_regularizer:
-          l2: 1e-5
+          l2: 5e-5
       kernel_regularizer: l1
-    - filters: 96 
+    - filters: 128 
       kernel_size: 11
       activation: relu
       use_bn: False
+      use_bias: False
+      specific_act:
+        type: LeakyRelu
+        alpha: 0.01
       padding: valid
       specific_reg:
         kernel_regularizer:
           l1: 1e-5
-          l2: 1e-4
+          l2: 5e-4
         bias_regularizer:
-          l2: 1e-5
+          l2: 5e-5
         activity_regularizer:
-          l2: 1e-5
+          l2: 5e-5
       kernel_regularizer: l1
 
 params_train:
-  epochs: 100
+  epochs: 20
   use_multiprocessing: True

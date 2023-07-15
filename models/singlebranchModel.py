@@ -35,9 +35,10 @@ class CNN(Model):
         if compile is None:
             compile = {}
         
-        input_lay = keras.Input(shape=input_size)
+        input_lay = keras.Input(shape=input_size) # Input layer of the RNA sequence (and struct if given)
+        second_lay = keras.Input(shape=(3,)) # Input layer for m6a if applicable
 
-        architecture = list(params_model.get('architecture'))
+        self.architecture = list(params_model.get('architecture'))
         utils.check_params(params_model)
 
         index = {}
@@ -46,13 +47,13 @@ class CNN(Model):
             
         arch = []
 
-        for k, j in enumerate(list(architecture)):
+        for k, j in enumerate(list(self.architecture)):
             if k == 0:
                 arch, index = utils.add_layer(j, input_lay, index, params_model, arch)
             else:
                 arch, index = utils.add_layer(j, arch[len(arch)-1], index, params_model, arch)
         
-        self.model = keras.Model(inputs=input_lay, outputs=arch[-1])
+        self.model = keras.Model(inputs=[input_lay,second_lay], outputs=arch[-1][0])
 
         if "optimizer" not in params_model.keys():
             optimizer = 'adam'
@@ -65,6 +66,8 @@ class CNN(Model):
         optimizer = utils.set_optimizer(optimizer, learning_rate)
 
         self.model.compile(optimizer=optimizer, loss=loss, metrics=metrics, **compile)
+
+
 
     def fit(self, train_data: pd.DataFrame, params_dataLoader: Dict = None, params_train: Dict = None):
         return super().fit(train_data, params_dataLoader, params_train)

@@ -14,6 +14,8 @@ class Model(ABC):
         if params_dataLoader is None:
             Warning('data Loader uses default arguments')
             params_dataLoader = {}
+        if ('i' in self.architecture and not params_dataLoader.get('m6a')) or (params_dataLoader.get('m6a') and not 'i' in self.architecture):
+            ValueError('m6a input requires concatination')
         return self.model.fit(GeneDataLoader(train_data, **params_dataLoader), **params_train)
 
     def evaluate(self, eval_data, params_dataLoader, params_eval):
@@ -38,6 +40,10 @@ class Model(ABC):
 
         train_dataLoader = GeneDataLoader(train_data, **params_train_dataLoader)
         eval_dataLoader = GeneDataLoader(eval_data, shuffle=False, **params_eval_dataLoader)
+        if ('i' in self.architecture and not train_dataLoader.get('m6a')) or (train_data.get('m6a') and not 'i' in self.architecture):
+            ValueError('m6a input requires concatination')
+        if ('i' in self.architecture and not eval_dataLoader.get('m6a')) or (eval_dataLoader.get('m6a') and not 'i' in self.architecture):
+            ValueError('m6a input requires concatination')
         return self.model.fit(train_dataLoader, callbacks=callback, validation_data=eval_dataLoader, **params_train)
 
     def predict(self, pred_data, params_dataLoader, params_predict):
