@@ -1,7 +1,7 @@
 from typing import Dict, List
 from collections import Counter
 from keras.layers import Conv1D, Dense, Flatten, MaxPooling1D, Dropout, Reshape, LeakyReLU, \
-    BatchNormalization, add, ReLU, GlobalAvgPool1D, Activation, Lambda, Multiply, Layer, Concatenate, 
+    BatchNormalization, add, ReLU, GlobalAvgPool1D, Activation, Lambda, Multiply, Layer, Concatenate, LSTM
 from keras import backend as K
 from keras.optimizers import SGD, Adam, Nadam
 from keras.activations import tanh
