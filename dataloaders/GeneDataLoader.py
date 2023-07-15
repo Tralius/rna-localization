@@ -54,9 +54,7 @@ class GeneDataLoader(Sequence):
             padded_sequences = np.zeros((end_index - start_index, self.max_len, 4), dtype=np.float32)
 
         output = np.zeros((end_index - start_index, 9), dtype=np.float32)
-
-        if self.m6A:
-            m6A_values = np.zeros((end_index - start_index, 3), dtype=np.float32)
+        m6A_values = np.zeros((end_index - start_index, 3), dtype=np.float32)
 
         # Load padded sequences and labels for the current batch
         for i, idx in enumerate(self.indices[start_index:end_index]):
@@ -77,11 +75,7 @@ class GeneDataLoader(Sequence):
                 m6A_values[i, :] = self.data[['m6A_5UTR', 'm6A_CDS', 'm6A_3UTR']].iloc[idx].values
 
             padded_sequences[i, -len(self.data['seq'].iloc[idx]):, :] = seq_data
-
-        if self.m6A:
-            return [padded_sequences, m6A_values], output
-
-        return [padded_sequences, [0,0,0]], output
+        return [padded_sequences, m6A_values], output
 
 
 def one_hot_emb(data: pd.DataFrame) -> pd.DataFrame:
