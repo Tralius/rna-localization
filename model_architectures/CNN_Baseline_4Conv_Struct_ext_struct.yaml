@@ -1,0 +1,79 @@
+param_dataLoader_train:
+  batch_size: 32
+  shuffle: True
+  struct: True
+  m6A: False
+
+param_dataLoader_valid:
+  batch_size: 32
+  struct: True
+  m6A: False
+
+params_model:
+  architecture: cpspdspdspfede
+  optimizer: nadam
+  conv:
+    - filters: 16
+      kernel_size: 17
+      activation: relu
+  dense:
+    - units: 512
+      activation: relu
+    - units: 9
+      activation: softmax
+  pooling:
+    - pool_size: 4
+    - pool_size: 4
+    - pool_size: 4
+    - pool_size: 4
+  dropouts:
+    - rate: 0.4
+    - rate: 0.4
+    - rate: 0.4
+  skip:
+    - filters: 32 
+      kernel_size: 14
+      activation: relu
+      use_bn: False
+      padding: valid
+      specific_reg:
+        kernel_regularizer:
+          l1: 1e-5
+          l2: 1e-4
+        bias_regularizer:
+          l2: 1e-5
+        activity_regularizer:
+          l2: 1e-5
+      kernel_regularizer: l1
+    - filters: 64 
+      kernel_size: 11
+      activation: relu
+      use_bn: False
+      padding: valid
+      specific_reg:
+        kernel_regularizer:
+          l1: 1e-5
+          l2: 1e-4
+        bias_regularizer:
+          l2: 1e-5
+        activity_regularizer:
+          l2: 1e-5
+      kernel_regularizer: l1
+    - filters: 96 
+      kernel_size: 11
+      activation: relu
+      use_bn: False
+      padding: valid
+      specific_reg:
+        kernel_regularizer:
+          l1: 1e-5
+          l2: 1e-4
+        bias_regularizer:
+          l2: 1e-5
+        activity_regularizer:
+          l2: 1e-5
+      kernel_regularizer: l1
+
+params_train:
+  epochs: 100
+  use_multiprocessing: True
