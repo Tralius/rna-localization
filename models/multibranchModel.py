@@ -27,6 +27,7 @@ class MultiBranch(Model):
         self.number_branches = number_branches
 
         input_lay = keras.Input(shape=input_size)
+        second_lay = keras.Input(shape=(3)) # Input layer for m6a if applicable
 
         for i in range(number_branches):
             parameters = param_branches[i]
@@ -40,16 +41,17 @@ class MultiBranch(Model):
             architecture = list(parameters.get('architecture'))
             for k, j in enumerate(architecture):
                 if k == 0:
-                    arch, index = utils.add_layer(j, input_lay, index, parameters, arch)
+                    arch, index = utils.add_layer(j, [input_lay, second_lay], index, parameters, arch)
                 else:
                     arch, index = utils.add_layer(j, arch[len(arch) - 1], index, parameters, arch)
 
             branched_models.append(arch[len(arch) - 1])
 
-        x = Concatenate(axis=1)(branched_models)
+        in_con = [branch[0] for branch in branched_models]
+        x = Concatenate(axis=1)(in_con)
         x = Dense(**param_consensus)(x)
         out = Dense(units=9, activation='softmax')(x)
-        self.model = keras.Model(inputs=input_lay, outputs=out)
+        self.model = keras.Model(inputs=[input_lay, second_lay], outputs=out)
 
         if "optimizer" not in params_model.keys():
             optimizer = 'adam'

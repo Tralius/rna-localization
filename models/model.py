@@ -40,10 +40,6 @@ class Model(ABC):
 
         train_dataLoader = GeneDataLoader(train_data, **params_train_dataLoader)
         eval_dataLoader = GeneDataLoader(eval_data, shuffle=False, **params_eval_dataLoader)
-        if ('i' in self.architecture and not params_train_dataLoader.get('m6a')) or (params_train_dataLoader.get('m6a') and not 'i' in self.architecture):
-            ValueError('m6a input requires concatination')
-        if ('i' in self.architecture and not params_eval_dataLoader.get('m6a')) or (params_eval_dataLoader.get('m6a') and not 'i' in self.architecture):
-            ValueError('m6a input requires concatination')
         return self.model.fit(train_dataLoader, callbacks=callback, validation_data=eval_dataLoader, **params_train)
 
     def predict(self, pred_data, params_dataLoader, params_predict):

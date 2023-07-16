@@ -79,6 +79,10 @@ class CNN(Model):
                          params_train_dataLoader: Dict = None,
                          params_eval_dataLoader: Dict = None,
                          params_train: Dict = None):
+        if ('i' in self.architecture and not params_train_dataLoader.get('m6a')) or (params_train_dataLoader.get('m6a') and not 'i' in self.architecture):
+            ValueError('m6a input requires concatination')
+        if ('i' in self.architecture and not params_eval_dataLoader.get('m6a')) or (params_eval_dataLoader.get('m6a') and not 'i' in self.architecture):
+            ValueError('m6a input requires concatination')
         return super().fit_and_evaluate(train_data, eval_data, callback,
                                         params_train_dataLoader,
                                         params_eval_dataLoader,
