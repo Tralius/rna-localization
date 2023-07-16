@@ -4,6 +4,7 @@ import matplotlib as mpl
 from matplotlib import cm
 from matplotlib.colors import ListedColormap, LinearSegmentedColormap
 from tensorflow import keras
+import tensorflow as tf
 
 def plot_a(ax, base, left_edge, height, color):
     a_polygon_coords = [
