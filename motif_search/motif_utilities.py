@@ -153,6 +153,7 @@ def plot_score_track(arr, threshold=None, figsize=(20,2), **kwargs):
     plt.show()
 
 
+# Adapted from https://www.tensorflow.org/tutorials/interpretability/integrated_gradients
 def get_gradients(model, x):
     x_tensor = tf.convert_to_tensor(x, dtype=tf.float32)
 

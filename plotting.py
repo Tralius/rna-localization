@@ -37,8 +37,8 @@ def multiplot_pearson(data: Dict[str, List[float]], mean: bool = True, training:
     plot_data = dataframe.melt(id_vars=['epoch'], var_name='compartment', value_name='correlation')
     return sns.lineplot(plot_data, x='epoch', y='correlation', hue='compartment').set(title=title)
 
+# Adapted from https://github.com/HarveyYan/RNATracker/tree/master
 def roc_curve_plot(testY, predictedY):
-    # Adapted from https://github.com/HarveyYan/RNATracker/tree/master
     testY = testY.iloc[:, 0:9]
     sum_vec = testY.sum(axis=1)
     testY = testY.divide(sum_vec, axis='index')
@@ -89,6 +89,7 @@ def roc_curve_plot(testY, predictedY):
     plt.show()
 
 
+# Adapted from https://github.com/HarveyYan/RNATracker/tree/master
 def scatter_plot(ground_truth, pred):
     classes = list(ground_truth.columns)
 
@@ -111,9 +112,7 @@ def scatter_plot(ground_truth, pred):
 def box_plot_array(multidimensionalarray):
     # Plot
     bp = plt.boxplot(
-        # A data frame needs to be converted to an array before it can be plotted this way
         np.array(multidimensionalarray),
-        # You can use the column headings from the data frame as labels
         labels=['ERM', 'KDEL', 'LMA', 'MITO', 'NES', 'NIK', 'NLS', 'NUCP', 'OMM'],
         showfliers=False
     )
@@ -139,9 +138,7 @@ def box_plot(dataframe):
 
     # Plot
     bp = plt.boxplot(
-        # A data frame needs to be converted to an array before it can be plotted this way
         np.array(new_loc_data),
-        # You can use the column headings from the data frame as labels
         labels=list(loc_data.columns),
         showfliers=False
     )
