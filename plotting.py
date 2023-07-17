@@ -6,6 +6,7 @@ from sklearn.metrics import roc_curve, auc
 from scipy.stats import pearsonr
 import seaborn as sns
 
+
 # summarize history for accuracy
 def plot_line_graph(data, title, ylabel, xlabel, legend):
     # for i in range(len(data)):
@@ -16,11 +17,13 @@ def plot_line_graph(data, title, ylabel, xlabel, legend):
     plt.xlabel(xlabel)
     plt.legend(legend, loc='upper left')
     plt.show()
-    
-def multiplot_pearson(data: Dict[str, List[float]], mean: bool = True, training: bool = False,title: str = 'Correlation after Compartment'):
+
+
+def multiplot_pearson(data: Dict[str, List[float]], mean: bool = True, training: bool = False,
+                      title: str = 'Correlation after Compartment'):
     headers = [
-               'val_ERM', 'val_KDEL', 'val_LMA', 'val_MITO', 'val_NES', 'val_NIK', 'val_NLS', 'val_NUCP', 'val_OMM'
-               ]
+        'val_ERM', 'val_KDEL', 'val_LMA', 'val_MITO', 'val_NES', 'val_NIK', 'val_NLS', 'val_NUCP', 'val_OMM'
+    ]
     if training:
         headers = ['ERM', 'KDEL', 'LMA', 'MITO', 'NES', 'NIK', 'NLS', 'NUCP', 'OMM'].extend(headers)
     data_list = [data[ind] for ind in headers]
@@ -35,8 +38,8 @@ def multiplot_pearson(data: Dict[str, List[float]], mean: bool = True, training:
     plot_data = dataframe.melt(id_vars=['epoch'], var_name='compartment', value_name='correlation')
     return sns.lineplot(plot_data, x='epoch', y='correlation', hue='compartment').set(title=title)
 
-def roc_curve_plot(testY, predictedY):
 
+def roc_curve_plot(testY, predictedY):
     testY = testY.iloc[:, 0:9]
     sum_vec = testY.sum(axis=1)
     testY = testY.divide(sum_vec, axis='index')
@@ -64,7 +67,7 @@ def roc_curve_plot(testY, predictedY):
     testY = np.array(y_label_hot_encoding)
     predictedY = np.array(pred_label_hot_encoding)
 
-    plt.rcParams["figure.figsize"] = (20,10)
+    plt.rcParams["figure.figsize"] = (20, 10)
 
     # calculate the roc_curve for every class
     for i, location in enumerate(classes):
@@ -76,7 +79,7 @@ def roc_curve_plot(testY, predictedY):
         "blue", "orange", "green", "red", "purple", "brown", "pink", "gray", "olive"
     ]
     for i in range(len(classes)):
-        plt.plot(fpr[i], tpr[i], color=colors[i], marker='.', label=f"{classes[i]}: {round(auc_score[i],2)}")
+        plt.plot(fpr[i], tpr[i], color=colors[i], marker='.', label=f"{classes[i]}: {round(auc_score[i], 2)}")
     # axis labels
 
     plt.xlabel('False Positive Rate')
@@ -86,23 +89,24 @@ def roc_curve_plot(testY, predictedY):
     # show the plot
     plt.show()
 
+
 def scatter_plot(ground_truth, pred):
-
-    ground_truth = ground_truth.iloc[:, 0:9]
-    sum_vec = ground_truth.sum(axis=1)
-    ground_truth = ground_truth.divide(sum_vec, axis='index')
-
     classes = list(ground_truth.columns)
 
-    # for i, loc in enumerate(classes):
-    '''True label - predicted label scatter'''
-    plt.rcParams["figure.figsize"] = (20, 10)
-    plt.title(classes[0])
-    plt.xlabel('True localization value')
-    plt.ylabel('Predicted localization value')
-    plt.plot([0, 1], [0, 1], 'k--')
-    plt.scatter(ground_truth[classes[0]], pred[:, 0], label="")
-    plt.legend()
+    colors = [
+        "blue", "orange", "green", "red", "purple", "brown", "pink", "gray", "olive"
+    ]
+
+    for i, loc in enumerate(classes):
+        '''True label - predicted label scatter'''
+        plt.rcParams["figure.figsize"] = (20, 10)
+        plt.title(classes[0])
+        plt.xlabel('True localization value')
+        plt.ylabel('Predicted localization value')
+        plt.plot([0, 1], [0, 1], 'k--')
+        plt.scatter(ground_truth[classes[i]], pred[:, i], label="", c=colors[i])
+        plt.legend()
+        plt.show()
 
 
 def box_plot_array(multidimensionalarray):
@@ -119,6 +123,7 @@ def box_plot_array(multidimensionalarray):
     plt.ylabel('Probability')
     plt.xlabel('Cellular Compartments')
     plt.show()
+
 
 def box_plot(dataframe):
     loc_data = dataframe.iloc[:, 0:9]
