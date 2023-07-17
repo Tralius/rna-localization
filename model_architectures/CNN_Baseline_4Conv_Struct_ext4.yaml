@@ -21,11 +21,8 @@ params_model:
   pooling:
     - pool_size: 4
     - pool_size: 4
-      strides: 2
     - pool_size: 4
-      strides: 4
     - pool_size: 4
-      strides: 4
   dropouts:
     - rate: 0.4
     - rate: 0.4
@@ -90,5 +87,5 @@ params_model:
       kernel_regularizer: l1
 
 params_train:
-  epochs: 20
+  epochs: 100
   use_multiprocessing: True
