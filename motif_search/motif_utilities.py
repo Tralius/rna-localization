@@ -6,6 +6,8 @@ from matplotlib.colors import ListedColormap, LinearSegmentedColormap
 from tensorflow import keras
 import tensorflow as tf
 
+# Adapted from https://github.com/kundajelab/deeplift/blob/master/deeplift/visualization/viz_sequence.py
+
 def plot_a(ax, base, left_edge, height, color):
     a_polygon_coords = [
         np.array([

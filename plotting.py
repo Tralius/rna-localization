@@ -6,7 +6,6 @@ from sklearn.metrics import roc_curve, auc
 from scipy.stats import pearsonr
 import seaborn as sns
 
-
 # summarize history for accuracy
 def plot_line_graph(data, title, ylabel, xlabel, legend):
     # for i in range(len(data)):
@@ -38,8 +37,8 @@ def multiplot_pearson(data: Dict[str, List[float]], mean: bool = True, training:
     plot_data = dataframe.melt(id_vars=['epoch'], var_name='compartment', value_name='correlation')
     return sns.lineplot(plot_data, x='epoch', y='correlation', hue='compartment').set(title=title)
 
-
 def roc_curve_plot(testY, predictedY):
+    # Adapted from https://github.com/HarveyYan/RNATracker/tree/master
     testY = testY.iloc[:, 0:9]
     sum_vec = testY.sum(axis=1)
     testY = testY.divide(sum_vec, axis='index')

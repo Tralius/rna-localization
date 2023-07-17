@@ -6,23 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="52db749d-89b6-4485-b261-7f1b8eaaf8a7" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CNN_Baseline_4Conv_Struct_ext.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/CNN_Baseline_4Conv_Struct_ext.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CNN_Baseline_4Conv_Struct_ext2.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RNATrack1Corr.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/acc.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataloaders/GeneDataLoader.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataloaders/GeneDataLoader.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flor_CNN_Att4_exp.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/flor_CNN_Att4_exp.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flor_CNN_Att4_exp2.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/flor_arch1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/model.png" beforeDir="false" afterPath="$PROJECT_DIR$/model.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model_architecture_viz/CNN_Baseline_4Conv_Struct_ext2_2023-07-13.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/model_architecture_viz/CNN_Baseline_4Conv_Struct_ext_2023-07-13.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/model_architecture_viz/CNN_Baseline_4Conv_Struct_ext_2023-07-14.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/model_architecture_viz/flor_CNN_Att4_exp2_2023-07-13.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/model_architecture_viz/flor_CNN_Att4_exp_2023-07-13.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/model_architectures/CNN_architecture6 copy.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/model_architectures/CNN_architecture6 copy.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/singlebranchModel.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/singlebranchModel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataloaders/GeneDataLoaderPauli.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/motif_search/motif_utilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/motif_search/motif_utilities.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plotting.py" beforeDir="false" afterPath="$PROJECT_DIR$/plotting.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils.py" afterDir="false" />
     </list>
     <list id="27850a01-4b3f-483c-83ed-a454a7e32907" name="Changes by jonasflor" comment="" />
     <option name="SHOW_DIALOG" value="false" />
