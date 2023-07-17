@@ -1,0 +1,160 @@
+Model: "model_1"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ input_2 (InputLayer)        [(None, 34526, 6)]        0         
+                                                                 
+ conv1d_3 (Conv1D)           (None, 34510, 16)         1648      
+                                                                 
+ max_pooling1d_3 (MaxPooling  (None, 8627, 16)         0         
+ 1D)                                                             
+                                                                 
+ dropout_4 (Dropout)         (None, 8627, 16)          0         
+                                                                 
+ conv1d_4 (Conv1D)           (None, 8617, 32)          5664      
+                                                                 
+ max_pooling1d_4 (MaxPooling  (None, 2154, 32)         0         
+ 1D)                                                             
+                                                                 
+ dropout_5 (Dropout)         (None, 2154, 32)          0         
+                                                                 
+ conv1d_5 (Conv1D)           (None, 2148, 64)          14400     
+                                                                 
+ max_pooling1d_5 (MaxPooling  (None, 537, 64)          0         
+ 1D)                                                             
+                                                                 
+ dropout_6 (Dropout)         (None, 537, 64)           0         
+                                                                 
+ flatten_1 (Flatten)         (None, 34368)             0         
+                                                                 
+ dense_2 (Dense)             (None, 512)               17596928  
+                                                                 
+ dropout_7 (Dropout)         (None, 512)               0         
+                                                                 
+ dense_3 (Dense)             (None, 9)                 4617      
+                                                                 
+=================================================================
+Total params: 17,623,257
+Trainable params: 17,623,257
+Non-trainable params: 0
+_________________________________________________________________
+Epoch 1/60
+311/311 [==============================] - 143s 456ms/step - loss: 2.1956 - ERM: 0.2675 - KDEL: 0.3006 - LMA: 0.0793 - MITO: 0.0764 - NES: 0.0969 - NIK: 0.0774 - NLS: 0.0580 - NUCP: 0.1560 - OMM: 0.0404 - val_loss: 2.1786 - val_ERM: 0.2057 - val_KDEL: 0.3623 - val_LMA: -0.0927 - val_MITO: 0.2262 - val_NES: 0.1752 - val_NIK: 0.3327 - val_NLS: 0.1253 - val_NUCP: 0.1562 - val_OMM: 0.1727
+Epoch 2/60
+311/311 [==============================] - 143s 460ms/step - loss: 2.1670 - ERM: 0.3173 - KDEL: 0.3636 - LMA: 0.1471 - MITO: 0.1421 - NES: 0.1487 - NIK: 0.1794 - NLS: 0.1017 - NUCP: 0.2198 - OMM: 0.0876 - val_loss: 2.1731 - val_ERM: 0.3135 - val_KDEL: 0.5531 - val_LMA: 0.0215 - val_MITO: 0.3747 - val_NES: 0.0980 - val_NIK: 0.4065 - val_NLS: 0.3017 - val_NUCP: 0.4100 - val_OMM: 0.1833
+Epoch 3/60
+311/311 [==============================] - 143s 460ms/step - loss: 2.1654 - ERM: 0.3264 - KDEL: 0.3717 - LMA: 0.1626 - MITO: 0.1690 - NES: 0.1590 - NIK: 0.2171 - NLS: 0.1390 - NUCP: 0.2302 - OMM: 0.1062 - val_loss: 2.1702 - val_ERM: 0.3700 - val_KDEL: 0.5556 - val_LMA: 0.0763 - val_MITO: 0.3657 - val_NES: 0.2581 - val_NIK: 0.3477 - val_NLS: 0.3390 - val_NUCP: 0.4831 - val_OMM: 0.1576
+Epoch 4/60
+311/311 [==============================] - 142s 457ms/step - loss: 2.1647 - ERM: 0.3368 - KDEL: 0.3768 - LMA: 0.1709 - MITO: 0.1802 - NES: 0.1717 - NIK: 0.2237 - NLS: 0.1445 - NUCP: 0.2393 - OMM: 0.1108 - val_loss: 2.1696 - val_ERM: 0.3214 - val_KDEL: 0.5345 - val_LMA: 0.0018 - val_MITO: 0.1520 - val_NES: 0.2539 - val_NIK: 0.4231 - val_NLS: 0.2925 - val_NUCP: 0.4632 - val_OMM: 0.1727
+Epoch 5/60
+311/311 [==============================] - 143s 460ms/step - loss: 2.1641 - ERM: 0.3406 - KDEL: 0.3828 - LMA: 0.1746 - MITO: 0.1868 - NES: 0.1824 - NIK: 0.2285 - NLS: 0.1674 - NUCP: 0.2443 - OMM: 0.1287 - val_loss: 2.1674 - val_ERM: 0.3683 - val_KDEL: 0.5272 - val_LMA: 0.1099 - val_MITO: 0.4174 - val_NES: 0.2960 - val_NIK: 0.4097 - val_NLS: 0.3310 - val_NUCP: 0.4897 - val_OMM: 0.1614
+Epoch 6/60
+311/311 [==============================] - 143s 459ms/step - loss: 2.1640 - ERM: 0.3384 - KDEL: 0.3813 - LMA: 0.1864 - MITO: 0.2011 - NES: 0.1861 - NIK: 0.2252 - NLS: 0.1682 - NUCP: 0.2439 - OMM: 0.1231 - val_loss: 2.1679 - val_ERM: 0.4010 - val_KDEL: 0.5537 - val_LMA: 0.1030 - val_MITO: 0.3647 - val_NES: 0.3333 - val_NIK: 0.4183 - val_NLS: 0.3111 - val_NUCP: 0.4883 - val_OMM: 0.2075
+Epoch 7/60
+311/311 [==============================] - 143s 460ms/step - loss: 2.1629 - ERM: 0.3401 - KDEL: 0.3889 - LMA: 0.1981 - MITO: 0.2222 - NES: 0.1908 - NIK: 0.2399 - NLS: 0.1754 - NUCP: 0.2511 - OMM: 0.1384 - val_loss: 2.1690 - val_ERM: 0.3315 - val_KDEL: 0.5059 - val_LMA: 0.1472 - val_MITO: 0.2143 - val_NES: 0.3664 - val_NIK: 0.3634 - val_NLS: 0.2951 - val_NUCP: 0.4856 - val_OMM: 0.1881
+Epoch 8/60
+311/311 [==============================] - 143s 461ms/step - loss: 2.1627 - ERM: 0.3481 - KDEL: 0.3896 - LMA: 0.1965 - MITO: 0.2208 - NES: 0.1996 - NIK: 0.2315 - NLS: 0.1835 - NUCP: 0.2507 - OMM: 0.1462 - val_loss: 2.1677 - val_ERM: 0.3412 - val_KDEL: 0.5435 - val_LMA: 0.2150 - val_MITO: 0.2773 - val_NES: 0.3446 - val_NIK: 0.3910 - val_NLS: 0.3783 - val_NUCP: 0.4974 - val_OMM: 0.1790
+Epoch 9/60
+311/311 [==============================] - 142s 457ms/step - loss: 2.1623 - ERM: 0.3518 - KDEL: 0.3877 - LMA: 0.1961 - MITO: 0.2238 - NES: 0.2031 - NIK: 0.2304 - NLS: 0.1853 - NUCP: 0.2537 - OMM: 0.1541 - val_loss: 2.1667 - val_ERM: 0.4030 - val_KDEL: 0.5207 - val_LMA: 0.1233 - val_MITO: 0.2924 - val_NES: 0.3813 - val_NIK: 0.4064 - val_NLS: 0.3481 - val_NUCP: 0.5104 - val_OMM: 0.2100
+Epoch 10/60
+311/311 [==============================] - 143s 458ms/step - loss: 2.1618 - ERM: 0.3548 - KDEL: 0.3900 - LMA: 0.2159 - MITO: 0.2180 - NES: 0.2138 - NIK: 0.2404 - NLS: 0.1933 - NUCP: 0.2535 - OMM: 0.1693 - val_loss: 2.1676 - val_ERM: 0.3767 - val_KDEL: 0.5546 - val_LMA: 0.0748 - val_MITO: 0.2539 - val_NES: 0.4299 - val_NIK: 0.3852 - val_NLS: 0.2842 - val_NUCP: 0.5087 - val_OMM: 0.2141
+Epoch 11/60
+311/311 [==============================] - 143s 459ms/step - loss: 2.1612 - ERM: 0.3650 - KDEL: 0.3889 - LMA: 0.2242 - MITO: 0.2302 - NES: 0.2110 - NIK: 0.2473 - NLS: 0.1996 - NUCP: 0.2580 - OMM: 0.1744 - val_loss: 2.1658 - val_ERM: 0.3999 - val_KDEL: 0.5732 - val_LMA: 0.1701 - val_MITO: 0.3437 - val_NES: 0.3748 - val_NIK: 0.4445 - val_NLS: 0.3138 - val_NUCP: 0.4818 - val_OMM: 0.2660
+Epoch 12/60
+311/311 [==============================] - 143s 459ms/step - loss: 2.1614 - ERM: 0.3594 - KDEL: 0.3874 - LMA: 0.2228 - MITO: 0.2317 - NES: 0.2125 - NIK: 0.2317 - NLS: 0.2095 - NUCP: 0.2578 - OMM: 0.1742 - val_loss: 2.1673 - val_ERM: 0.3373 - val_KDEL: 0.5670 - val_LMA: 0.2379 - val_MITO: 0.2913 - val_NES: 0.3224 - val_NIK: 0.4196 - val_NLS: 0.2965 - val_NUCP: 0.4429 - val_OMM: 0.2131
+Epoch 13/60
+311/311 [==============================] - 142s 457ms/step - loss: 2.1605 - ERM: 0.3685 - KDEL: 0.3842 - LMA: 0.2167 - MITO: 0.2329 - NES: 0.2156 - NIK: 0.2494 - NLS: 0.2168 - NUCP: 0.2671 - OMM: 0.1841 - val_loss: 2.1666 - val_ERM: 0.3747 - val_KDEL: 0.5365 - val_LMA: 0.1850 - val_MITO: 0.2648 - val_NES: 0.3580 - val_NIK: 0.4330 - val_NLS: 0.3276 - val_NUCP: 0.4685 - val_OMM: 0.2256
+Epoch 14/60
+311/311 [==============================] - 142s 457ms/step - loss: 2.1600 - ERM: 0.3631 - KDEL: 0.3914 - LMA: 0.2280 - MITO: 0.2417 - NES: 0.2228 - NIK: 0.2621 - NLS: 0.1991 - NUCP: 0.2679 - OMM: 0.1825 - val_loss: 2.1664 - val_ERM: 0.3778 - val_KDEL: 0.5367 - val_LMA: 0.0694 - val_MITO: 0.2950 - val_NES: 0.4019 - val_NIK: 0.4225 - val_NLS: 0.2698 - val_NUCP: 0.4259 - val_OMM: 0.1752
+Epoch 15/60
+311/311 [==============================] - 142s 457ms/step - loss: 2.1597 - ERM: 0.3744 - KDEL: 0.3879 - LMA: 0.2373 - MITO: 0.2374 - NES: 0.2194 - NIK: 0.2542 - NLS: 0.2093 - NUCP: 0.2750 - OMM: 0.1925 - val_loss: 2.1662 - val_ERM: 0.3844 - val_KDEL: 0.4698 - val_LMA: 0.0141 - val_MITO: 0.1945 - val_NES: 0.4083 - val_NIK: 0.3682 - val_NLS: 0.1510 - val_NUCP: 0.4540 - val_OMM: 0.1761
+Epoch 16/60
+311/311 [==============================] - 142s 458ms/step - loss: 2.1590 - ERM: 0.3721 - KDEL: 0.3912 - LMA: 0.2401 - MITO: 0.2445 - NES: 0.2232 - NIK: 0.2560 - NLS: 0.2228 - NUCP: 0.2819 - OMM: 0.1938 - val_loss: 2.1655 - val_ERM: 0.3671 - val_KDEL: 0.5228 - val_LMA: 0.0736 - val_MITO: 0.2785 - val_NES: 0.3461 - val_NIK: 0.4299 - val_NLS: 0.2082 - val_NUCP: 0.4395 - val_OMM: 0.1619
+Epoch 17/60
+311/311 [==============================] - 142s 457ms/step - loss: 2.1586 - ERM: 0.3855 - KDEL: 0.3907 - LMA: 0.2433 - MITO: 0.2433 - NES: 0.2373 - NIK: 0.2681 - NLS: 0.2360 - NUCP: 0.2787 - OMM: 0.2057 - val_loss: 2.1664 - val_ERM: 0.4150 - val_KDEL: 0.5245 - val_LMA: -0.0607 - val_MITO: 0.2123 - val_NES: 0.3428 - val_NIK: 0.4580 - val_NLS: 0.3143 - val_NUCP: 0.3683 - val_OMM: 0.2479
+Epoch 18/60
+311/311 [==============================] - 142s 457ms/step - loss: 2.1577 - ERM: 0.3892 - KDEL: 0.3982 - LMA: 0.2491 - MITO: 0.2410 - NES: 0.2287 - NIK: 0.2642 - NLS: 0.2360 - NUCP: 0.2961 - OMM: 0.2146 - val_loss: 2.1659 - val_ERM: 0.4050 - val_KDEL: 0.5747 - val_LMA: 0.0372 - val_MITO: 0.2648 - val_NES: 0.3054 - val_NIK: 0.4860 - val_NLS: 0.2925 - val_NUCP: 0.3813 - val_OMM: 0.2417
+Epoch 19/60
+311/311 [==============================] - 142s 457ms/step - loss: 2.1574 - ERM: 0.3874 - KDEL: 0.3900 - LMA: 0.2504 - MITO: 0.2412 - NES: 0.2375 - NIK: 0.2816 - NLS: 0.2442 - NUCP: 0.2806 - OMM: 0.2162 - val_loss: 2.1666 - val_ERM: 0.3978 - val_KDEL: 0.5356 - val_LMA: 0.0039 - val_MITO: 0.3020 - val_NES: 0.2969 - val_NIK: 0.4684 - val_NLS: 0.2708 - val_NUCP: 0.3915 - val_OMM: 0.2311
+Epoch 20/60
+311/311 [==============================] - 142s 456ms/step - loss: 2.1566 - ERM: 0.3920 - KDEL: 0.3952 - LMA: 0.2770 - MITO: 0.2426 - NES: 0.2341 - NIK: 0.2848 - NLS: 0.2391 - NUCP: 0.2905 - OMM: 0.2191 - val_loss: 2.1663 - val_ERM: 0.4536 - val_KDEL: 0.5413 - val_LMA: -0.0105 - val_MITO: 0.3139 - val_NES: 0.3821 - val_NIK: 0.4329 - val_NLS: 0.3686 - val_NUCP: 0.4158 - val_OMM: 0.3082
+Epoch 21/60
+311/311 [==============================] - 142s 458ms/step - loss: 2.1559 - ERM: 0.3991 - KDEL: 0.3914 - LMA: 0.2650 - MITO: 0.2460 - NES: 0.2429 - NIK: 0.2857 - NLS: 0.2623 - NUCP: 0.2948 - OMM: 0.2339 - val_loss: 2.1666 - val_ERM: 0.4173 - val_KDEL: 0.5508 - val_LMA: -0.0496 - val_MITO: 0.2407 - val_NES: 0.3515 - val_NIK: 0.4325 - val_NLS: 0.3285 - val_NUCP: 0.4508 - val_OMM: 0.3081
+Epoch 22/60
+311/311 [==============================] - 142s 457ms/step - loss: 2.1556 - ERM: 0.4000 - KDEL: 0.3964 - LMA: 0.2633 - MITO: 0.2545 - NES: 0.2324 - NIK: 0.3044 - NLS: 0.2616 - NUCP: 0.3135 - OMM: 0.2323 - val_loss: 2.1674 - val_ERM: 0.4044 - val_KDEL: 0.4887 - val_LMA: 0.0116 - val_MITO: 0.2660 - val_NES: 0.3453 - val_NIK: 0.4581 - val_NLS: 0.3421 - val_NUCP: 0.4942 - val_OMM: 0.3145
+Epoch 23/60
+311/311 [==============================] - 142s 457ms/step - loss: 2.1543 - ERM: 0.4094 - KDEL: 0.3957 - LMA: 0.2830 - MITO: 0.2596 - NES: 0.2573 - NIK: 0.3111 - NLS: 0.2728 - NUCP: 0.3082 - OMM: 0.2499 - val_loss: 2.1667 - val_ERM: 0.4164 - val_KDEL: 0.5012 - val_LMA: 0.0366 - val_MITO: 0.2278 - val_NES: 0.3604 - val_NIK: 0.4023 - val_NLS: 0.3321 - val_NUCP: 0.4722 - val_OMM: 0.3590
+Epoch 24/60
+311/311 [==============================] - 142s 457ms/step - loss: 2.1542 - ERM: 0.4161 - KDEL: 0.4031 - LMA: 0.2746 - MITO: 0.2576 - NES: 0.2590 - NIK: 0.3091 - NLS: 0.2638 - NUCP: 0.3142 - OMM: 0.2587 - val_loss: 2.1666 - val_ERM: 0.4074 - val_KDEL: 0.5307 - val_LMA: -0.0752 - val_MITO: 0.2330 - val_NES: 0.3457 - val_NIK: 0.3792 - val_NLS: 0.2592 - val_NUCP: 0.4983 - val_OMM: 0.3348
+Epoch 25/60
+311/311 [==============================] - 142s 457ms/step - loss: 2.1526 - ERM: 0.4271 - KDEL: 0.4076 - LMA: 0.2931 - MITO: 0.2711 - NES: 0.2579 - NIK: 0.3236 - NLS: 0.2769 - NUCP: 0.3166 - OMM: 0.2702 - val_loss: 2.1662 - val_ERM: 0.4608 - val_KDEL: 0.5746 - val_LMA: 0.0669 - val_MITO: 0.2514 - val_NES: 0.3585 - val_NIK: 0.4048 - val_NLS: 0.3485 - val_NUCP: 0.5390 - val_OMM: 0.3062
+Epoch 26/60
+311/311 [==============================] - 142s 456ms/step - loss: 2.1514 - ERM: 0.4363 - KDEL: 0.4040 - LMA: 0.3050 - MITO: 0.2686 - NES: 0.2669 - NIK: 0.3292 - NLS: 0.2837 - NUCP: 0.3393 - OMM: 0.2734 - val_loss: 2.1666 - val_ERM: 0.4419 - val_KDEL: 0.5353 - val_LMA: 0.0448 - val_MITO: 0.2036 - val_NES: 0.2784 - val_NIK: 0.4038 - val_NLS: 0.3904 - val_NUCP: 0.4987 - val_OMM: 0.2468
+Epoch 27/60
+311/311 [==============================] - 142s 456ms/step - loss: 2.1507 - ERM: 0.4439 - KDEL: 0.4141 - LMA: 0.3074 - MITO: 0.2736 - NES: 0.2829 - NIK: 0.3500 - NLS: 0.2858 - NUCP: 0.3272 - OMM: 0.2818 - val_loss: 2.1668 - val_ERM: 0.4975 - val_KDEL: 0.4478 - val_LMA: -0.0520 - val_MITO: 0.1866 - val_NES: 0.2585 - val_NIK: 0.4130 - val_NLS: 0.3416 - val_NUCP: 0.4839 - val_OMM: 0.2165
+Epoch 28/60
+311/311 [==============================] - 142s 457ms/step - loss: 2.1501 - ERM: 0.4487 - KDEL: 0.4114 - LMA: 0.3255 - MITO: 0.2688 - NES: 0.2754 - NIK: 0.3351 - NLS: 0.2966 - NUCP: 0.3408 - OMM: 0.2911 - val_loss: 2.1664 - val_ERM: 0.4683 - val_KDEL: 0.5138 - val_LMA: -0.0482 - val_MITO: 0.2150 - val_NES: 0.2526 - val_NIK: 0.3565 - val_NLS: 0.2947 - val_NUCP: 0.5837 - val_OMM: 0.3196
+Epoch 29/60
+311/311 [==============================] - 142s 458ms/step - loss: 2.1499 - ERM: 0.4497 - KDEL: 0.4076 - LMA: 0.3084 - MITO: 0.2622 - NES: 0.2796 - NIK: 0.3542 - NLS: 0.2900 - NUCP: 0.3351 - OMM: 0.2874 - val_loss: 2.1667 - val_ERM: 0.4743 - val_KDEL: 0.5125 - val_LMA: -0.0166 - val_MITO: 0.2421 - val_NES: 0.3271 - val_NIK: 0.3789 - val_NLS: 0.2706 - val_NUCP: 0.4958 - val_OMM: 0.3352
+Epoch 30/60
+311/311 [==============================] - 142s 458ms/step - loss: 2.1480 - ERM: 0.4594 - KDEL: 0.4140 - LMA: 0.3301 - MITO: 0.2775 - NES: 0.2695 - NIK: 0.3544 - NLS: 0.3095 - NUCP: 0.3586 - OMM: 0.3051 - val_loss: 2.1670 - val_ERM: 0.4844 - val_KDEL: 0.5423 - val_LMA: -0.0060 - val_MITO: 0.2834 - val_NES: 0.3845 - val_NIK: 0.3356 - val_NLS: 0.3928 - val_NUCP: 0.4790 - val_OMM: 0.3110
+Epoch 31/60
+311/311 [==============================] - 142s 457ms/step - loss: 2.1471 - ERM: 0.4774 - KDEL: 0.4102 - LMA: 0.3346 - MITO: 0.2799 - NES: 0.2824 - NIK: 0.3666 - NLS: 0.3110 - NUCP: 0.3632 - OMM: 0.3077 - val_loss: 2.1672 - val_ERM: 0.4971 - val_KDEL: 0.5418 - val_LMA: 0.0294 - val_MITO: 0.2574 - val_NES: 0.3508 - val_NIK: 0.3624 - val_NLS: 0.4887 - val_NUCP: 0.5440 - val_OMM: 0.3020
+Epoch 32/60
+311/311 [==============================] - 142s 457ms/step - loss: 2.1476 - ERM: 0.4598 - KDEL: 0.4126 - LMA: 0.3391 - MITO: 0.2668 - NES: 0.2835 - NIK: 0.3767 - NLS: 0.3185 - NUCP: 0.3399 - OMM: 0.3116 - val_loss: 2.1670 - val_ERM: 0.4944 - val_KDEL: 0.5061 - val_LMA: 0.1289 - val_MITO: 0.2186 - val_NES: 0.4197 - val_NIK: 0.2851 - val_NLS: 0.4639 - val_NUCP: 0.5962 - val_OMM: 0.3493
+Epoch 33/60
+311/311 [==============================] - 143s 460ms/step - loss: 2.1454 - ERM: 0.4763 - KDEL: 0.4086 - LMA: 0.3449 - MITO: 0.2978 - NES: 0.2905 - NIK: 0.3906 - NLS: 0.3294 - NUCP: 0.3613 - OMM: 0.3213 - val_loss: 2.1673 - val_ERM: 0.4604 - val_KDEL: 0.5013 - val_LMA: 0.0913 - val_MITO: 0.2093 - val_NES: 0.2998 - val_NIK: 0.2603 - val_NLS: 0.4219 - val_NUCP: 0.5631 - val_OMM: 0.1577
+Epoch 34/60
+311/311 [==============================] - 143s 459ms/step - loss: 2.1432 - ERM: 0.4863 - KDEL: 0.4170 - LMA: 0.3573 - MITO: 0.2880 - NES: 0.2937 - NIK: 0.4090 - NLS: 0.3480 - NUCP: 0.3738 - OMM: 0.3317 - val_loss: 2.1669 - val_ERM: 0.4431 - val_KDEL: 0.4473 - val_LMA: -0.0069 - val_MITO: 0.1825 - val_NES: 0.4056 - val_NIK: 0.2910 - val_NLS: 0.4368 - val_NUCP: 0.4673 - val_OMM: 0.4499
+Epoch 35/60
+311/311 [==============================] - 142s 456ms/step - loss: 2.1444 - ERM: 0.4910 - KDEL: 0.4130 - LMA: 0.3423 - MITO: 0.2985 - NES: 0.3032 - NIK: 0.3887 - NLS: 0.3381 - NUCP: 0.3677 - OMM: 0.3273 - val_loss: 2.1674 - val_ERM: 0.4207 - val_KDEL: 0.5111 - val_LMA: 0.0386 - val_MITO: 0.2521 - val_NES: 0.3238 - val_NIK: 0.2587 - val_NLS: 0.4700 - val_NUCP: 0.5395 - val_OMM: 0.4216
+Epoch 36/60
+311/311 [==============================] - 142s 456ms/step - loss: 2.1421 - ERM: 0.4975 - KDEL: 0.4252 - LMA: 0.3622 - MITO: 0.3102 - NES: 0.3119 - NIK: 0.4119 - NLS: 0.3421 - NUCP: 0.3854 - OMM: 0.3425 - val_loss: 2.1677 - val_ERM: 0.4767 - val_KDEL: 0.5186 - val_LMA: 0.0332 - val_MITO: 0.3178 - val_NES: 0.5048 - val_NIK: 0.3002 - val_NLS: 0.4522 - val_NUCP: 0.4453 - val_OMM: 0.4740
+Epoch 37/60
+311/311 [==============================] - 143s 459ms/step - loss: 2.1418 - ERM: 0.4963 - KDEL: 0.4233 - LMA: 0.3653 - MITO: 0.2930 - NES: 0.3141 - NIK: 0.3980 - NLS: 0.3535 - NUCP: 0.3981 - OMM: 0.3512 - val_loss: 2.1677 - val_ERM: 0.4396 - val_KDEL: 0.4472 - val_LMA: 0.1632 - val_MITO: 0.2329 - val_NES: 0.3563 - val_NIK: 0.1516 - val_NLS: 0.5818 - val_NUCP: 0.4972 - val_OMM: 0.3672
+Epoch 38/60
+311/311 [==============================] - 142s 457ms/step - loss: 2.1422 - ERM: 0.4848 - KDEL: 0.4189 - LMA: 0.3588 - MITO: 0.2981 - NES: 0.3105 - NIK: 0.4159 - NLS: 0.3412 - NUCP: 0.4042 - OMM: 0.3407 - val_loss: 2.1678 - val_ERM: 0.4969 - val_KDEL: 0.4985 - val_LMA: 0.0911 - val_MITO: 0.1962 - val_NES: 0.4720 - val_NIK: 0.2369 - val_NLS: 0.4771 - val_NUCP: 0.5604 - val_OMM: 0.5555
+Epoch 39/60
+311/311 [==============================] - 143s 459ms/step - loss: 2.1403 - ERM: 0.5138 - KDEL: 0.4203 - LMA: 0.3726 - MITO: 0.3101 - NES: 0.3177 - NIK: 0.4275 - NLS: 0.3565 - NUCP: 0.3929 - OMM: 0.3470 - val_loss: 2.1671 - val_ERM: 0.4591 - val_KDEL: 0.4334 - val_LMA: 0.1248 - val_MITO: 0.2725 - val_NES: 0.4576 - val_NIK: 0.2026 - val_NLS: 0.5099 - val_NUCP: 0.6487 - val_OMM: 0.4853
+Epoch 40/60
+311/311 [==============================] - 143s 459ms/step - loss: 2.1383 - ERM: 0.5238 - KDEL: 0.4260 - LMA: 0.3948 - MITO: 0.3200 - NES: 0.3100 - NIK: 0.4402 - NLS: 0.3558 - NUCP: 0.4034 - OMM: 0.3666 - val_loss: 2.1677 - val_ERM: 0.4727 - val_KDEL: 0.4730 - val_LMA: 0.0119 - val_MITO: 0.2907 - val_NES: 0.3663 - val_NIK: 0.2216 - val_NLS: 0.4534 - val_NUCP: 0.5695 - val_OMM: 0.4958
+Epoch 41/60
+311/311 [==============================] - 143s 459ms/step - loss: 2.1367 - ERM: 0.5232 - KDEL: 0.4296 - LMA: 0.4021 - MITO: 0.3107 - NES: 0.3320 - NIK: 0.4482 - NLS: 0.3696 - NUCP: 0.4307 - OMM: 0.3841 - val_loss: 2.1682 - val_ERM: 0.4314 - val_KDEL: 0.4282 - val_LMA: 0.1412 - val_MITO: 0.2590 - val_NES: 0.4335 - val_NIK: 0.1507 - val_NLS: 0.4175 - val_NUCP: 0.5920 - val_OMM: 0.4609
+Epoch 42/60
+311/311 [==============================] - 143s 459ms/step - loss: 2.1373 - ERM: 0.5248 - KDEL: 0.4340 - LMA: 0.3890 - MITO: 0.3262 - NES: 0.3191 - NIK: 0.4435 - NLS: 0.3726 - NUCP: 0.4373 - OMM: 0.3739 - val_loss: 2.1678 - val_ERM: 0.4518 - val_KDEL: 0.4356 - val_LMA: 0.0339 - val_MITO: 0.2907 - val_NES: 0.4685 - val_NIK: 0.1803 - val_NLS: 0.4204 - val_NUCP: 0.5561 - val_OMM: 0.4952
+Epoch 43/60
+311/311 [==============================] - 142s 458ms/step - loss: 2.1372 - ERM: 0.5284 - KDEL: 0.4346 - LMA: 0.3890 - MITO: 0.3204 - NES: 0.3211 - NIK: 0.4568 - NLS: 0.3654 - NUCP: 0.4289 - OMM: 0.3647 - val_loss: 2.1679 - val_ERM: 0.4910 - val_KDEL: 0.4463 - val_LMA: 0.0439 - val_MITO: 0.2159 - val_NES: 0.4753 - val_NIK: 0.1360 - val_NLS: 0.4893 - val_NUCP: 0.4929 - val_OMM: 0.5514
+Epoch 44/60
+311/311 [==============================] - 143s 458ms/step - loss: 2.1351 - ERM: 0.5331 - KDEL: 0.4352 - LMA: 0.3955 - MITO: 0.3205 - NES: 0.3176 - NIK: 0.4557 - NLS: 0.3839 - NUCP: 0.4413 - OMM: 0.3832 - val_loss: 2.1681 - val_ERM: 0.4291 - val_KDEL: 0.3952 - val_LMA: 0.1149 - val_MITO: 0.2260 - val_NES: 0.4227 - val_NIK: 0.1261 - val_NLS: 0.5406 - val_NUCP: 0.5597 - val_OMM: 0.5817
+Epoch 45/60
+311/311 [==============================] - 143s 458ms/step - loss: 2.1341 - ERM: 0.5382 - KDEL: 0.4343 - LMA: 0.4117 - MITO: 0.3188 - NES: 0.3458 - NIK: 0.4839 - NLS: 0.3992 - NUCP: 0.4414 - OMM: 0.3855 - val_loss: 2.1678 - val_ERM: 0.4933 - val_KDEL: 0.4492 - val_LMA: 0.1343 - val_MITO: 0.2772 - val_NES: 0.3772 - val_NIK: 0.2413 - val_NLS: 0.6355 - val_NUCP: 0.5563 - val_OMM: 0.5846
+Epoch 46/60
+311/311 [==============================] - 142s 457ms/step - loss: 2.1328 - ERM: 0.5490 - KDEL: 0.4489 - LMA: 0.4148 - MITO: 0.3375 - NES: 0.3458 - NIK: 0.4800 - NLS: 0.3867 - NUCP: 0.4554 - OMM: 0.4031 - val_loss: 2.1683 - val_ERM: 0.5160 - val_KDEL: 0.4875 - val_LMA: 0.0997 - val_MITO: 0.2479 - val_NES: 0.4541 - val_NIK: 0.1508 - val_NLS: 0.5353 - val_NUCP: 0.5153 - val_OMM: 0.5462
+Epoch 47/60
+311/311 [==============================] - 142s 457ms/step - loss: 2.1322 - ERM: 0.5539 - KDEL: 0.4515 - LMA: 0.4239 - MITO: 0.3403 - NES: 0.3456 - NIK: 0.4813 - NLS: 0.3984 - NUCP: 0.4433 - OMM: 0.4000 - val_loss: 2.1677 - val_ERM: 0.4865 - val_KDEL: 0.4641 - val_LMA: 0.1428 - val_MITO: 0.2981 - val_NES: 0.3619 - val_NIK: 0.2075 - val_NLS: 0.5637 - val_NUCP: 0.5559 - val_OMM: 0.4559
+Epoch 48/60
+311/311 [==============================] - 143s 458ms/step - loss: 2.1315 - ERM: 0.5586 - KDEL: 0.4388 - LMA: 0.4260 - MITO: 0.3294 - NES: 0.3400 - NIK: 0.4883 - NLS: 0.3863 - NUCP: 0.4680 - OMM: 0.4045 - val_loss: 2.1676 - val_ERM: 0.4845 - val_KDEL: 0.4663 - val_LMA: 0.1281 - val_MITO: 0.2708 - val_NES: 0.3203 - val_NIK: 0.2258 - val_NLS: 0.5967 - val_NUCP: 0.4625 - val_OMM: 0.4707
+Epoch 49/60
+311/311 [==============================] - 143s 459ms/step - loss: 2.1299 - ERM: 0.5566 - KDEL: 0.4454 - LMA: 0.4473 - MITO: 0.3480 - NES: 0.3475 - NIK: 0.4989 - NLS: 0.4162 - NUCP: 0.4657 - OMM: 0.4023 - val_loss: 2.1686 - val_ERM: 0.5073 - val_KDEL: 0.4713 - val_LMA: 0.0702 - val_MITO: 0.3211 - val_NES: 0.3656 - val_NIK: 0.2284 - val_NLS: 0.6392 - val_NUCP: 0.3707 - val_OMM: 0.5012
+Epoch 50/60
+311/311 [==============================] - 142s 458ms/step - loss: 2.1316 - ERM: 0.5647 - KDEL: 0.4419 - LMA: 0.4183 - MITO: 0.3561 - NES: 0.3394 - NIK: 0.5004 - NLS: 0.3980 - NUCP: 0.4557 - OMM: 0.3857 - val_loss: 2.1680 - val_ERM: 0.4686 - val_KDEL: 0.4147 - val_LMA: 0.2112 - val_MITO: 0.3111 - val_NES: 0.3735 - val_NIK: 0.1982 - val_NLS: 0.5704 - val_NUCP: 0.5588 - val_OMM: 0.3943
+Epoch 51/60
+311/311 [==============================] - 143s 459ms/step - loss: 2.1292 - ERM: 0.5638 - KDEL: 0.4499 - LMA: 0.4384 - MITO: 0.3407 - NES: 0.3588 - NIK: 0.4961 - NLS: 0.4183 - NUCP: 0.4766 - OMM: 0.4244 - val_loss: 2.1682 - val_ERM: 0.4210 - val_KDEL: 0.4461 - val_LMA: 0.0816 - val_MITO: 0.2990 - val_NES: 0.3872 - val_NIK: 0.2287 - val_NLS: 0.4862 - val_NUCP: 0.5029 - val_OMM: 0.5540
+Epoch 52/60
+311/311 [==============================] - 142s 457ms/step - loss: 2.1283 - ERM: 0.5668 - KDEL: 0.4533 - LMA: 0.4390 - MITO: 0.3506 - NES: 0.3676 - NIK: 0.5108 - NLS: 0.4268 - NUCP: 0.4906 - OMM: 0.4333 - val_loss: 2.1689 - val_ERM: 0.5102 - val_KDEL: 0.4905 - val_LMA: 0.0641 - val_MITO: 0.3068 - val_NES: 0.5046 - val_NIK: 0.2630 - val_NLS: 0.6265 - val_NUCP: 0.4260 - val_OMM: 0.5137
+Epoch 53/60
+311/311 [==============================] - 143s 458ms/step - loss: 2.1273 - ERM: 0.5763 - KDEL: 0.4615 - LMA: 0.4536 - MITO: 0.3482 - NES: 0.3537 - NIK: 0.5068 - NLS: 0.4379 - NUCP: 0.4849 - OMM: 0.4277 - val_loss: 2.1691 - val_ERM: 0.5653 - val_KDEL: 0.4319 - val_LMA: 0.1491 - val_MITO: 0.2942 - val_NES: 0.4155 - val_NIK: 0.2598 - val_NLS: 0.5514 - val_NUCP: 0.5460 - val_OMM: 0.3887
+Epoch 54/60
+311/311 [==============================] - 142s 457ms/step - loss: 2.1264 - ERM: 0.5750 - KDEL: 0.4580 - LMA: 0.4478 - MITO: 0.3567 - NES: 0.3747 - NIK: 0.5278 - NLS: 0.4399 - NUCP: 0.4883 - OMM: 0.4418 - val_loss: 2.1685 - val_ERM: 0.5505 - val_KDEL: 0.4322 - val_LMA: 0.2412 - val_MITO: 0.2345 - val_NES: 0.4505 - val_NIK: 0.2074 - val_NLS: 0.6027 - val_NUCP: 0.6188 - val_OMM: 0.3655
+Epoch 55/60
+311/311 [==============================] - 143s 460ms/step - loss: 2.1267 - ERM: 0.5718 - KDEL: 0.4569 - LMA: 0.4535 - MITO: 0.3453 - NES: 0.3476 - NIK: 0.5235 - NLS: 0.4343 - NUCP: 0.4889 - OMM: 0.4288 - val_loss: 2.1690 - val_ERM: 0.4331 - val_KDEL: 0.4408 - val_LMA: 0.0744 - val_MITO: 0.2828 - val_NES: 0.3887 - val_NIK: 0.2206 - val_NLS: 0.4903 - val_NUCP: 0.4469 - val_OMM: 0.4973
+Epoch 56/60
+311/311 [==============================] - 142s 458ms/step - loss: 2.1256 - ERM: 0.5770 - KDEL: 0.4569 - LMA: 0.4592 - MITO: 0.3489 - NES: 0.3725 - NIK: 0.5207 - NLS: 0.4511 - NUCP: 0.5011 - OMM: 0.4355 - val_loss: 2.1691 - val_ERM: 0.4434 - val_KDEL: 0.4630 - val_LMA: 0.0314 - val_MITO: 0.2467 - val_NES: 0.4888 - val_NIK: 0.2077 - val_NLS: 0.4782 - val_NUCP: 0.3547 - val_OMM: 0.4609
+Epoch 57/60
+311/311 [==============================] - 142s 457ms/step - loss: 2.1258 - ERM: 0.5786 - KDEL: 0.4647 - LMA: 0.4689 - MITO: 0.3544 - NES: 0.3749 - NIK: 0.5162 - NLS: 0.4424 - NUCP: 0.5045 - OMM: 0.4271 - val_loss: 2.1686 - val_ERM: 0.4096 - val_KDEL: 0.4578 - val_LMA: 0.0460 - val_MITO: 0.2613 - val_NES: 0.4240 - val_NIK: 0.2584 - val_NLS: 0.4490 - val_NUCP: 0.3061 - val_OMM: 0.5720
+Epoch 58/60
+311/311 [==============================] - 142s 457ms/step - loss: 2.1256 - ERM: 0.5902 - KDEL: 0.4523 - LMA: 0.4556 - MITO: 0.3438 - NES: 0.3770 - NIK: 0.5218 - NLS: 0.4426 - NUCP: 0.5059 - OMM: 0.4441 - val_loss: 2.1687 - val_ERM: 0.4748 - val_KDEL: 0.4712 - val_LMA: 0.0872 - val_MITO: 0.2650 - val_NES: 0.4231 - val_NIK: 0.2692 - val_NLS: 0.4198 - val_NUCP: 0.3911 - val_OMM: 0.4849
+Epoch 59/60
+311/311 [==============================] - 143s 459ms/step - loss: 2.1235 - ERM: 0.5874 - KDEL: 0.4699 - LMA: 0.4793 - MITO: 0.3598 - NES: 0.3882 - NIK: 0.5340 - NLS: 0.4414 - NUCP: 0.5106 - OMM: 0.4593 - val_loss: 2.1683 - val_ERM: 0.4510 - val_KDEL: 0.4950 - val_LMA: 0.0890 - val_MITO: 0.2800 - val_NES: 0.4327 - val_NIK: 0.2776 - val_NLS: 0.4193 - val_NUCP: 0.4880 - val_OMM: 0.5828
+Epoch 60/60
+311/311 [==============================] - 143s 460ms/step - loss: 2.1234 - ERM: 0.5906 - KDEL: 0.4720 - LMA: 0.4782 - MITO: 0.3545 - NES: 0.3811 - NIK: 0.5455 - NLS: 0.4219 - NUCP: 0.5098 - OMM: 0.4383 - val_loss: 2.1682 - val_ERM: 0.4315 - val_KDEL: 0.4497 - val_LMA: 0.0876 - val_MITO: 0.2286 - val_NES: 0.3939 - val_NIK: 0.2685 - val_NLS: 0.3694 - val_NUCP: 0.3811 - val_OMM: 0.5542

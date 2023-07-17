@@ -17,3 +17,9 @@
 With the enabled conda environments you are then free to execute the jupyter notebooks
 
 TODO: add license from RNATracker
+
+TODO: how to run everything (the latest models)
+
+TODO: schreibend dass notbooks in test_data_eval rauskopeirt werden müssen damit sie funktioniern
+
+TODO: welche arhcitceture yamls korrespondierne zu welchenm model im paper 

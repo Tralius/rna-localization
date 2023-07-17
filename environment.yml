@@ -13,4 +13,5 @@ dependencies:
     - scikit-learn
     - pydot
     - tensorflow_probability
+    - seaborn
 prefix: /home/usr/anaconda3/envs/reggen
