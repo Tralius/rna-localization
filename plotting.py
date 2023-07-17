@@ -105,6 +105,21 @@ def scatter_plot(ground_truth, pred):
     plt.legend()
 
 
+def box_plot_array(multidimensionalarray):
+    # Plot
+    bp = plt.boxplot(
+        # A data frame needs to be converted to an array before it can be plotted this way
+        np.array(multidimensionalarray),
+        # You can use the column headings from the data frame as labels
+        labels=['ERM', 'KDEL', 'LMA', 'MITO', 'NES', 'NIK', 'NLS', 'NUCP', 'OMM'],
+        showfliers=False
+    )
+    # Axis details
+    plt.title('Cellular Compoartments Data Distribution')
+    plt.ylabel('Probability')
+    plt.xlabel('Cellular Compartments')
+    plt.show()
+
 def box_plot(dataframe):
     loc_data = dataframe.iloc[:, 0:9]
 
