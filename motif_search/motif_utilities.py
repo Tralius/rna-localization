@@ -133,7 +133,7 @@ def plot_weights(array,
     plot_weights_given_ax(ax=ax, array=array,**kwargs)
     if despine:
         plt.axis('off')
-    plt.show()
+    # plt.show()
     return fig,ax
 
 
