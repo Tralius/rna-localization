@@ -25,7 +25,7 @@ def read_model_file(path, padding, multibranched: bool = False):
 def prepare_data(colab: bool = False, path=None):
     if path is None:
         Warning('Using default local path')
-        path = '~/Downloads/seq_from_prim_and_icshape_withchrm_no_scaff.m6A.csv'
+        path = 'seq_from_prim_and_icshape_withchrm_no_scaff.m6A.csv'
     np.random.seed(3)
 
     if colab:
